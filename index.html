@@ -29,6 +29,10 @@
     --btn-bg: rgba(255,255,255,0.2);
     --btn-hover: rgba(255,255,255,0.6);
     --story-ring: #4a90e2;
+    --tg-accent: #3390ec;
+    --tg-bg: #ffffff;
+    --tg-hover: #f1f1f1;
+    --tg-border: #e6e6e6;
   }
 
   body.theme-dark {
@@ -52,29 +56,10 @@
     --btn-bg: rgba(255,255,255,0.1);
     --btn-hover: rgba(255,255,255,0.3);
     --story-ring: #64b5f6;
-  }
-
-  body.theme-custom {
-    --bg-body: var(--custom-bg, #3a7ca5);
-    --bg-window: rgba(255, 255, 255, 0.2);
-    --bg-sidebar: rgba(255, 255, 255, 0.4);
-    --bg-chat: rgba(255, 255, 255, 0.6);
-    --bg-messages: rgba(255, 255, 255, 0.9);
-    --bg-input: rgba(255, 255, 255, 0.5);
-    --text-main: #1a1a1a;
-    --text-muted: #555;
-    --border-light: rgba(255, 255, 255, 0.6);
-    --border-dark: rgba(0, 0, 0, 0.1);
-    --msg-them-bg: rgba(255, 255, 255, 0.8);
-    --msg-them-text: #222;
-    --msg-me-bg: rgba(200, 230, 255, 0.8);
-    --msg-me-text: #003366;
-    --contact-hover: rgba(255,255,255,0.3);
-    --contact-active: rgba(200, 230, 255, 0.6);
-    --popup-bg: rgba(255, 255, 255, 0.9);
-    --btn-bg: rgba(255,255,255,0.4);
-    --btn-hover: rgba(255,255,255,0.8);
-    --story-ring: #4a90e2;
+    --tg-accent: #64b5f6;
+    --tg-bg: #212121;
+    --tg-hover: #2c2c2c;
+    --tg-border: #333333;
   }
 
   body {
@@ -93,7 +78,7 @@
     transition: background 0.3s ease;
   }
 
-  #hidden-file-input { display: none; }
+  #hidden-file-input, #story-file-input { display: none; }
 
   /* ===== ОКНО AERO ===== */
   .aero-window {
@@ -127,9 +112,7 @@
     padding: 0;
   }
 
-  .aero-window.hidden {
-    display: none;
-  }
+  .aero-window.hidden { display: none; }
 
   .title-bar {
     background: linear-gradient(180deg, rgba(40, 40, 40, 0.85) 0%, rgba(20, 20, 20, 0.95) 100%);
@@ -330,7 +313,6 @@
   .chat-title { font-weight: 600; font-size: 16px; color: var(--text-main); z-index: 1; display: flex; align-items: center; gap: 10px; }
   .chat-title span { font-size: 12px; color: var(--text-muted); font-weight: normal; margin-left: 5px; }
   
-  /* Кнопки в шапке чата */
   .header-btn {
     background: var(--btn-bg); border: 1px solid var(--border-light); border-radius: 4px;
     cursor: pointer; font-size: 12px; padding: 4px 8px; transition: all 0.2s; z-index: 1; color: var(--text-main);
@@ -363,7 +345,6 @@
   .my-story .story-avatar {
     border-color: #4cd964;
     background: var(--bg-messages);
-    color: #4cd964;
   }
   .my-story .story-avatar::after {
     content: '+'; position: absolute; bottom: -2px; right: -2px;
@@ -441,37 +422,97 @@
     box-shadow: 0 25px 50px rgba(0,0,0,0.6), inset 0 0 0 1px var(--border-light); overflow: hidden;
     color: var(--text-main); display: flex; flex-direction: column;
   }
+  .modal-window.settings-window { width: 720px; height: 520px; }
   .modal-header { background: linear-gradient(180deg, var(--bg-sidebar) 0%, rgba(200,220,240,0.1) 100%); color: var(--text-main); padding: 10px 15px; font-weight: bold; font-size: 14px; border-bottom: 1px solid var(--border-dark); display: flex; justify-content: space-between; align-items: center;}
   
-  /* Настройки с вкладками */
-  .settings-layout { display: flex; height: 300px; }
+  /* ===== НАСТРОЙКИ В СТИЛЕ TELEGRAM ===== */
+  .settings-layout { display: flex; flex: 1; overflow: hidden; }
   .settings-sidebar {
-    width: 120px; background: rgba(0,0,0,0.05); border-right: 1px solid var(--border-dark);
+    width: 220px;
+    background: var(--tg-bg);
+    border-right: 1px solid var(--tg-border);
     display: flex; flex-direction: column; padding: 10px 0;
+    overflow-y: auto;
   }
   .settings-tab {
-    padding: 10px 15px; cursor: pointer; font-size: 12px; font-weight: 600; color: var(--text-muted);
-    transition: all 0.2s; border-left: 3px solid transparent;
+    padding: 12px 20px; cursor: pointer; font-size: 14px; font-weight: 500;
+    color: var(--text-main); transition: background 0.2s;
+    display: flex; align-items: center; gap: 12px;
   }
-  .settings-tab:hover { background: rgba(0,0,0,0.05); color: var(--text-main); }
-  .settings-tab.active { background: rgba(74, 144, 226, 0.1); color: #4a90e2; border-left-color: #4a90e2; }
+  .settings-tab:hover { background: var(--tg-hover); }
+  .settings-tab.active {
+    background: var(--tg-accent); color: #fff; border-radius: 0 20px 20px 0;
+    margin-right: 10px;
+  }
+  .settings-tab .tab-icon { font-size: 16px; }
   
-  .settings-main { flex: 1; padding: 15px; overflow-y: auto; display: none; flex-direction: column; gap: 12px;}
+  .settings-main {
+    flex: 1; padding: 20px; overflow-y: auto;
+    display: none; flex-direction: column; gap: 20px;
+    background: var(--bg-chat);
+  }
   .settings-main.active { display: flex; }
+
+  .tg-section {
+    display: flex; flex-direction: column;
+    background: var(--bg-messages); border-radius: 10px;
+    border: 1px solid var(--border-dark); overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .tg-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 16px; border-bottom: 1px solid var(--border-dark);
+    cursor: pointer;
+  }
+  .tg-row:last-child { border-bottom: none; }
+  .tg-row:hover { background: var(--tg-hover); }
+  .tg-row-info { display: flex; flex-direction: column; gap: 3px; }
+  .tg-row-title { font-size: 14px; font-weight: 600; color: var(--text-main); }
+  .tg-row-desc { font-size: 12px; color: var(--text-muted); }
+  .tg-row-value { font-size: 13px; color: var(--tg-accent); font-weight: 500; }
   
-  .modal-body { padding: 15px; display: flex; flex-direction: column; gap: 12px; }
-  .modal-body label { font-size: 12px; font-weight: bold; color: var(--text-main); display: flex; align-items: center; gap: 8px;}
-  .modal-body input[type="text"] { width: 100%; padding: 6px; border: 1px solid var(--border-dark); border-radius: 4px; font-family: inherit; font-size: 12px; background: var(--bg-messages); color: var(--text-main); }
-  .modal-body select { width: 100%; padding: 6px; border: 1px solid var(--border-dark); border-radius: 4px; font-family: inherit; font-size: 12px; background: var(--bg-messages); color: var(--text-main); outline: none;}
-  .modal-body input[type="color"] { width: 100%; height: 30px; padding: 0; border: none; background: none; cursor: pointer;}
-  .checkbox-list { max-height: 120px; overflow-y: auto; border: 1px solid var(--border-dark); border-radius: 4px; padding: 5px; background: var(--bg-messages); }
-  .checkbox-list label { display: flex; align-items: center; gap: 6px; font-weight: normal; padding: 3px; cursor: pointer; }
-  
+  .tg-select {
+    padding: 6px 10px; border: 1px solid var(--border-dark); border-radius: 6px;
+    background: var(--bg-sidebar); color: var(--text-main); font-family: inherit;
+    font-size: 13px; outline: none; cursor: pointer;
+  }
+  .tg-select:focus { border-color: var(--tg-accent); }
+
+  .toggle-switch { position: relative; width: 40px; height: 22px; flex-shrink: 0; cursor: pointer; }
+  .toggle-switch input { display: none; }
+  .toggle-switch .toggle-slider {
+    position: absolute; inset: 0;
+    background: #ccc; border-radius: 22px; transition: .3s;
+  }
+  .toggle-switch .toggle-slider::before {
+    content: ''; position: absolute; top: 2px; left: 2px;
+    width: 18px; height: 18px; border-radius: 50%;
+    background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    transition: .3s;
+  }
+  .toggle-switch input:checked + .toggle-slider { background: var(--tg-accent); }
+  .toggle-switch input:checked + .toggle-slider::before { transform: translateX(18px); }
+
+  .tg-btn {
+    background: var(--tg-accent); color: #fff; border: none;
+    padding: 8px 16px; border-radius: 6px; font-weight: 600; font-size: 13px;
+    cursor: pointer; transition: opacity 0.2s;
+  }
+  .tg-btn:hover { opacity: 0.85; }
+  .tg-btn.danger { background: #e53935; }
+
+  /* Модалка добавления истории */
   .modal-footer { padding: 10px 15px; background: rgba(0,0,0,0.05); display: flex; justify-content: flex-end; gap: 8px; border-top: 1px solid var(--border-dark); }
   .modal-footer button { padding: 5px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 12px; border: 1px solid var(--border-dark); background: var(--bg-sidebar); color: var(--text-main); }
   .modal-footer button:hover { filter: brightness(0.9); }
   .modal-footer button.primary { background: linear-gradient(180deg, #a0d8ff, #3a8ecc); border-color: #104a80; color: white; }
   .modal-footer button.primary:hover { filter: brightness(1.1); }
+
+  .modal-body { padding: 15px; display: flex; flex-direction: column; gap: 12px; }
+  .modal-body label { font-size: 12px; font-weight: bold; color: var(--text-main); display: flex; align-items: center; gap: 8px;}
+  .modal-body input[type="text"] { width: 100%; padding: 6px; border: 1px solid var(--border-dark); border-radius: 4px; font-family: inherit; font-size: 12px; background: var(--bg-messages); color: var(--text-main); }
+  .checkbox-list { max-height: 120px; overflow-y: auto; border: 1px solid var(--border-dark); border-radius: 4px; padding: 5px; background: var(--bg-messages); }
+  .checkbox-list label { display: flex; align-items: center; gap: 6px; font-weight: normal; padding: 3px; cursor: pointer; }
 
   /* ===== ЭФФЕКТ ПРОТЕСТА! ===== */
   .objection-overlay {
@@ -499,30 +540,17 @@
     100% { transform: rotate(-10deg) scale(0.8); opacity: 0; }
   }
 
-  /* ===== ЭКРАН ЗВОНКА В СТИЛЕ SKYPE ===== */
+  /* ===== ЭКРАН ЗВОНКА ===== */
   .call-overlay {
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     background: linear-gradient(180deg, #4a7cb1 0%, #a7a6b5 50%, #e3d1cd 100%);
-    z-index: 500;
-    display: none;
-    flex-direction: column;
-    opacity: 0;
+    z-index: 500; display: none; flex-direction: column; opacity: 0;
     transition: opacity 0.3s ease;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   }
-  .call-overlay.active {
-    display: flex;
-    opacity: 1;
-  }
+  .call-overlay.active { display: flex; opacity: 1; }
 
-  .call-top-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    padding: 20px 30px;
-    color: #fff;
-  }
+  .call-top-bar { display: flex; justify-content: space-between; align-items: flex-start; padding: 20px 30px; color: #fff; }
   .call-user-info h2 { margin: 0; font-size: 24px; font-weight: 600; }
   .call-user-info p { margin: 4px 0 0; font-size: 13px; opacity: 0.8; font-weight: 300; }
   .call-top-actions { display: flex; align-items: center; gap: 15px; }
@@ -533,9 +561,7 @@
   }
   .call-top-avatar img { width: 100%; height: 100%; object-fit: cover; }
 
-  .call-center {
-    flex: 1; display: flex; justify-content: center; align-items: center; position: relative;
-  }
+  .call-center { flex: 1; display: flex; justify-content: center; align-items: center; position: relative; }
   .call-center-avatar {
     width: 180px; height: 180px; border-radius: 50%; background: #dcdcdc;
     display: flex; align-items: center; justify-content: center; font-size: 60px;
@@ -551,9 +577,7 @@
   }
   .call-self-video video { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
 
-  .call-bottom-bar {
-    padding: 30px; display: flex; justify-content: center; align-items: center; position: relative;
-  }
+  .call-bottom-bar { padding: 30px; display: flex; justify-content: center; align-items: center; position: relative; }
   .call-controls { display: flex; gap: 20px; }
   .call-control-btn {
     width: 60px; height: 60px; border-radius: 50%; border: none; cursor: pointer;
@@ -567,7 +591,6 @@
   .call-control-btn.red { background: #e85b5b; color: #fff; box-shadow: 0 4px 10px rgba(232, 91, 91, 0.4); }
   .call-control-btn.red:hover { transform: scale(1.05); background: #d14a4a; }
 
-  /* Меню опций */
   .call-options-wrapper { position: absolute; right: 30px; bottom: 30px; }
   .call-options-menu {
     position: absolute; bottom: 70px; right: 0; background: #fff;
@@ -582,7 +605,6 @@
   .call-options-menu div:last-child { border-bottom: none; }
   .call-options-menu div:hover { background: #f5f5f5; }
 
-  /* Индикатор записи */
   .record-indicator {
     position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
     background: rgba(255,0,0,0.8); color: white; padding: 5px 15px; border-radius: 20px;
@@ -592,7 +614,6 @@
   .record-dot { width: 10px; height: 10px; background: white; border-radius: 50%; animation: blink 1s infinite; }
   @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
-  /* Модалка историй */
   .story-viewer {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     background: #000; z-index: 600; display: none; flex-direction: column;
@@ -603,7 +624,7 @@
     width: 300px; height: 500px; background: #333; border-radius: 12px;
     display: flex; align-items: center; justify-content: center; padding: 20px;
     color: #fff; font-size: 20px; text-align: center; box-shadow: 0 0 50px rgba(255,255,255,0.1);
-    position: relative; overflow: hidden;
+    position: relative; overflow: hidden; flex-direction: column; gap: 12px;
   }
   .story-viewer-header {
     position: absolute; top: 10px; left: 10px; right: 10px;
@@ -629,15 +650,16 @@
 <body>
 
 <input type="file" id="hidden-file-input" accept="image/*">
+<input type="file" id="story-file-input" accept="image/*">
 
 <div class="aero-window" id="main-window">
   <div class="title-bar">
-    <div class="title-bar-text"><span>⚖️ Courtroom Live Messenger 2009</span></div>
+    <div class="title-bar-text"><span data-i18n="title">⚖️ Courtroom Live Messenger 2009</span></div>
     <div class="title-bar-controls">
-      <button onclick="openModal('modal-settings')" title="Настройки">⚙️</button>
-      <button onclick="minimizeWindow()" title="Свернуть">_</button>
-      <button onclick="maximizeWindow()" title="Развернуть">□</button>
-      <button class="close-btn" onclick="closeWindow()" title="Закрыть">✕</button>
+      <button onclick="openModal('modal-settings')" title="Settings">⚙️</button>
+      <button onclick="minimizeWindow()" title="Minimize">_</button>
+      <button onclick="maximizeWindow()" title="Maximize">□</button>
+      <button class="close-btn" onclick="closeWindow()" title="Close">✕</button>
     </div>
   </div>
 
@@ -645,55 +667,52 @@
     <div class="sidebar">
       <div class="my-profile">
         <div class="my-avatar-container" id="my-avatar-display">
-          🧑‍⚖️
-          <div class="my-status-dot online" id="my-status-dot" onclick="toggleStatusMenu(event)" title="Изменить статус"></div>
+          <div class="my-status-dot online" id="my-status-dot" onclick="toggleStatusMenu(event)" title="Change status"></div>
         </div>
         <div class="my-info">
           <div class="my-status">
-            <span id="display-my-name">Феникс Райт</span>
-            <button class="cloud-btn" onclick="toggleCloud(event)" title="Мой профиль">☁️</button>
+            <span id="display-my-name">User1</span>
+            <button class="cloud-btn" onclick="toggleCloud(event)" title="My Profile">☁️</button>
           </div>
-          <div class="my-mood" id="display-my-mood">Готов к бою!</div>
+          <div class="my-mood" id="display-my-mood" data-i18n="user">Пользователь</div>
         </div>
 
         <div class="status-menu" id="status-menu">
-          <div onclick="setMyStatus('online')"><span class="status-dot online"></span> В сети</div>
-          <div onclick="setMyStatus('away')"><span class="status-dot away"></span> Нет на месте</div>
-          <div onclick="setMyStatus('busy')"><span class="status-dot busy"></span> Занят</div>
+          <div onclick="setMyStatus('online')"><span class="status-dot online"></span> <span data-i18n="online">В сети</span></div>
+          <div onclick="setMyStatus('away')"><span class="status-dot away"></span> <span data-i18n="away">Нет на месте</span></div>
+          <div onclick="setMyStatus('busy')"><span class="status-dot busy"></span> <span data-i18n="busy">Занят</span></div>
         </div>
         
         <div class="info-cloud-popup popup" id="info-cloud">
-          <h3>👤 Мой профиль <button class="edit-btn" onclick="toggleEditProfile(event, 'me')">✏️ Изменить</button></h3>
+          <h3><span data-i18n="my_profile">👤 Мой профиль</span> <button class="edit-btn" onclick="toggleEditProfile(event, 'me')" data-i18n="edit">✏️ Изменить</button></h3>
           
           <div id="profile-view-mode">
-            <p><b>Имя:</b> <span id="view-name">Феникс Райт</span></p>
-            <p><b>Телефон:</b> <span id="view-phone">+7 (999) 123-45-67</span></p>
-            <p><b>Статус:</b> <span id="view-role">Адвокат</span></p>
-            <p><b>О себе:</b> <span id="view-bio">Люблю гамбургеры, чай и правду.</span></p>
+            <p><b data-i18n="name">Имя:</b> <span id="view-name">User1</span></p>
+            <p><b data-i18n="phone">Телефон:</b> <span id="view-phone">+7 (000) 000-00-00</span></p>
+            <p><b data-i18n="status">Статус:</b> <span id="view-role">Пользователь</span></p>
+            <p><b data-i18n="bio">О себе:</b> <span id="view-bio" data-i18n="welcome">Добро пожаловать в мессенджер!</span></p>
           </div>
           
           <div id="profile-edit-mode" style="display:none;">
             <div class="avatar-edit-area">
-              <button class="edit-btn" onclick="triggerFileUpload('me')">📷 Сменить фото</button>
-              <span style="font-size:10px; color:var(--text-muted);">Или введите эмодзи ниже</span>
+              <button class="edit-btn" onclick="triggerFileUpload('me')" data-i18n="change_photo">📷 Сменить фото</button>
             </div>
-            <p><b>Аватар (эмодзи):</b><br><input type="text" class="edit-input" id="edit-avatar-text"></p>
-            <p><b>Имя:</b><br><input type="text" class="edit-input" id="edit-name"></p>
-            <p><b>Телефон:</b><br><input type="text" class="edit-input" id="edit-phone"></p>
-            <p><b>Статус:</b><br><input type="text" class="edit-input" id="edit-role"></p>
-            <p><b>О себе:</b><br><textarea class="edit-input" id="edit-bio" rows="2"></textarea></p>
-            <button class="edit-btn" style="background: rgba(0,150,0,0.2); border-color: rgba(0,150,0,0.4); width: 100%; margin-top:5px;" onclick="saveProfile(event, 'me')">💾 Сохранить</button>
+            <p><b data-i18n="name">Имя:</b><br><input type="text" class="edit-input" id="edit-name"></p>
+            <p><b data-i18n="phone">Телефон:</b><br><input type="text" class="edit-input" id="edit-phone"></p>
+            <p><b data-i18n="status">Статус:</b><br><input type="text" class="edit-input" id="edit-role"></p>
+            <p><b data-i18n="bio">О себе:</b><br><textarea class="edit-input" id="edit-bio" rows="2"></textarea></p>
+            <button class="edit-btn" style="background: rgba(0,150,0,0.2); border-color: rgba(0,150,0,0.4); width: 100%; margin-top:5px;" onclick="saveProfile(event, 'me')" data-i18n="save">💾 Сохранить</button>
           </div>
         </div>
       </div>
 
       <div class="action-bar">
-        <button onclick="openModal('modal-add-contact')">➕ Контакт</button>
-        <button onclick="openModal('modal-add-group')">➕ Группа</button>
+        <button onclick="openModal('modal-add-contact')" data-i18n="add_contact">➕ Контакт</button>
+        <button onclick="openModal('modal-add-group')" data-i18n="add_group">➕ Группа</button>
       </div>
 
       <div class="search-box">
-        <input type="text" placeholder="Поиск по контактам..." id="search-input">
+        <input type="text" placeholder="Поиск по контактам..." id="search-input" data-i18n-placeholder="search">
       </div>
       <div class="contact-list" id="contact-list">
         <!-- Контакты будут добавляться сюда -->
@@ -702,15 +721,15 @@
 
     <div class="chat-area">
       <div class="objection-overlay" id="objection-overlay">
-        <div class="objection-text">ПРОТЕСТУЮ!</div>
+        <div class="objection-text" data-i18n="objection">ПРОТЕСТУЮ!</div>
       </div>
 
       <div class="chat-header">
-        <div class="chat-title" id="chat-title">Выберите собеседника...</div>
+        <div class="chat-title" id="chat-title" data-i18n="select_chat">Выберите собеседника...</div>
         <div style="display:flex; gap:10px; align-items:center; z-index: 2;">
-          <button class="header-btn" id="view-contact-profile-btn" onclick="toggleContactProfile(event)" style="display:none;">ℹ️ Профиль</button>
+          <button class="header-btn" id="view-contact-profile-btn" onclick="toggleContactProfile(event)" style="display:none;" data-i18n="profile">ℹ️ Профиль</button>
           
-          <button class="header-btn" id="call-btn" onclick="startCall()" title="Позвонить" style="display:none;">
+          <button class="header-btn" id="call-btn" onclick="startCall()" title="Call" style="display:none;">
             <svg viewBox="0 0 24 24">
               <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
               <path d="M15.5 2.5a8 8 0 0 1 5 5"/>
@@ -722,51 +741,47 @@
         </div>
       </div>
 
-      <!-- Панель историй -->
       <div class="stories-bar" id="stories-bar">
         <div class="story-item my-story" onclick="openAddStoryModal()">
-          <div class="story-avatar">🧑‍⚖️</div>
-          <div class="story-name">Моя история</div>
+          <div class="story-avatar" id="my-story-avatar"></div>
+          <div class="story-name" data-i18n="my_story">Моя история</div>
         </div>
-        <!-- Истории друзей будут добавляться сюда -->
       </div>
 
       <div class="contact-profile-popup popup" id="contact-profile-popup">
-        <h3 id="contact-popup-title">Профиль <button class="edit-btn" onclick="toggleEditProfile(event, 'contact')">✏️ Изменить</button></h3>
+        <h3 id="contact-popup-title">Профиль <button class="edit-btn" onclick="toggleEditProfile(event, 'contact')" data-i18n="edit">✏️ Изменить</button></h3>
         
         <div id="contact-view-mode">
-          <p><b>Телефон:</b> <span id="cp-phone">-</span></p>
-          <p><b>Роль:</b> <span id="cp-role">-</span></p>
-          <p><b>Статус:</b> <span id="cp-status">-</span></p>
-          <p id="cp-bio-container"><b>О себе:</b> <span id="cp-bio">-</span></p>
-          <p id="cp-members-container" style="display:none;"><b>Участники:</b> <span id="cp-members">-</span></p>
+          <p><b data-i18n="phone">Телефон:</b> <span id="cp-phone">-</span></p>
+          <p><b data-i18n="role">Роль:</b> <span id="cp-role">-</span></p>
+          <p><b data-i18n="status">Статус:</b> <span id="cp-status">-</span></p>
+          <p id="cp-bio-container"><b data-i18n="bio">О себе:</b> <span id="cp-bio">-</span></p>
+          <p id="cp-members-container" style="display:none;"><b data-i18n="members">Участники:</b> <span id="cp-members">-</span></p>
         </div>
 
         <div id="contact-edit-mode" style="display:none;">
           <div class="avatar-edit-area">
-            <button class="edit-btn" onclick="triggerFileUpload('contact')">📷 Сменить фото</button>
-            <span style="font-size:10px; color:var(--text-muted);">Или введите эмодзи ниже</span>
+            <button class="edit-btn" onclick="triggerFileUpload('contact')" data-i18n="change_photo">📷 Сменить фото</button>
           </div>
-          <p><b>Аватар:</b><br><input type="text" class="edit-input" id="edit-c-avatar-text"></p>
-          <p><b>Имя:</b><br><input type="text" class="edit-input" id="edit-c-name"></p>
-          <p><b>Телефон:</b><br><input type="text" class="edit-input" id="edit-c-phone"></p>
-          <p><b>Роль:</b><br><input type="text" class="edit-input" id="edit-c-role"></p>
-          <p><b>О себе:</b><br><textarea class="edit-input" id="edit-c-bio" rows="2"></textarea></p>
-          <button class="edit-btn" style="background: rgba(0,150,0,0.2); border-color: rgba(0,150,0,0.4); width: 100%; margin-top:5px;" onclick="saveProfile(event, 'contact')">💾 Сохранить</button>
+          <p><b data-i18n="name">Имя:</b><br><input type="text" class="edit-input" id="edit-c-name"></p>
+          <p><b data-i18n="phone">Телефон:</b><br><input type="text" class="edit-input" id="edit-c-phone"></p>
+          <p><b data-i18n="role">Роль:</b><br><input type="text" class="edit-input" id="edit-c-role"></p>
+          <p><b data-i18n="bio">О себе:</b><br><textarea class="edit-input" id="edit-c-bio" rows="2"></textarea></p>
+          <button class="edit-btn" style="background: rgba(0,150,0,0.2); border-color: rgba(0,150,0,0.4); width: 100%; margin-top:5px;" onclick="saveProfile(event, 'contact')" data-i18n="save">💾 Сохранить</button>
         </div>
       </div>
 
       <div class="messages" id="messages">
-        <div style="text-align:center; color:var(--text-muted); margin-top:50px;">Выберите контакт или создайте новый...</div>
+        <div style="text-align:center; color:var(--text-muted); margin-top:50px;" data-i18n="select_chat_desc">Выберите контакт или создайте новый...</div>
       </div>
 
       <div class="input-area">
         <div class="toolbar">
-          <button class="objection-btn" onclick="triggerObjection()">🚨 ПРОТЕСТУЮ!</button>
+          <button class="objection-btn" onclick="triggerObjection()" data-i18n="objection_btn">🚨 ПРОТЕСТУЮ!</button>
         </div>
         <div class="input-row">
-          <textarea id="message-input" placeholder="Введите вашу речь... (Enter - отправить)"></textarea>
-          <button id="send-btn" class="gavel-btn" title="Отправить (Enter)">
+          <textarea id="message-input" placeholder="Введите вашу речь... (Enter - отправить)" data-i18n-placeholder="type_message"></textarea>
+          <button id="send-btn" class="gavel-btn" title="Send">
             <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
               <rect x="15" y="75" width="40" height="12" rx="4" fill="#6b412b" stroke="#3d1f15" stroke-width="4"/>
               <rect x="22" y="65" width="26" height="12" rx="4" fill="#d9a07d" stroke="#3d1f15" stroke-width="4"/>
@@ -786,86 +801,252 @@
   <!-- МОДАЛЬНЫЕ ОКНА -->
   <div class="modal-overlay" id="modal-add-contact">
     <div class="modal-window">
-      <div class="modal-header">Добавить новый контакт</div>
+      <div class="modal-header" data-i18n="add_contact_title">Добавить новый контакт</div>
       <div class="modal-body">
-        <label>Имя:</label>
-        <input type="text" id="new-contact-name" placeholder="Например: Дик Гамшу">
-        <label>Номер телефона:</label>
+        <label data-i18n="name">Имя:</label>
+        <input type="text" id="new-contact-name" placeholder="User2">
+        <label data-i18n="phone">Номер телефона:</label>
         <input type="text" id="new-contact-phone" placeholder="+7 (999) 000-00-00">
-        <label>Роль / Статус:</label>
-        <input type="text" id="new-contact-role" placeholder="Например: Детектив">
-        <label>О себе:</label>
-        <input type="text" id="new-contact-bio" placeholder="Коротко о персонаже...">
+        <label data-i18n="role">Роль / Статус:</label>
+        <input type="text" id="new-contact-role" placeholder="User">
+        <label data-i18n="bio">О себе:</label>
+        <input type="text" id="new-contact-bio" placeholder="...">
       </div>
       <div class="modal-footer">
-        <button onclick="closeModal('modal-add-contact')">Отмена</button>
-        <button class="primary" onclick="addNewContact()">Создать</button>
+        <button onclick="closeModal('modal-add-contact')" data-i18n="cancel">Отмена</button>
+        <button class="primary" onclick="addNewContact()" data-i18n="create">Создать</button>
       </div>
     </div>
   </div>
 
   <div class="modal-overlay" id="modal-add-group">
     <div class="modal-window">
-      <div class="modal-header">Создать групповой чат</div>
+      <div class="modal-header" data-i18n="add_group_title">Создать групповой чат</div>
       <div class="modal-body">
-        <label>Название группы:</label>
-        <input type="text" id="new-group-name" placeholder="Например: Защита">
-        <label>Выберите участников:</label>
+        <label data-i18n="group_name">Название группы:</label>
+        <input type="text" id="new-group-name" placeholder="Group">
+        <label data-i18n="select_members">Выберите участников:</label>
         <div class="checkbox-list" id="group-members-list"></div>
       </div>
       <div class="modal-footer">
-        <button onclick="closeModal('modal-add-group')">Отмена</button>
-        <button class="primary" onclick="createGroup()">Создать</button>
+        <button onclick="closeModal('modal-add-group')" data-i18n="cancel">Отмена</button>
+        <button class="primary" onclick="createGroup()" data-i18n="create">Создать</button>
       </div>
     </div>
   </div>
 
-  <!-- НАСТРОЙКИ (С ВКЛАДКАМИ) -->
+  <!-- НАСТРОЙКИ В СТИЛЕ TELEGRAM -->
   <div class="modal-overlay" id="modal-settings">
-    <div class="modal-window">
-      <div class="modal-header">⚙️ Настройки</div>
+    <div class="modal-window settings-window">
+      <div class="modal-header"><span data-i18n="settings">⚙️ Настройки</span> <button class="edit-btn" style="background:transparent; border:none; font-size:16px;" onclick="closeModal('modal-settings')">✕</button></div>
       <div class="settings-layout">
         <div class="settings-sidebar">
-          <div class="settings-tab active" onclick="switchSettingsTab('tab-sounds', this)">Звуки и темы</div>
-          <div class="settings-tab" onclick="switchSettingsTab('tab-privacy', this)">Конфиденциальность</div>
+          <div class="settings-tab active" onclick="switchSettingsTab('tab-general', this)">
+            <span class="tab-icon">⚙️</span> <span data-i18n="general">Общие</span>
+          </div>
+          <div class="settings-tab" onclick="switchSettingsTab('tab-account', this)">
+            <span class="tab-icon">👤</span> <span data-i18n="account">Аккаунт</span>
+          </div>
+          <div class="settings-tab" onclick="switchSettingsTab('tab-privacy', this)">
+            <span class="tab-icon">🔒</span> <span data-i18n="privacy">Приватность</span>
+          </div>
+          <div class="settings-tab" onclick="switchSettingsTab('tab-notifications', this)">
+            <span class="tab-icon">🔔</span> <span data-i18n="notifications">Уведомления</span>
+          </div>
+          <div class="settings-tab" onclick="switchSettingsTab('tab-chat', this)">
+            <span class="tab-icon">💬</span> <span data-i18n="chat_settings">Настройки чата</span>
+          </div>
+          <div class="settings-tab" onclick="switchSettingsTab('tab-devices', this)">
+            <span class="tab-icon">📱</span> <span data-i18n="devices">Устройства</span>
+          </div>
+          <div class="settings-tab" onclick="switchSettingsTab('tab-advanced', this)">
+            <span class="tab-icon">🛠️</span> <span data-i18n="advanced">Продвинутые</span>
+          </div>
         </div>
         
-        <div class="settings-main active" id="tab-sounds">
-          <label style="cursor:pointer;">
-            <input type="checkbox" id="setting-sounds" checked onchange="toggleSounds(this.checked)">
-            Включить звуки мессенджера
-          </label>
-          <div style="border-top: 1px solid var(--border-dark); margin: 5px 0;"></div>
-          <label>Тема оформления:</label>
-          <select id="setting-theme" onchange="changeTheme(this.value)">
-            <option value="light">Светлая (Aero)</option>
-            <option value="dark">Темная</option>
-            <option value="custom">Пользовательская</option>
-          </select>
-          <div id="custom-color-container" style="display:none; margin-top:5px;">
-            <label>Выберите цвет фона:</label>
-            <input type="color" id="setting-color" value="#3a7ca5" oninput="applyCustomColor(this.value)">
+        <!-- Общие -->
+        <div class="settings-main active" id="tab-general">
+          <div class="tg-section">
+            <div class="tg-row">
+              <div class="tg-row-info">
+                <div class="tg-row-title" data-i18n="language">Язык</div>
+                <div class="tg-row-desc" data-i18n="language_desc">Выберите язык интерфейса</div>
+              </div>
+              <select class="tg-select" id="setting-language" onchange="changeLanguage(this.value)">
+                <option value="ru">Русский</option>
+                <option value="uk">Українська</option>
+                <option value="en">English</option>
+              </select>
+            </div>
+            <div class="tg-row">
+              <div class="tg-row-info">
+                <div class="tg-row-title" data-i18n="theme">Тема оформления</div>
+                <div class="tg-row-desc" data-i18n="theme_desc">Светлая или темная</div>
+              </div>
+              <select class="tg-select" id="setting-theme" onchange="changeTheme(this.value)">
+                <option value="light" data-i18n="theme_light">Светлая</option>
+                <option value="dark" data-i18n="theme_dark">Темная</option>
+              </select>
+            </div>
+          </div>
+          <div class="tg-section">
+            <div class="tg-row">
+              <div class="tg-row-info">
+                <div class="tg-row-title" data-i18n="sounds">Звуки</div>
+                <div class="tg-row-desc" data-i18n="sounds_desc">Звуки уведомлений и кликов</div>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="setting-sounds" checked onchange="toggleSounds(this.checked)">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
           </div>
         </div>
 
+        <!-- Аккаунт -->
+        <div class="settings-main" id="tab-account">
+          <div class="tg-section">
+            <div class="tg-row" onclick="toggleCloud(event)">
+              <div class="tg-row-info">
+                <div class="tg-row-title" data-i18n="my_profile">Мой профиль</div>
+                <div class="tg-row-desc" data-i18n="edit_profile_desc">Изменить имя, фото и описание</div>
+              </div>
+              <div class="tg-row-value">›</div>
+            </div>
+            <div class="tg-row">
+              <div class="tg-row-info">
+                <div class="tg-row-title" data-i18n="phone">Номер телефона</div>
+                <div class="tg-row-desc" id="tg-acc-phone">+7 (000) 000-00-00</div>
+              </div>
+            </div>
+            <div class="tg-row">
+              <div class="tg-row-info">
+                <div class="tg-row-title" data-i18n="username">Имя пользователя</div>
+                <div class="tg-row-desc" id="tg-acc-username">@user1</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Приватность -->
         <div class="settings-main" id="tab-privacy">
-          <label>Кто видит мой номер телефона:</label>
-          <select id="privacy-phone" onchange="savePrivacySettings()">
-            <option value="all">Все пользователи</option>
-            <option value="contacts">Только контакты</option>
-            <option value="nobody">Никто (Скрыт)</option>
-          </select>
-          
-          <label style="margin-top: 10px;">Кто видит мою аватарку:</label>
-          <select id="privacy-avatar" onchange="savePrivacySettings()">
-            <option value="all">Все пользователи</option>
-            <option value="contacts">Только контакты</option>
-            <option value="nobody">Никто (Скрыта)</option>
-          </select>
+          <div class="tg-section">
+            <div class="tg-row">
+              <div class="tg-row-info">
+                <div class="tg-row-title" data-i18n="phone_visibility">Кто видит номер</div>
+              </div>
+              <select class="tg-select" id="privacy-phone" onchange="savePrivacySettings()">
+                <option value="all" data-i18n="everyone">Все</option>
+                <option value="contacts" data-i18n="contacts">Контакты</option>
+                <option value="nobody" data-i18n="nobody">Никто</option>
+              </select>
+            </div>
+            <div class="tg-row">
+              <div class="tg-row-info">
+                <div class="tg-row-title" data-i18n="avatar_visibility">Кто видит фото</div>
+              </div>
+              <select class="tg-select" id="privacy-avatar" onchange="savePrivacySettings()">
+                <option value="all" data-i18n="everyone">Все</option>
+                <option value="contacts" data-i18n="contacts">Контакты</option>
+                <option value="nobody" data-i18n="nobody">Никто</option>
+              </select>
+            </div>
+          </div>
+          <div class="tg-section">
+            <div class="tg-row">
+              <div class="tg-row-info">
+                <div class="tg-row-title" data-i18n="messages">Сообщения</div>
+                <div class="tg-row-desc" data-i18n="messages_desc">Кто может писать первым</div>
+              </div>
+              <select class="tg-select">
+                <option data-i18n="everyone">Все</option>
+                <option data-i18n="contacts">Контакты</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Уведомления -->
+        <div class="settings-main" id="tab-notifications">
+          <div class="tg-section">
+            <div class="tg-row">
+              <div class="tg-row-info">
+                <div class="tg-row-title" data-i18n="desktop_notif">Уведомления на рабочем столе</div>
+              </div>
+              <label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+            </div>
+            <div class="tg-row">
+              <div class="tg-row-info">
+                <div class="tg-row-title" data-i18n="message_preview">Показывать текст сообщения</div>
+              </div>
+              <label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Настройки чата -->
+        <div class="settings-main" id="tab-chat">
+          <div class="tg-section">
+            <div class="tg-row">
+              <div class="tg-row-info">
+                <div class="tg-row-title" data-i18n="chat_wallpaper">Фон чата</div>
+              </div>
+              <div class="tg-row-value" data-i18n="standard">Стандартный</div>
+            </div>
+            <div class="tg-row">
+              <div class="tg-row-info">
+                <div class="tg-row-title" data-i18n="text_size">Размер текста</div>
+              </div>
+              <select class="tg-select">
+                <option>12px</option>
+                <option selected>14px</option>
+                <option>16px</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Устройства -->
+        <div class="settings-main" id="tab-devices">
+          <div class="tg-section">
+            <div class="tg-row">
+              <div class="tg-row-info">
+                <div class="tg-row-title" data-i18n="active_sessions">Активные сессии</div>
+                <div class="tg-row-desc">1</div>
+              </div>
+            </div>
+            <div class="tg-row">
+              <div class="tg-row-info">
+                <div class="tg-row-title">💻 Windows • Chrome</div>
+                <div class="tg-row-desc">Текущая сессия</div>
+              </div>
+            </div>
+          </div>
+          <button class="tg-btn danger" style="align-self: flex-start;">Terminate All Other Sessions</button>
+        </div>
+
+        <!-- Продвинутые -->
+        <div class="settings-main" id="tab-advanced">
+          <div class="tg-section">
+            <div class="tg-row">
+              <div class="tg-row-info">
+                <div class="tg-row-title" data-i18n="data_usage">Использование данных</div>
+                <div class="tg-row-desc" data-i18n="data_usage_desc">Настройки автоскачивания</div>
+              </div>
+              <div class="tg-row-value">›</div>
+            </div>
+            <div class="tg-row">
+              <div class="tg-row-info">
+                <div class="tg-row-title" data-i18n="proxy">Настройки прокси</div>
+                <div class="tg-row-desc" data-i18n="proxy_desc">Использовать прокси-сервер</div>
+              </div>
+              <div class="tg-row-value">›</div>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="modal-footer">
-        <button class="primary" onclick="closeModal('modal-settings')">Готово</button>
+      <div class="modal-footer" style="padding: 10px 20px; background: var(--bg-sidebar);">
+        <button class="primary" onclick="closeModal('modal-settings')" data-i18n="done">Готово</button>
       </div>
     </div>
   </div>
@@ -873,14 +1054,22 @@
   <!-- МОДАЛКА ДОБАВЛЕНИЯ ИСТОРИИ -->
   <div class="modal-overlay" id="modal-add-story">
     <div class="modal-window">
-      <div class="modal-header">Создать историю</div>
+      <div class="modal-header" data-i18n="create_story">Создать историю</div>
       <div class="modal-body">
-        <label>Текст истории:</label>
-        <input type="text" id="new-story-text" placeholder="Что у вас нового?">
+        <label data-i18n="story_text">Текст истории:</label>
+        <input type="text" id="new-story-text" placeholder="...">
+        <label data-i18n="story_photo">Фотография (необязательно):</label>
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <button class="edit-btn" style="align-self:flex-start;" onclick="triggerStoryUpload()" data-i18n="choose_photo">📷 Выбрать фото</button>
+          <div id="story-image-preview" style="display:none; flex-direction:column; align-items:center; gap:6px;">
+            <img id="story-preview-img" style="max-width:100%; max-height:140px; border-radius:6px; object-fit:cover; border:1px solid var(--border-dark);">
+            <button class="edit-btn" style="background: rgba(255,0,0,0.15); border-color: rgba(255,0,0,0.35); color: #c00;" onclick="clearStoryImage()" data-i18n="remove_photo">✕ Убрать фото</button>
+          </div>
+        </div>
       </div>
       <div class="modal-footer">
-        <button onclick="closeModal('modal-add-story')">Отмена</button>
-        <button class="primary" onclick="addStory()">Опубликовать</button>
+        <button onclick="closeModal('modal-add-story')" data-i18n="cancel">Отмена</button>
+        <button class="primary" onclick="addStory()" data-i18n="publish">Опубликовать</button>
       </div>
     </div>
   </div>
@@ -889,7 +1078,7 @@
   <div class="story-viewer" id="story-viewer">
     <div class="story-viewer-content" id="story-content">Текст истории</div>
     <div class="story-viewer-header">
-      <div class="story-viewer-avatar" id="story-viewer-avatar">👤</div>
+      <div class="story-viewer-avatar" id="story-viewer-avatar"></div>
       <span id="story-viewer-name">Имя</span>
     </div>
     <button class="story-viewer-close" onclick="closeStoryViewer()">✕</button>
@@ -898,21 +1087,21 @@
   <!-- ЭКРАН ЗВОНКА -->
   <div class="call-overlay" id="call-overlay">
     <div class="record-indicator" id="record-indicator">
-      <div class="record-dot"></div> ЗАПИСЬ
+      <div class="record-dot"></div> <span data-i18n="recording">ЗАПИСЬ</span>
     </div>
 
     <div class="call-top-bar">
       <div class="call-user-info">
         <h2 id="call-name">Имя</h2>
-        <p id="call-status">Соединение...</p>
+        <p id="call-status" data-i18n="connecting">Соединение...</p>
       </div>
       <div class="call-top-actions">
-        <div class="call-top-avatar" id="call-top-avatar">👤</div>
+        <div class="call-top-avatar" id="call-top-avatar"></div>
       </div>
     </div>
 
     <div class="call-center">
-      <div class="call-center-avatar" id="call-center-avatar">АК</div>
+      <div class="call-center-avatar" id="call-center-avatar"></div>
       <div class="call-self-video" id="call-self-video">
         <video id="self-video" autoplay playsinline muted></video>
       </div>
@@ -920,31 +1109,20 @@
 
     <div class="call-bottom-bar">
       <div class="call-controls">
-        <button class="call-control-btn white" id="mic-btn" onclick="toggleMic()" title="Выключить микрофон">
+        <button class="call-control-btn white" id="mic-btn" onclick="toggleMic()">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="22"></line></svg>
         </button>
         
-        <button class="call-control-btn black" id="cam-toggle-btn" onclick="toggleCamera()" title="Включить камеру">
+        <button class="call-control-btn black" id="cam-toggle-btn" onclick="toggleCamera()">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 10l4.553-2.276A1 1 0 0 1 21 8.618v6.764a1 1 0 0 1-1.447.894L15 14v-4z"></path><rect x="3" y="6" width="12" height="12" rx="2" ry="2"></rect><line x1="1" y1="1" x2="23" y2="23"></line></svg>
         </button>
 
-        <button class="call-control-btn black" id="share-btn" onclick="toggleScreenShare()" title="Демонстрация экрана">
+        <button class="call-control-btn black" id="share-btn" onclick="toggleScreenShare()">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
         </button>
 
-        <button class="call-control-btn red" onclick="endCall()" title="Завершить">
+        <button class="call-control-btn red" onclick="endCall()" title="End Call">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
-        </button>
-      </div>
-
-      <div class="call-options-wrapper">
-        <div class="call-options-menu" id="call-options-menu">
-          <div onclick="toggleHold()">Поставить звонок на удержание</div>
-          <div onclick="toggleRecord()">Начать запись</div>
-          <div onclick="alert('Настройки видео скоро будут доступны.')">Настройки видео</div>
-        </div>
-        <button class="call-control-btn white" onclick="toggleCallOptions()" title="Другие параметры">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
         </button>
       </div>
     </div>
@@ -953,19 +1131,277 @@
 
 <script>
   /* =========================================
+     ЛОКАЛИЗАЦИЯ (RU, UK, EN)
+     ========================================= */
+  const translations = {
+    ru: {
+      title: "⚖️ Courtroom Live Messenger 2009",
+      user: "Пользователь",
+      online: "В сети",
+      away: "Нет на месте",
+      busy: "Занят",
+      my_profile: "👤 Мой профиль",
+      edit: "✏️ Изменить",
+      name: "Имя:",
+      phone: "Телефон:",
+      status: "Статус:",
+      bio: "О себе:",
+      welcome: "Добро пожаловать в мессенджер!",
+      change_photo: "📷 Сменить фото",
+      save: "💾 Сохранить",
+      add_contact: "➕ Контакт",
+      add_group: "➕ Группа",
+      search: "Поиск по контактам...",
+      objection: "ПРОТЕСТУЮ!",
+      objection_btn: "🚨 ПРОТЕСТУЮ!",
+      select_chat: "Выберите собеседника...",
+      select_chat_desc: "Выберите контакт или создайте новый...",
+      profile: "ℹ️ Профиль",
+      my_story: "Моя история",
+      role: "Роль:",
+      members: "Участники:",
+      type_message: "Введите вашу речь... (Enter - отправить)",
+      add_contact_title: "Добавить новый контакт",
+      add_group_title: "Создать групповой чат",
+      group_name: "Название группы:",
+      select_members: "Выберите участников:",
+      cancel: "Отмена",
+      create: "Создать",
+      settings: "⚙️ Настройки",
+      general: "Общие",
+      account: "Аккаунт",
+      privacy: "Приватность",
+      notifications: "Уведомления",
+      chat_settings: "Настройки чата",
+      devices: "Устройства",
+      advanced: "Продвинутые",
+      language: "Язык",
+      language_desc: "Выберите язык интерфейса",
+      theme: "Тема оформления",
+      theme_desc: "Светлая или темная",
+      theme_light: "Светлая",
+      theme_dark: "Темная",
+      sounds: "Звуки",
+      sounds_desc: "Звуки уведомлений и кликов",
+      edit_profile_desc: "Изменить имя, фото и описание",
+      username: "Имя пользователя",
+      phone_visibility: "Кто видит номер",
+      avatar_visibility: "Кто видит фото",
+      everyone: "Все",
+      contacts: "Контакты",
+      nobody: "Никто",
+      messages: "Сообщения",
+      messages_desc: "Кто может писать первым",
+      desktop_notif: "Уведомления на рабочем столе",
+      message_preview: "Показывать текст сообщения",
+      chat_wallpaper: "Фон чата",
+      standard: "Стандартный",
+      text_size: "Размер текста",
+      active_sessions: "Активные сессии",
+      data_usage: "Использование данных",
+      data_usage_desc: "Настройки автоскачивания",
+      proxy: "Настройки прокси",
+      proxy_desc: "Использовать прокси-сервер",
+      done: "Готово",
+      create_story: "Создать историю",
+      story_text: "Текст истории:",
+      story_photo: "Фотография (необязательно):",
+      choose_photo: "📷 Выбрать фото",
+      remove_photo: "✕ Убрать фото",
+      publish: "Опубликовать",
+      recording: "ЗАПИСЬ",
+      connecting: "Соединение..."
+    },
+    uk: {
+      title: "⚖️ Courtroom Live Messenger 2009",
+      user: "Користувач",
+      online: "В мережі",
+      away: "Немає на місці",
+      busy: "Зайнятий",
+      my_profile: "👤 Мій профіль",
+      edit: "✏️ Змінити",
+      name: "Ім'я:",
+      phone: "Телефон:",
+      status: "Статус:",
+      bio: "Про себе:",
+      welcome: "Ласкаво просимо до месенджера!",
+      change_photo: "📷 Змінити фото",
+      save: "💾 Зберегти",
+      add_contact: "➕ Контакт",
+      add_group: "➕ Група",
+      search: "Пошук по контактах...",
+      objection: "ПРОТЕСТУЮ!",
+      objection_btn: "🚨 ПРОТЕСТУЮ!",
+      select_chat: "Виберіть співрозмовника...",
+      select_chat_desc: "Виберіть контакт або створіть новий...",
+      profile: "ℹ️ Профіль",
+      my_story: "Моя історія",
+      role: "Роль:",
+      members: "Учасники:",
+      type_message: "Введіть вашу промову... (Enter - надіслати)",
+      add_contact_title: "Додати новий контакт",
+      add_group_title: "Створити груповий чат",
+      group_name: "Назва групи:",
+      select_members: "Виберіть учасників:",
+      cancel: "Скасувати",
+      create: "Створити",
+      settings: "⚙️ Налаштування",
+      general: "Загальні",
+      account: "Акаунт",
+      privacy: "Приватність",
+      notifications: "Сповіщення",
+      chat_settings: "Налаштування чату",
+      devices: "Пристрої",
+      advanced: "Розширені",
+      language: "Мова",
+      language_desc: "Виберіть мову інтерфейсу",
+      theme: "Тема оформлення",
+      theme_desc: "Світла або темна",
+      theme_light: "Світла",
+      theme_dark: "Темна",
+      sounds: "Звуки",
+      sounds_desc: "Звуки сповіщень та кліків",
+      edit_profile_desc: "Змінити ім'я, фото та опис",
+      username: "Ім'я користувача",
+      phone_visibility: "Хто бачить номер",
+      avatar_visibility: "Хто бачить фото",
+      everyone: "Всі",
+      contacts: "Контакти",
+      nobody: "Ніхто",
+      messages: "Повідомлення",
+      messages_desc: "Хто може писати першим",
+      desktop_notif: "Сповіщення на робочому столі",
+      message_preview: "Показувати текст повідомлення",
+      chat_wallpaper: "Фон чату",
+      standard: "Стандартний",
+      text_size: "Розмір тексту",
+      active_sessions: "Активні сесії",
+      data_usage: "Використання даних",
+      data_usage_desc: "Налаштування автозавантаження",
+      proxy: "Налаштування проксі",
+      proxy_desc: "Використовувати проксі-сервер",
+      done: "Готово",
+      create_story: "Створити історію",
+      story_text: "Текст історії:",
+      story_photo: "Фотографія (необов'язково):",
+      choose_photo: "📷 Вибрати фото",
+      remove_photo: "✕ Прибрати фото",
+      publish: "Опублікувати",
+      recording: "ЗАПИС",
+      connecting: "З'єднання..."
+    },
+    en: {
+      title: "⚖️ Courtroom Live Messenger 2009",
+      user: "User",
+      online: "Online",
+      away: "Away",
+      busy: "Busy",
+      my_profile: "👤 My Profile",
+      edit: "✏️ Edit",
+      name: "Name:",
+      phone: "Phone:",
+      status: "Status:",
+      bio: "Bio:",
+      welcome: "Welcome to the messenger!",
+      change_photo: "📷 Change Photo",
+      save: "💾 Save",
+      add_contact: "➕ Contact",
+      add_group: "➕ Group",
+      search: "Search contacts...",
+      objection: "OBJECTION!",
+      objection_btn: "🚨 OBJECTION!",
+      select_chat: "Select a chat...",
+      select_chat_desc: "Select a contact or create a new one...",
+      profile: "ℹ️ Profile",
+      my_story: "My Story",
+      role: "Role:",
+      members: "Members:",
+      type_message: "Type your message... (Enter - send)",
+      add_contact_title: "Add New Contact",
+      add_group_title: "Create Group Chat",
+      group_name: "Group Name:",
+      select_members: "Select Members:",
+      cancel: "Cancel",
+      create: "Create",
+      settings: "⚙️ Settings",
+      general: "General",
+      account: "Account",
+      privacy: "Privacy",
+      notifications: "Notifications",
+      chat_settings: "Chat Settings",
+      devices: "Devices",
+      advanced: "Advanced",
+      language: "Language",
+      language_desc: "Choose interface language",
+      theme: "Theme",
+      theme_desc: "Light or dark",
+      theme_light: "Light",
+      theme_dark: "Dark",
+      sounds: "Sounds",
+      sounds_desc: "Notification and click sounds",
+      edit_profile_desc: "Change name, photo and bio",
+      username: "Username",
+      phone_visibility: "Who sees my phone",
+      avatar_visibility: "Who sees my photo",
+      everyone: "Everyone",
+      contacts: "Contacts",
+      nobody: "Nobody",
+      messages: "Messages",
+      messages_desc: "Who can message me first",
+      desktop_notif: "Desktop Notifications",
+      message_preview: "Show message text",
+      chat_wallpaper: "Chat Wallpaper",
+      standard: "Standard",
+      text_size: "Text Size",
+      active_sessions: "Active Sessions",
+      data_usage: "Data Usage",
+      data_usage_desc: "Auto-download settings",
+      proxy: "Proxy Settings",
+      proxy_desc: "Use proxy server",
+      done: "Done",
+      create_story: "Create Story",
+      story_text: "Story Text:",
+      story_photo: "Photo (optional):",
+      choose_photo: "📷 Choose Photo",
+      remove_photo: "✕ Remove Photo",
+      publish: "Publish",
+      recording: "REC",
+      connecting: "Connecting..."
+    }
+  };
+
+  let currentLang = 'ru';
+
+  function changeLanguage(lang) {
+    currentLang = lang;
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (translations[lang] && translations[lang][key]) {
+        el.textContent = translations[lang][key];
+      }
+    });
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+      const key = el.getAttribute('data-i18n-placeholder');
+      if (translations[lang] && translations[lang][key]) {
+        el.placeholder = translations[lang][key];
+      }
+    });
+    // Обновляем состояние настроек
+    playClick();
+  }
+
+  /* =========================================
      ИКОНКИ ПО УМОЛЧАНИЮ
      ========================================= */
-  const defaultContactAvatar = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%230b5d8a'/><circle cx='50' cy='37' r='16' fill='%23fff'/><path d='M 22 80 A 28 28 0 0 1 78 80 Z' fill='%23fff'/></svg>";
+  // Векторизованная картинка из вашего сообщения
+  const defaultAvatarUrl = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23005f8a'/><circle cx='50' cy='35' r='18' fill='%23fff'/><path d='M 15 80 C 15 50, 85 50, 85 80 Z' fill='%23fff'/></svg>";
   const defaultGroupAvatar = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><mask id='m'><rect width='100' height='100' fill='%23fff'/><circle cx='50' cy='35' r='22' fill='%23000'/><path d='M 20 85 C 20 55, 80 55, 80 85 V 100 H 20 Z' fill='%23000'/></mask></defs><g mask='url(%23m)'><circle cx='25' cy='35' r='20' fill='%2300a8ff'/><path d='M 0 80 C 0 55, 50 55, 50 80 V 100 H 0 Z' fill='%2300a8ff'/><circle cx='75' cy='35' r='20' fill='%2300a8ff'/><path d='M 50 80 C 50 55, 100 55, 100 80 V 100 H 50 Z' fill='%2300a8ff'/></g><circle cx='50' cy='35' r='22' fill='%2300a8ff'/><path d='M 20 85 C 20 55, 80 55, 80 85 V 100 H 20 Z' fill='%2300a8ff'/></svg>";
 
   /* =========================================
      НАСТРОЙКИ И ТЕМЫ
      ========================================= */
   let soundsEnabled = true;
-  let privacySettings = {
-    phone: 'all', // all, contacts, nobody
-    avatar: 'all'
-  };
+  let privacySettings = { phone: 'all', avatar: 'all' };
 
   function switchSettingsTab(tabId, el) {
     document.querySelectorAll('.settings-main').forEach(t => t.classList.remove('active'));
@@ -984,237 +1420,44 @@
     document.body.className = '';
     if (theme === 'dark') {
       document.body.classList.add('theme-dark');
-      document.getElementById('custom-color-container').style.display = 'none';
-    } else if (theme === 'custom') {
-      document.body.classList.add('theme-custom');
-      document.getElementById('custom-color-container').style.display = 'block';
-      applyCustomColor(document.getElementById('setting-color').value);
     } else {
       document.body.classList.add('theme-light');
-      document.getElementById('custom-color-container').style.display = 'none';
     }
     playClick();
-  }
-
-  function applyCustomColor(color) {
-    if (document.getElementById('setting-theme').value === 'custom') {
-      document.body.style.setProperty('--custom-bg', color);
-    }
   }
 
   function savePrivacySettings() {
     privacySettings.phone = document.getElementById('privacy-phone').value;
     privacySettings.avatar = document.getElementById('privacy-avatar').value;
     playClick();
-    updateProfileDisplay(); // Обновляем отображение
-  }
-
-  function updateProfileDisplay() {
-    const nameEl = document.getElementById('view-name');
-    const phoneEl = document.getElementById('view-phone');
-    const avatarContainer = document.getElementById('my-avatar-display');
-    
-    // Применяем настройки конфиденциальности к своему профилю
-    if (privacySettings.phone === 'nobody') {
-      phoneEl.textContent = 'Скрыт';
-    } else {
-      phoneEl.textContent = myProfile.phone;
-    }
-
-    if (privacySettings.avatar === 'nobody') {
-       // Оставляем только кружок статуса
-       const dot = document.getElementById('my-status-dot');
-       if (dot) {
-         avatarContainer.innerHTML = `<div style="font-size:24px; color:#ccc;">👤</div>`;
-         avatarContainer.appendChild(dot);
-       } else {
-         avatarContainer.innerHTML = `<div style="font-size:24px; color:#ccc;">👤</div>`;
-       }
-    } else {
-       avatarContainer.innerHTML = `
-          ${renderAvatar(myProfile.avatar)}
-          <div class="my-status-dot ${myProfile.status}" id="my-status-dot" onclick="toggleStatusMenu(event)" title="Изменить статус"></div>
-        `;
-    }
+    updateProfileDisplay();
+    renderContacts();
   }
 
   /* =========================================
-     УПРАВЛЕНИЕ ОКНОМ
+     ГЕНЕРАЦИЯ УНИКАЛЬНЫХ ИМЕН
      ========================================= */
-  function minimizeWindow() {
-    playClick();
-    document.getElementById('main-window').classList.add('minimized');
-  }
-  function maximizeWindow() {
-    playClick();
-    const win = document.getElementById('main-window');
-    if (win.classList.contains('maximized')) {
-      win.classList.remove('maximized');
-    } else {
-      win.classList.remove('minimized');
-      win.classList.add('maximized');
-    }
-  }
-  function closeWindow() {
-    playClick();
-    document.getElementById('main-window').classList.add('hidden');
-    setTimeout(() => {
-      if(confirm('Мессенджер закрыт. Открыть снова?')) {
-        document.getElementById('main-window').classList.remove('hidden');
-      }
-    }, 100);
-  }
+  let userCounter = 1;
 
-  /* =========================================
-     ЗВУКИ
-     ========================================= */
-  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  
-  function playClick() {
-    if (!soundsEnabled) return;
-    if (audioCtx.state === 'suspended') audioCtx.resume();
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(800, audioCtx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(300, audioCtx.currentTime + 0.05);
-    gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
-    osc.connect(gain); gain.connect(audioCtx.destination);
-    osc.start(); osc.stop(audioCtx.currentTime + 0.05);
-  }
-
-  function playTypeSound() {
-    if (!soundsEnabled) return;
-    if (audioCtx.state === 'suspended') audioCtx.resume();
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    osc.type = 'square';
-    osc.frequency.setValueAtTime(1200, audioCtx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(600, audioCtx.currentTime + 0.02);
-    gain.gain.setValueAtTime(0.02, audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.02);
-    osc.connect(gain); gain.connect(audioCtx.destination);
-    osc.start(); osc.stop(audioCtx.currentTime + 0.02);
-  }
-
-  function playSkypeSound() {
-    if (!soundsEnabled) return;
-    if (audioCtx.state === 'suspended') audioCtx.resume();
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(659.25, audioCtx.currentTime); 
-    osc.frequency.setValueAtTime(523.25, audioCtx.currentTime + 0.1); 
-    gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-    gain.gain.setValueAtTime(0.1, audioCtx.currentTime + 0.1);
-    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.35);
-    osc.connect(gain); gain.connect(audioCtx.destination);
-    osc.start(); osc.stop(audioCtx.currentTime + 0.35);
-  }
-
-  function playTrashSound() {
-    if (!soundsEnabled) return;
-    if (audioCtx.state === 'suspended') audioCtx.resume();
-    const bufferSize = audioCtx.sampleRate * 0.4; 
-    const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-    const data = buffer.getChannelData(0);
-    for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
-    const noise = audioCtx.createBufferSource();
-    noise.buffer = buffer;
-    const filter = audioCtx.createBiquadFilter();
-    filter.type = 'lowpass';
-    filter.frequency.setValueAtTime(800, audioCtx.currentTime);
-    filter.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.4);
-    const gain = audioCtx.createGain();
-    gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
-    noise.connect(filter); filter.connect(gain); gain.connect(audioCtx.destination);
-    noise.start();
-    
-    const osc = audioCtx.createOscillator();
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(150, audioCtx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(50, audioCtx.currentTime + 0.2);
-    const oscGain = audioCtx.createGain();
-    oscGain.gain.setValueAtTime(0.2, audioCtx.currentTime);
-    oscGain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
-    osc.connect(oscGain); oscGain.connect(audioCtx.destination);
-    osc.start(); osc.stop(audioCtx.currentTime + 0.2);
-  }
-
-  function playRingSound() {
-    if (!soundsEnabled) return;
-    if (audioCtx.state === 'suspended') audioCtx.resume();
-    const t = audioCtx.currentTime;
-    [0, 0.45].forEach(offset => {
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(620, t + offset);
-      osc.frequency.setValueAtTime(780, t + offset + 0.18);
-      gain.gain.setValueAtTime(0.001, t + offset);
-      gain.gain.exponentialRampToValueAtTime(0.12, t + offset + 0.02);
-      gain.gain.setValueAtTime(0.12, t + offset + 0.18);
-      gain.gain.exponentialRampToValueAtTime(0.001, t + offset + 0.25);
-      osc.connect(gain); gain.connect(audioCtx.destination);
-      osc.start(t + offset); osc.stop(t + offset + 0.3);
-    });
-  }
-
-  function playConnectSound() {
-    if (!soundsEnabled) return;
-    if (audioCtx.state === 'suspended') audioCtx.resume();
-    const t = audioCtx.currentTime;
-    [523.25, 659.25, 783.99].forEach((freq, i) => {
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(freq, t + i * 0.1);
-      gain.gain.setValueAtTime(0.001, t + i * 0.1);
-      gain.gain.exponentialRampToValueAtTime(0.09, t + i * 0.1 + 0.02);
-      gain.gain.exponentialRampToValueAtTime(0.001, t + i * 0.1 + 0.18);
-      osc.connect(gain); gain.connect(audioCtx.destination);
-      osc.start(t + i * 0.1); osc.stop(t + i * 0.1 + 0.2);
-    });
-  }
-
-  function playHangupSound() {
-    if (!soundsEnabled) return;
-    if (audioCtx.state === 'suspended') audioCtx.resume();
-    const t = audioCtx.currentTime;
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(520, t);
-    osc.frequency.exponentialRampToValueAtTime(140, t + 0.35);
-    gain.gain.setValueAtTime(0.12, t);
-    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
-    osc.connect(gain); gain.connect(audioCtx.destination);
-    osc.start(t); osc.stop(t + 0.35);
+  function getNextUserName() {
+    return 'User' + userCounter++;
   }
 
   /* =========================================
      ДАННЫЕ
      ========================================= */
   let myProfile = { 
-    name: 'Феникс Райт', 
-    phone: '+7 (999) 123-45-67', 
-    role: 'Адвокат', 
-    bio: 'Люблю гамбургеры, чай и правду.', 
-    avatar: '🧑‍⚖️',
+    name: getNextUserName(), // User1
+    phone: '+7 (000) 000-00-00', 
+    role: 'User', 
+    bio: 'Welcome to the messenger!', 
+    avatar: defaultAvatarUrl,
     status: 'online'
   };
 
   let contacts = []; 
   let threads = {};  
-  const replies = {}; 
-
-  // Истории (Stories)
-  let stories = [
-    { id: 's1', author: 'Майя Фей', avatar: '👧', content: 'Готовимся к завтрашнему заседанию! 📚', time: '10 мин назад' },
-    { id: 's2', author: 'Майлз Эджворт', avatar: '🧑‍💼', content: 'Идеальная улика не оставляет шансов.', time: '30 мин назад' }
-  ];
+  let stories = [];
 
   let activeId = null; 
   let avatarTarget = 'me';
@@ -1223,18 +1466,9 @@
   let isRecording = false;
   let isScreenSharing = false;
   let isMicMuted = false;
+  let pendingStoryImage = null;
 
-  /* Состояние звонка */
-  let callState = {
-    active: false,
-    contactId: null,
-    seconds: 0,
-    connectTimeout: null,
-    timerInterval: null,
-    ringInterval: null
-  };
-
-  /* Состояние камеры */
+  let callState = { active: false, contactId: null, seconds: 0, connectTimeout: null, timerInterval: null, ringInterval: null };
   let cameraStream = null;
   let cameraOn = false;
 
@@ -1247,6 +1481,7 @@
   const viewContactProfileBtn = document.getElementById('view-contact-profile-btn');
   const callBtn = document.getElementById('call-btn');
   const hiddenFileInput = document.getElementById('hidden-file-input');
+  const storyFileInput = document.getElementById('story-file-input');
   const statusMenu = document.getElementById('status-menu');
 
   /* =========================================
@@ -1254,9 +1489,9 @@
      ========================================= */
   function renderAvatar(avatarStr) {
     if (avatarStr && (avatarStr.startsWith('data:image') || avatarStr.startsWith('http'))) {
-      return `<img src="${avatarStr}" alt="avatar">`;
+      return `<img src="${avatarStr}" alt="avatar" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">`;
     }
-    return avatarStr || '👤';
+    return avatarStr || `<img src="${defaultAvatarUrl}" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">`;
   }
 
   function getNowTime() {
@@ -1264,16 +1499,120 @@
     return String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
   }
 
+  function updateProfileDisplay() {
+    const avatarContainer = document.getElementById('my-avatar-display');
+    
+    if (privacySettings.avatar === 'nobody') {
+       const dot = document.getElementById('my-status-dot');
+       avatarContainer.innerHTML = `<div style="font-size:24px; color:#ccc;">👤</div>`;
+       if(dot) avatarContainer.appendChild(dot);
+    } else {
+       avatarContainer.innerHTML = `
+          ${renderAvatar(myProfile.avatar)}
+          <div class="my-status-dot ${myProfile.status}" id="my-status-dot" onclick="toggleStatusMenu(event)" title="Change status"></div>
+        `;
+    }
+    
+    // Обновляем вкладку "Аккаунт" в настройках
+    document.getElementById('tg-acc-phone').textContent = privacySettings.phone === 'nobody' ? 'Hidden' : myProfile.phone;
+    document.getElementById('tg-acc-username').textContent = '@' + myProfile.name.toLowerCase();
+    document.getElementById('my-story-avatar').innerHTML = renderAvatar(myProfile.avatar);
+  }
+
   /* =========================================
-     ИСТОРИИ (STORIES)
+     ЗВУКИ
+     ========================================= */
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  function playClick() {
+    if (!soundsEnabled) return;
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+    osc.type = 'sine'; osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(300, audioCtx.currentTime + 0.05);
+    gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.start(); osc.stop(audioCtx.currentTime + 0.05);
+  }
+  function playTypeSound() {
+    if (!soundsEnabled) return;
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+    osc.type = 'square'; osc.frequency.setValueAtTime(1200, audioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(600, audioCtx.currentTime + 0.02);
+    gain.gain.setValueAtTime(0.02, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.02);
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.start(); osc.stop(audioCtx.currentTime + 0.02);
+  }
+  function playTrashSound() {
+    if (!soundsEnabled) return;
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const bufferSize = audioCtx.sampleRate * 0.4; 
+    const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+    const noise = audioCtx.createBufferSource(); noise.buffer = buffer;
+    const filter = audioCtx.createBiquadFilter(); filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(800, audioCtx.currentTime);
+    filter.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.4);
+    const gain = audioCtx.createGain(); gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+    noise.connect(filter); filter.connect(gain); gain.connect(audioCtx.destination);
+    noise.start();
+  }
+  function playRingSound() {
+    if (!soundsEnabled) return;
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const t = audioCtx.currentTime;
+    [0, 0.45].forEach(offset => {
+      const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+      osc.type = 'sine'; osc.frequency.setValueAtTime(620, t + offset);
+      osc.frequency.setValueAtTime(780, t + offset + 0.18);
+      gain.gain.setValueAtTime(0.001, t + offset);
+      gain.gain.exponentialRampToValueAtTime(0.12, t + offset + 0.02);
+      gain.gain.setValueAtTime(0.12, t + offset + 0.18);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + offset + 0.25);
+      osc.connect(gain); gain.connect(audioCtx.destination);
+      osc.start(t + offset); osc.stop(t + offset + 0.3);
+    });
+  }
+  function playConnectSound() {
+    if (!soundsEnabled) return;
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const t = audioCtx.currentTime;
+    [523.25, 659.25, 783.99].forEach((freq, i) => {
+      const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+      osc.type = 'sine'; osc.frequency.setValueAtTime(freq, t + i * 0.1);
+      gain.gain.setValueAtTime(0.001, t + i * 0.1);
+      gain.gain.exponentialRampToValueAtTime(0.09, t + i * 0.1 + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + i * 0.1 + 0.18);
+      osc.connect(gain); gain.connect(audioCtx.destination);
+      osc.start(t + i * 0.1); osc.stop(t + i * 0.1 + 0.2);
+    });
+  }
+  function playHangupSound() {
+    if (!soundsEnabled) return;
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const t = audioCtx.currentTime;
+    const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+    osc.type = 'sine'; osc.frequency.setValueAtTime(520, t);
+    osc.frequency.exponentialRampToValueAtTime(140, t + 0.35);
+    gain.gain.setValueAtTime(0.12, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.start(t); osc.stop(t + 0.35);
+  }
+
+  /* =========================================
+     ИСТОРИИ
      ========================================= */
   function renderStories() {
     const bar = document.getElementById('stories-bar');
-    // Оставляем "Мою историю", удаляем остальные
     bar.innerHTML = `
       <div class="story-item my-story" onclick="openAddStoryModal()">
-        <div class="story-avatar">🧑‍⚖️</div>
-        <div class="story-name">Моя история</div>
+        <div class="story-avatar" id="my-story-avatar">${renderAvatar(myProfile.avatar)}</div>
+        <div class="story-name" data-i18n="my_story">${translations[currentLang].my_story}</div>
       </div>
     `;
     
@@ -1292,36 +1631,83 @@
   function openAddStoryModal() {
     playClick();
     document.getElementById('new-story-text').value = '';
+    pendingStoryImage = null;
+    document.getElementById('story-preview-img').src = '';
+    document.getElementById('story-image-preview').style.display = 'none';
     document.getElementById('modal-add-story').classList.add('active');
+  }
+
+  function triggerStoryUpload() { playClick(); storyFileInput.click(); }
+
+  storyFileInput.addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(event) {
+      const img = new Image();
+      img.onload = function() {
+        const canvas = document.createElement('canvas'); const ctx = canvas.getContext('2d');
+        const maxSize = 800; let width = img.width, height = img.height;
+        if (width > height) { if (width > maxSize) { height *= maxSize / width; width = maxSize; } } 
+        else { if (height > maxSize) { width *= maxSize / height; height = maxSize; } }
+        canvas.width = width; canvas.height = height;
+        ctx.drawImage(img, 0, 0, width, height);
+        pendingStoryImage = canvas.toDataURL('image/jpeg', 0.85);
+        document.getElementById('story-preview-img').src = pendingStoryImage;
+        document.getElementById('story-image-preview').style.display = 'flex';
+        playClick();
+      };
+      img.src = event.target.result;
+    };
+    reader.readAsDataURL(file);
+    this.value = '';
+  });
+
+  function clearStoryImage() {
+    pendingStoryImage = null;
+    document.getElementById('story-preview-img').src = '';
+    document.getElementById('story-image-preview').style.display = 'none';
+    playClick();
   }
 
   function addStory() {
     const text = document.getElementById('new-story-text').value.trim();
-    if (!text) return;
+    if (!text && !pendingStoryImage) return;
     playClick();
     stories.unshift({
-      id: 's_' + Date.now(),
-      author: myProfile.name,
-      avatar: myProfile.avatar,
-      content: text,
-      time: 'Только что'
+      id: 's_' + Date.now(), author: myProfile.name, avatar: myProfile.avatar,
+      content: text, image: pendingStoryImage, time: 'Just now'
     });
+    pendingStoryImage = null;
+    document.getElementById('story-preview-img').src = '';
+    document.getElementById('story-image-preview').style.display = 'none';
     closeModal('modal-add-story');
     renderStories();
   }
 
   function openStoryViewer(story) {
     playClick();
-    document.getElementById('story-content').textContent = story.content;
+    const contentEl = document.getElementById('story-content');
+    contentEl.innerHTML = '';
+    if (story.image) {
+      const img = document.createElement('img');
+      img.src = story.image;
+      img.style.maxWidth = '100%'; img.style.maxHeight = '340px';
+      img.style.borderRadius = '8px'; img.style.objectFit = 'contain';
+      contentEl.appendChild(img);
+    }
+    if (story.content) {
+      const textDiv = document.createElement('div');
+      textDiv.textContent = story.content;
+      textDiv.style.fontSize = '17px'; textDiv.style.lineHeight = '1.4';
+      contentDiv.appendChild(textDiv);
+    }
     document.getElementById('story-viewer-avatar').innerHTML = renderAvatar(story.avatar);
     document.getElementById('story-viewer-name').textContent = story.author;
     document.getElementById('story-viewer').classList.add('active');
   }
 
-  function closeStoryViewer() {
-    playClick();
-    document.getElementById('story-viewer').classList.remove('active');
-  }
+  function closeStoryViewer() { playClick(); document.getElementById('story-viewer').classList.remove('active'); }
 
   /* =========================================
      СТАТУС
@@ -1342,9 +1728,9 @@
     myProfile.status = status;
     const dot = document.getElementById('my-status-dot');
     if (dot) dot.className = `my-status-dot ${status}`;
-    let moodText = 'Готов к бою!';
-    if (status === 'away') moodText = 'Отошел на минутку...';
-    if (status === 'busy') moodText = 'Не беспокоить! Идет суд!';
+    let moodText = translations[currentLang].user;
+    if (status === 'away') moodText = translations[currentLang].away;
+    if (status === 'busy') moodText = translations[currentLang].busy;
     document.getElementById('display-my-mood').textContent = moodText;
     statusMenu.classList.remove('active');
   }
@@ -1366,15 +1752,10 @@
     reader.onload = function(event) {
       const img = new Image();
       img.onload = function() {
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        const maxSize = 128;
-        let width = img.width, height = img.height;
-        if (width > height) {
-          if (width > maxSize) { height *= maxSize / width; width = maxSize; }
-        } else {
-          if (height > maxSize) { width *= maxSize / height; height = maxSize; }
-        }
+        const canvas = document.createElement('canvas'); const ctx = canvas.getContext('2d');
+        const maxSize = 128; let width = img.width, height = img.height;
+        if (width > height) { if (width > maxSize) { height *= maxSize / width; width = maxSize; } } 
+        else { if (height > maxSize) { width *= maxSize / height; height = maxSize; } }
         canvas.width = width; canvas.height = height;
         ctx.drawImage(img, 0, 0, width, height);
         const base64Image = canvas.toDataURL('image/jpeg', 0.8);
@@ -1382,14 +1763,11 @@
         if (avatarTarget === 'me') {
           myProfile.avatar = base64Image;
           updateProfileDisplay();
-          const t = document.getElementById('edit-avatar-text');
-          if (t) t.value = '';
+          renderStories();
         } else {
           const c = contacts.find(x => x.id === currentEditContactId);
           if (c) {
             c.avatar = base64Image;
-            const t = document.getElementById('edit-c-avatar-text');
-            if (t) t.value = '';
             renderContacts();
             renderChat();
           }
@@ -1420,11 +1798,8 @@
       if (c.status === 'court') statusColor = 'status-court';
       if (c.status === 'away') statusColor = 'status-away';
 
-      // Конфиденциальность: скрываем номер, если так настроено
-      let phoneText = c.phone || 'Номер скрыт';
-      if (privacySettings.phone === 'nobody') {
-        phoneText = 'Номер скрыт';
-      }
+      let phoneText = c.phone || 'Hidden';
+      if (privacySettings.phone === 'nobody') phoneText = 'Hidden';
 
       let avatarHtml = renderAvatar(c.avatar);
       if (privacySettings.avatar === 'nobody') {
@@ -1439,8 +1814,8 @@
         </div>
         <div class="contact-status ${statusColor}"></div>
         <div class="contact-actions">
-          <div class="edit-contact-btn" title="Редактировать профиль">✏️</div>
-          <div class="delete-btn" title="Удалить контакт">🗑️</div>
+          <div class="edit-contact-btn" title="Edit">✏️</div>
+          <div class="delete-btn" title="Delete">🗑️</div>
         </div>
       `;
       div.onclick = () => {
@@ -1450,14 +1825,8 @@
         renderContacts();
         renderChat();
       };
-      div.querySelector('.edit-contact-btn').onclick = (e) => {
-        e.stopPropagation();
-        editContactFromList(c.id);
-      };
-      div.querySelector('.delete-btn').onclick = (e) => {
-        e.stopPropagation();
-        deleteContact(c.id);
-      };
+      div.querySelector('.edit-contact-btn').onclick = (e) => { e.stopPropagation(); editContactFromList(c.id); };
+      div.querySelector('.delete-btn').onclick = (e) => { e.stopPropagation(); deleteContact(c.id); };
       contactListEl.appendChild(div);
     });
   }
@@ -1469,14 +1838,13 @@
     renderChat();
     const c = contacts.find(x => x.id === id);
     if (!c) return;
-    document.getElementById('contact-popup-title').innerHTML = `👤 ${c.name} <button class="edit-btn" onclick="toggleEditProfile(event, 'contact')">✏️ Изменить</button>`;
+    document.getElementById('contact-popup-title').innerHTML = `👤 ${c.name} <button class="edit-btn" onclick="toggleEditProfile(event, 'contact')">${translations[currentLang].edit}</button>`;
     document.getElementById('contact-view-mode').style.display = 'none';
     document.getElementById('contact-edit-mode').style.display = 'block';
     const hide = c.isGroup ? 'none' : '';
     document.getElementById('edit-c-phone').parentElement.style.display = hide;
     document.getElementById('edit-c-role').parentElement.style.display = hide;
     document.getElementById('edit-c-bio').parentElement.style.display  = hide;
-    document.getElementById('edit-c-avatar-text').value = c.avatar?.startsWith('data:') ? '' : (c.avatar || '');
     document.getElementById('edit-c-name').value = c.name || '';
     document.getElementById('edit-c-phone').value = c.phone || '';
     document.getElementById('edit-c-role').value = c.role || '';
@@ -1486,13 +1854,12 @@
   }
 
   function deleteContact(id) {
-    if (!confirm('Вы уверены, что хотите удалить этот контакт?')) return;
+    if (!confirm('Delete this contact?')) return;
     playTrashSound();
     contactProfilePopup.classList.remove('active');
     if (callState.active && callState.contactId === id) endCall();
     contacts = contacts.filter(c => c.id !== id);
     delete threads[id];
-    delete replies[id];
     if (activeId === id) activeId = contacts.length > 0 ? contacts[0].id : null;
     renderContacts();
     renderChat();
@@ -1501,15 +1868,14 @@
   function renderChat() {
     const c = contacts.find(x => x.id === activeId);
     if (!c) {
-      chatTitleEl.innerHTML = 'Выберите собеседника...';
+      chatTitleEl.innerHTML = translations[currentLang].select_chat;
       viewContactProfileBtn.style.display = 'none';
       if (callBtn) callBtn.style.display = 'none';
-      messagesEl.innerHTML = '<div style="text-align:center; color:var(--text-muted); margin-top:50px;">Выберите контакт или создайте новый...</div>';
+      messagesEl.innerHTML = `<div style="text-align:center; color:var(--text-muted); margin-top:50px;">${translations[currentLang].select_chat_desc}</div>`;
       return;
     }
-    let statusText = c.isGroup ? 'Группа' : (c.status === 'court' ? 'В суде' : 'В сети');
+    let statusText = c.isGroup ? 'Group' : (c.status === 'court' ? 'In Court' : translations[currentLang].online);
     
-    // Конфиденциальность в шапке
     let avatarHtml = renderAvatar(c.avatar);
     if (privacySettings.avatar === 'nobody') {
        avatarHtml = `<div style="font-size:16px; color:#ccc;">👤</div>`;
@@ -1541,58 +1907,26 @@
   function animateGavel() {
     const svg = document.querySelector('#send-btn svg');
     if (!svg) return;
-    svg.classList.remove('hitting');
-    void svg.offsetWidth;
-    svg.classList.add('hitting');
+    svg.classList.remove('hitting'); void svg.offsetWidth; svg.classList.add('hitting');
     setTimeout(() => svg.classList.remove('hitting'), 500);
   }
 
   function sendMessage() {
     const text = inputEl.value.trim();
     if (!text || !activeId) return;
-    playClick();
-    animateGavel();
+    playClick(); animateGavel();
     if (!threads[activeId]) threads[activeId] = [];
     threads[activeId].push({ who: 'me', text: text, time: getNowTime() });
-    inputEl.value = '';
-    renderChat();
-
-    const c = contacts.find(x => x.id === activeId);
-    if (c) {
-      setTimeout(() => {
-        let replyText, replyAuthor;
-        if (c.isGroup && c.members.length > 0) {
-          const randomMemberId = c.members[Math.floor(Math.random() * c.members.length)];
-          const member = contacts.find(x => x.id === randomMemberId);
-          const memberReplies = replies[randomMemberId] || ['...'];
-          replyText = memberReplies[Math.floor(Math.random() * memberReplies.length)];
-          replyAuthor = member ? member.name : 'Участник';
-        } else {
-          const replyList = replies[c.id] || ['...'];
-          replyText = replyList[Math.floor(Math.random() * replyList.length)];
-          replyAuthor = c.name;
-        }
-        threads[activeId].push({ who: 'them', text: replyText, time: getNowTime(), author: replyAuthor });
-        playSkypeSound(); 
-        if (activeId === c.id) renderChat();
-      }, 1500 + Math.random() * 1000);
-    }
+    inputEl.value = ''; renderChat();
   }
 
   document.getElementById('send-btn').onclick = sendMessage;
-  inputEl.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
-  });
-
+  inputEl.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } });
   document.getElementById('search-input').addEventListener('input', renderContacts);
 
   /* =========================================
      ЗВОНОК
      ========================================= */
-  function toggleCallOptions() {
-    document.getElementById('call-options-menu').classList.toggle('active');
-  }
-
   function toggleMic() {
     isMicMuted = !isMicMuted;
     const btn = document.getElementById('mic-btn');
@@ -1606,88 +1940,31 @@
     playClick();
   }
 
-  function toggleHold() {
-    isHolding = !isHolding;
-    const statusEl = document.getElementById('call-status');
-    if (isHolding) {
-      statusEl.textContent = 'На удержании...';
-      statusEl.style.color = '#ffcc00';
-    } else {
-      statusEl.textContent = '00:00';
-      statusEl.style.color = '#fff';
-    }
-    document.getElementById('call-options-menu').classList.remove('active');
-  }
-
-  function toggleRecord() {
-    isRecording = !isRecording;
-    document.getElementById('record-indicator').classList.toggle('active', isRecording);
-    document.getElementById('call-options-menu').classList.remove('active');
-  }
-
   function toggleScreenShare() {
     isScreenSharing = !isScreenSharing;
     const btn = document.getElementById('share-btn');
     if (isScreenSharing) {
       btn.className = 'call-control-btn white';
-      // Симуляция показа экрана (заменяем аватар на текст)
-      document.getElementById('call-center-avatar').innerHTML = '<span style="font-size:20px; padding:20px;">🖥️ Экран демонстрируется</span>';
-      playClick();
+      document.getElementById('call-center-avatar').innerHTML = '<span style="font-size:20px; padding:20px;">🖥️</span>';
     } else {
       btn.className = 'call-control-btn black';
-      // Возвращаем аватар
       const c = contacts.find(x => x.id === callState.contactId);
-      if (c) {
-        const centerAvatar = document.getElementById('call-center-avatar');
-        if (c.avatar.startsWith('data:') || c.avatar.startsWith('http')) {
-          centerAvatar.innerHTML = `<img src="${c.avatar}">`;
-        } else {
-          centerAvatar.innerHTML = c.avatar;
-        }
-      }
-      playClick();
+      if (c) document.getElementById('call-center-avatar').innerHTML = renderAvatar(c.avatar);
     }
+    playClick();
   }
 
   function startCall() {
     const c = contacts.find(x => x.id === activeId);
-    if (!c) return;
-    if (callState.active) return;
+    if (!c || callState.active) return;
 
-    callState.active = true;
-    callState.contactId = activeId;
-    callState.seconds = 0;
-    isHolding = false;
-    isRecording = false;
-    isScreenSharing = false;
-    isMicMuted = false;
-
-    // Сброс кнопок
-    const micBtn = document.getElementById('mic-btn');
-    micBtn.className = 'call-control-btn white';
-    micBtn.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="22"></line></svg>`;
-
-    const shareBtn = document.getElementById('share-btn');
-    shareBtn.className = 'call-control-btn black';
-    
-    document.getElementById('record-indicator').classList.remove('active');
+    callState.active = true; callState.contactId = activeId; callState.seconds = 0;
+    isHolding = false; isRecording = false; isScreenSharing = false; isMicMuted = false;
 
     document.getElementById('call-name').textContent = c.name;
-    document.getElementById('call-status').textContent = 'Соединение...';
-    document.getElementById('call-status').style.color = '#fff';
+    document.getElementById('call-status').textContent = translations[currentLang].connecting;
     document.getElementById('call-top-avatar').innerHTML = renderAvatar(c.avatar);
-    
-    const centerAvatar = document.getElementById('call-center-avatar');
-    if (c.avatar.startsWith('data:') || c.avatar.startsWith('http')) {
-      centerAvatar.innerHTML = `<img src="${c.avatar}">`;
-    } else {
-      centerAvatar.innerHTML = c.avatar;
-    }
-
-    const camBtn = document.getElementById('cam-toggle-btn');
-    camBtn.className = 'call-control-btn black';
-    camBtn.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 10l4.553-2.276A1 1 0 0 1 21 8.618v6.764a1 1 0 0 1-1.447.894L15 14v-4z"></path><rect x="3" y="6" width="12" height="12" rx="2" ry="2"></rect><line x1="1" y1="1" x2="23" y2="23"></line></svg>`;
-
+    document.getElementById('call-center-avatar').innerHTML = renderAvatar(c.avatar);
     document.getElementById('call-overlay').classList.add('active');
 
     playRingSound();
@@ -1697,79 +1974,44 @@
       clearInterval(callState.ringInterval);
       playConnectSound();
       document.getElementById('call-status').textContent = '00:00';
-      
       callState.timerInterval = setInterval(() => {
-        if (isHolding) return; // Пауза таймера на удержании
+        if (isHolding) return;
         callState.seconds++;
         const m = String(Math.floor(callState.seconds / 60)).padStart(2, '0');
         const s = String(callState.seconds % 60).padStart(2, '0');
         document.getElementById('call-status').textContent = `${m}:${s}`;
       }, 1000);
-    }, 2500 + Math.random() * 2000);
+    }, 2000);
   }
 
   function endCall() {
     if (!callState.active) return;
-    clearTimeout(callState.connectTimeout);
-    clearInterval(callState.timerInterval);
-    clearInterval(callState.ringInterval);
-    playHangupSound();
-    stopCamera();
-    callState.active = false;
-    callState.contactId = null;
-    callState.seconds = 0;
+    clearTimeout(callState.connectTimeout); clearInterval(callState.timerInterval); clearInterval(callState.ringInterval);
+    playHangupSound(); stopCamera();
+    callState.active = false; callState.contactId = null; callState.seconds = 0;
     document.getElementById('call-overlay').classList.remove('active');
-    document.getElementById('call-options-menu').classList.remove('active');
-    document.getElementById('record-indicator').classList.remove('active');
   }
 
-  /* =========================================
-     КАМЕРА
-     ========================================= */
   async function toggleCamera() {
     const btn = document.getElementById('cam-toggle-btn');
-    if (cameraOn) {
-      stopCamera();
-      playClick();
-      return;
-    }
-
-    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-      alert('Ваш браузер не поддерживает камеру. Попробуйте Chrome/Firefox на localhost или HTTPS.');
-      return;
-    }
-
+    if (cameraOn) { stopCamera(); playClick(); return; }
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { alert('Camera not supported.'); return; }
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
-      cameraStream = stream;
-      cameraOn = true;
-      const video = document.getElementById('self-video');
-      video.srcObject = stream;
-      
+      cameraStream = stream; cameraOn = true;
+      document.getElementById('self-video').srcObject = stream;
       document.getElementById('call-self-video').style.display = 'block';
       btn.className = 'call-control-btn white';
       btn.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 10l4.553-2.276A1 1 0 0 1 21 8.618v6.764a1 1 0 0 1-1.447.894L15 14v-4z"></path><rect x="3" y="6" width="12" height="12" rx="2" ry="2"></rect></svg>`;
-      
       playClick();
-    } catch (err) {
-      console.error('Camera error:', err);
-      let msg = 'Не удалось включить камеру.';
-      if (err.name === 'NotAllowedError') msg += ' Разрешение отклонено.';
-      else if (err.name === 'NotFoundError') msg += ' Камера не найдена.';
-      alert(msg);
-    }
+    } catch (err) { alert('Camera error.'); }
   }
 
   function stopCamera() {
-    if (cameraStream) {
-      cameraStream.getTracks().forEach(t => t.stop());
-      cameraStream = null;
-    }
+    if (cameraStream) { cameraStream.getTracks().forEach(t => t.stop()); cameraStream = null; }
     cameraOn = false;
-    const video = document.getElementById('self-video');
-    if (video) video.srcObject = null;
+    document.getElementById('self-video').srcObject = null;
     document.getElementById('call-self-video').style.display = 'none';
-    
     const btn = document.getElementById('cam-toggle-btn');
     if (btn) {
       btn.className = 'call-control-btn black';
@@ -1780,97 +2022,66 @@
   /* =========================================
      ПРОФИЛИ И МОДАЛКИ
      ========================================= */
-  function openModal(id) {
-    playClick();
-    document.getElementById(id).classList.add('active');
-    if (id === 'modal-add-group') renderGroupCheckboxes();
-  }
-
-  function closeModal(id) {
-    playClick();
-    document.getElementById(id).classList.remove('active');
-  }
+  function openModal(id) { playClick(); document.getElementById(id).classList.add('active'); if (id === 'modal-add-group') renderGroupCheckboxes(); }
+  function closeModal(id) { playClick(); document.getElementById(id).classList.remove('active'); }
 
   function toggleCloud(event) {
-    event.stopPropagation();
-    playClick();
+    event.stopPropagation(); playClick();
     infoCloud.classList.toggle('active');
-    contactProfilePopup.classList.remove('active');
-    statusMenu.classList.remove('active');
-    const dot = document.getElementById('my-status-dot');
-    if(dot) dot.classList.remove('menu-open');
+    contactProfilePopup.classList.remove('active'); statusMenu.classList.remove('active');
+    const dot = document.getElementById('my-status-dot'); if(dot) dot.classList.remove('menu-open');
+    // Закрываем настройки если открыты
+    closeModal('modal-settings');
   }
 
   function toggleEditProfile(event, targetType) {
-    event.stopPropagation();
-    playClick();
+    event.stopPropagation(); playClick();
     if (targetType === 'me') {
       const viewMode = document.getElementById('profile-view-mode');
       const editMode = document.getElementById('profile-edit-mode');
       if (viewMode.style.display !== 'none') {
-        viewMode.style.display = 'none';
-        editMode.style.display = 'block';
-        document.getElementById('edit-avatar-text').value = myProfile.avatar.startsWith('data:') ? '' : myProfile.avatar;
+        viewMode.style.display = 'none'; editMode.style.display = 'block';
         document.getElementById('edit-name').value = myProfile.name;
         document.getElementById('edit-phone').value = myProfile.phone;
         document.getElementById('edit-role').value = myProfile.role;
         document.getElementById('edit-bio').value = myProfile.bio;
-      } else {
-        viewMode.style.display = 'block';
-        editMode.style.display = 'none';
-      }
+      } else { viewMode.style.display = 'block'; editMode.style.display = 'none'; }
     } else {
       const c = contacts.find(x => x.id === activeId);
       if (!c) return;
       const viewMode = document.getElementById('contact-view-mode');
       const editMode = document.getElementById('contact-edit-mode');
       if (viewMode.style.display !== 'none') {
-        viewMode.style.display = 'none';
-        editMode.style.display = 'block';
+        viewMode.style.display = 'none'; editMode.style.display = 'block';
         const hide = c.isGroup ? 'none' : '';
         document.getElementById('edit-c-phone').parentElement.style.display = hide;
         document.getElementById('edit-c-role').parentElement.style.display = hide;
         document.getElementById('edit-c-bio').parentElement.style.display  = hide;
-        document.getElementById('edit-c-avatar-text').value = c.avatar?.startsWith('data:') ? '' : (c.avatar || '');
         document.getElementById('edit-c-name').value = c.name || '';
         document.getElementById('edit-c-phone').value = c.phone || '';
         document.getElementById('edit-c-role').value = c.role || '';
         document.getElementById('edit-c-bio').value = c.bio || '';
-      } else {
-        viewMode.style.display = 'block';
-        editMode.style.display = 'none';
-      }
+      } else { viewMode.style.display = 'block'; editMode.style.display = 'none'; }
     }
   }
 
   function saveProfile(event, targetType) {
-    event.stopPropagation();
-    playClick();
+    event.stopPropagation(); playClick();
     if (targetType === 'me') {
-      const newAvatarText = document.getElementById('edit-avatar-text').value.trim();
-      if (newAvatarText) {
-        myProfile.avatar = newAvatarText;
-        updateProfileDisplay();
-      }
       myProfile.name = document.getElementById('edit-name').value || myProfile.name;
       myProfile.phone = document.getElementById('edit-phone').value;
       myProfile.role = document.getElementById('edit-role').value;
       myProfile.bio = document.getElementById('edit-bio').value;
-      
-      updateProfileDisplay();
-      
+      updateProfileDisplay(); renderStories();
       document.getElementById('view-name').textContent = myProfile.name;
       document.getElementById('view-role').textContent = myProfile.role;
       document.getElementById('view-bio').textContent = myProfile.bio;
       document.getElementById('display-my-name').textContent = myProfile.name;
-      
       document.getElementById('profile-view-mode').style.display = 'block';
       document.getElementById('profile-edit-mode').style.display = 'none';
     } else {
       const c = contacts.find(x => x.id === activeId);
       if (!c) return;
-      const newAvatarText = document.getElementById('edit-c-avatar-text').value.trim();
-      if (newAvatarText) c.avatar = newAvatarText;
       c.name = document.getElementById('edit-c-name').value || c.name;
       if (!c.isGroup) {
         c.phone = document.getElementById('edit-c-phone').value;
@@ -1879,53 +2090,41 @@
       }
       document.getElementById('contact-view-mode').style.display = 'block';
       document.getElementById('contact-edit-mode').style.display = 'none';
-      renderContacts();
-      renderChat();
-      toggleContactProfile(event);
+      renderContacts(); renderChat(); toggleContactProfile(event);
     }
   }
 
   function toggleContactProfile(event) {
-    event.stopPropagation();
-    playClick();
-    if (contactProfilePopup.classList.contains('active')) {
-      contactProfilePopup.classList.remove('active');
-      return;
-    }
+    event.stopPropagation(); playClick();
+    if (contactProfilePopup.classList.contains('active')) { contactProfilePopup.classList.remove('active'); return; }
     const c = contacts.find(x => x.id === activeId);
     if (!c) return;
-    document.getElementById('contact-popup-title').innerHTML = `👤 ${c.name} <button class="edit-btn" onclick="toggleEditProfile(event, 'contact')">✏️ Изменить</button>`;
+    document.getElementById('contact-popup-title').innerHTML = `👤 ${c.name} <button class="edit-btn" onclick="toggleEditProfile(event, 'contact')">${translations[currentLang].edit}</button>`;
     document.getElementById('contact-view-mode').style.display = 'block';
     document.getElementById('contact-edit-mode').style.display = 'none';
     if (c.isGroup) {
       document.getElementById('cp-phone').parentElement.style.display = 'none';
-      document.getElementById('cp-role').textContent = 'Групповой чат';
+      document.getElementById('cp-role').textContent = 'Group Chat';
       document.getElementById('cp-status').parentElement.style.display = 'none';
       document.getElementById('cp-bio-container').style.display = 'none';
       document.getElementById('cp-members-container').style.display = 'block';
-      const memberNames = c.members.map(id => {
-        const m = contacts.find(x => x.id === id);
-        return m ? m.name : 'Неизвестный';
-      }).join(', ');
-      document.getElementById('cp-members').textContent = memberNames || 'Нет участников';
+      const memberNames = c.members.map(id => { const m = contacts.find(x => x.id === id); return m ? m.name : 'Unknown'; }).join(', ');
+      document.getElementById('cp-members').textContent = memberNames || 'None';
     } else {
-      let phoneText = c.phone || 'Не указан';
-      if (privacySettings.phone === 'nobody') phoneText = 'Скрыт настройками';
-      
+      let phoneText = c.phone || 'Not specified';
+      if (privacySettings.phone === 'nobody') phoneText = 'Hidden';
       document.getElementById('cp-phone').textContent = phoneText;
       document.getElementById('cp-phone').parentElement.style.display = 'block';
-      document.getElementById('cp-role').textContent = c.role || 'Не указано';
-      document.getElementById('cp-status').textContent = c.mood || 'В сети';
+      document.getElementById('cp-role').textContent = c.role || 'Not specified';
+      document.getElementById('cp-status').textContent = c.mood || translations[currentLang].online;
       document.getElementById('cp-status').parentElement.style.display = 'block';
       document.getElementById('cp-bio-container').style.display = 'block';
-      document.getElementById('cp-bio').textContent = c.bio || 'Информация скрыта.';
+      document.getElementById('cp-bio').textContent = c.bio || 'Hidden.';
       document.getElementById('cp-members-container').style.display = 'none';
     }
     contactProfilePopup.classList.add('active');
-    infoCloud.classList.remove('active');
-    statusMenu.classList.remove('active');
-    const dot = document.getElementById('my-status-dot');
-    if(dot) dot.classList.remove('menu-open');
+    infoCloud.classList.remove('active'); statusMenu.classList.remove('active');
+    const dot = document.getElementById('my-status-dot'); if(dot) dot.classList.remove('menu-open');
   }
 
   document.addEventListener('click', (event) => {
@@ -1933,12 +2132,7 @@
     if (!contactProfilePopup.contains(event.target) && !event.target.closest('.header-btn')) contactProfilePopup.classList.remove('active');
     if (!statusMenu.contains(event.target) && !event.target.closest('.my-status-dot')) {
       statusMenu.classList.remove('active');
-      const dot = document.getElementById('my-status-dot');
-      if (dot) dot.classList.remove('menu-open');
-    }
-    if (!event.target.closest('.call-options-wrapper')) {
-      const optMenu = document.getElementById('call-options-menu');
-      if (optMenu) optMenu.classList.remove('active');
+      const dot = document.getElementById('my-status-dot'); if (dot) dot.classList.remove('menu-open');
     }
   });
 
@@ -1946,20 +2140,18 @@
      ДОБАВЛЕНИЕ КОНТАКТОВ И ГРУПП
      ========================================= */
   function addNewContact() {
-    const name = document.getElementById('new-contact-name').value.trim();
-    const phone = document.getElementById('new-contact-phone').value.trim() || 'Номер скрыт';
-    const role = document.getElementById('new-contact-role').value.trim() || 'Неизвестно';
-    const bio = document.getElementById('new-contact-bio').value.trim() || 'Без описания.';
-    if (!name) { alert('Введите имя контакта!'); return; }
+    let name = document.getElementById('new-contact-name').value.trim();
+    if (!name) name = getNextUserName();
+    const phone = document.getElementById('new-contact-phone').value.trim() || '+7 (999) 000-00-00';
+    const role = document.getElementById('new-contact-role').value.trim() || 'User';
+    const bio = document.getElementById('new-contact-bio').value.trim() || '...';
     const newId = 'contact_' + Date.now();
-    contacts.push({ id: newId, name: name, phone: phone, status: 'online', mood: role, avatar: defaultContactAvatar, role: role, bio: bio });
-    threads[newId] = [{ who: 'them', text: 'Привет! Я только что присоединился к чату.', time: getNowTime(), author: name }];
-    replies[newId] = ['Привет!', 'Рад знакомству!', 'Чем могу помочь?'];
+    
+    contacts.push({ id: newId, name: name, phone: phone, status: 'online', mood: role, avatar: defaultAvatarUrl, role: role, bio: bio });
     playClick();
     closeModal('modal-add-contact');
     activeId = newId;
-    renderContacts();
-    renderChat();
+    renderContacts(); renderChat();
     document.getElementById('new-contact-name').value = '';
     document.getElementById('new-contact-phone').value = '';
     document.getElementById('new-contact-role').value = '';
@@ -1978,18 +2170,15 @@
 
   function createGroup() {
     const name = document.getElementById('new-group-name').value.trim();
-    if (!name) { alert('Введите название группы!'); return; }
+    if (!name) { alert('Enter group name!'); return; }
     const checkboxes = document.querySelectorAll('#group-members-list input[type="checkbox"]:checked');
     const members = Array.from(checkboxes).map(cb => cb.value);
-    if (members.length === 0) { alert('Выберите хотя бы одного участника!'); return; }
+    if (members.length === 0) { alert('Select at least one member!'); return; }
     const newId = 'group_' + Date.now();
-    contacts.push({ id: newId, name: name, avatar: defaultGroupAvatar, isGroup: true, members: members, status: 'online', phone: 'Групповой чат' });
-    threads[newId] = [{ who: 'them', text: `Группа "${name}" создана.`, time: getNowTime(), author: 'Система' }];
-    playClick();
-    closeModal('modal-add-group');
-    activeId = newId;
-    renderContacts();
-    renderChat();
+    contacts.push({ id: newId, name: name, avatar: defaultGroupAvatar, isGroup: true, members: members, status: 'online', phone: 'Group Chat' });
+    threads[newId] = [{ who: 'them', text: `Group "${name}" created.`, time: getNowTime(), author: 'System' }];
+    playClick(); closeModal('modal-add-group');
+    activeId = newId; renderContacts(); renderChat();
     document.getElementById('new-group-name').value = '';
   }
 
@@ -2000,23 +2189,21 @@
     playClick();
     if (!activeId) return;
     const overlay = document.getElementById('objection-overlay');
-    overlay.classList.remove('active');
-    void overlay.offsetWidth;
-    overlay.classList.add('active');
+    overlay.classList.remove('active'); void overlay.offsetWidth; overlay.classList.add('active');
     if (!threads[activeId]) threads[activeId] = [];
-    threads[activeId].push({ who: 'me', text: '🚨 <b style="color:red;">ПРОТЕСТУЮ!</b> 🚨', time: getNowTime(), author: myProfile.name });
+    threads[activeId].push({ who: 'me', text: `🚨 <b style="color:red;">${translations[currentLang].objection}</b> 🚨`, time: getNowTime(), author: myProfile.name });
     renderChat();
   }
 
   /* =========================================
      ИНИЦИАЛИЗАЦИЯ
      ========================================= */
-  updateProfileDisplay();
-  document.getElementById('view-name').textContent = myProfile.name;
-  document.getElementById('view-role').textContent = myProfile.role;
-  document.getElementById('view-bio').textContent = myProfile.bio;
   document.getElementById('display-my-name').textContent = myProfile.name;
-  document.getElementById('display-my-mood').textContent = myProfile.role;
+  document.getElementById('view-name').textContent = myProfile.name;
+  updateProfileDisplay();
+  
+  // Применяем перевод по умолчанию
+  changeLanguage('ru');
 
   renderContacts();
   renderChat();
