@@ -756,14 +756,14 @@
           <h3><span data-i18n="my_profile">👤 Мой профиль</span> <button class="edit-btn" onclick="toggleEditProfile(event, 'me')" data-i18n="edit">✏️ Изменить</button></h3>
           <div id="profile-view-mode">
             <p><b data-i18n="name">Имя:</b> <span id="view-name">User1</span></p>
-            <p><b data-i18n="phone">Логин:</b> <span id="view-phone">+7 (000) 000-00-00</span></p>
+            <p><b data-i18n="phone">Телефон:</b> <span id="view-phone">+7 (000) 000-00-00</span></p>
             <p><b data-i18n="status">Статус:</b> <span id="view-role">Пользователь</span></p>
             <p><b data-i18n="bio">О себе:</b> <span id="view-bio" data-i18n="welcome">Добро пожаловать в мессенджер!</span></p>
           </div>
           <div id="profile-edit-mode" style="display:none;">
             <div class="avatar-edit-area"><button class="edit-btn" onclick="triggerFileUpload('me')" data-i18n="change_photo">📷 Сменить фото</button></div>
             <p><b data-i18n="name">Имя:</b><br><input type="text" class="edit-input" id="edit-name"></p>
-            <p><b data-i18n="phone">Логин:</b><br><input type="text" class="edit-input" id="edit-phone"></p>
+            <p><b data-i18n="phone">Телефон:</b><br><input type="text" class="edit-input" id="edit-phone"></p>
             <p><b data-i18n="status">Статус:</b><br><input type="text" class="edit-input" id="edit-role"></p>
             <p><b data-i18n="bio">О себе:</b><br><textarea class="edit-input" id="edit-bio" rows="2"></textarea></p>
             <button class="edit-btn" style="background:rgba(0,150,0,.2); border-color:rgba(0,150,0,.4); width:100%; margin-top:5px;" onclick="saveProfile(event, 'me')" data-i18n="save">💾 Сохранить</button>
@@ -806,7 +806,7 @@
       <div class="contact-profile-popup popup" id="contact-profile-popup">
         <h3 id="contact-popup-title">Профиль <button class="edit-btn" onclick="toggleEditProfile(event, 'contact')" data-i18n="edit">✏️ Изменить</button></h3>
         <div id="contact-view-mode">
-          <p><b data-i18n="phone">Логин:</b> <span id="cp-phone">-</span></p>
+          <p><b data-i18n="phone">Телефон:</b> <span id="cp-phone">-</span></p>
           <p><b data-i18n="role">Роль:</b> <span id="cp-role">-</span></p>
           <p><b data-i18n="status">Статус:</b> <span id="cp-status">-</span></p>
           <p id="cp-bio-container"><b data-i18n="bio">О себе:</b> <span id="cp-bio">-</span></p>
@@ -821,7 +821,7 @@
         <div id="contact-edit-mode" style="display:none;">
           <div class="avatar-edit-area"><button class="edit-btn" onclick="triggerFileUpload('contact')" data-i18n="change_photo">📷 Сменить фото</button></div>
           <p><b data-i18n="name">Имя:</b><br><input type="text" class="edit-input" id="edit-c-name"></p>
-          <p id="edit-c-phone-container" style="display:none;"><b data-i18n="phone">Логин:</b><br><input type="text" class="edit-input" id="edit-c-phone" disabled></p>
+          <p id="edit-c-phone-container" style="display:none;"><b data-i18n="phone">Телефон:</b><br><input type="text" class="edit-input" id="edit-c-phone" disabled></p>
           <p id="edit-c-role-container" style="display:none;"><b data-i18n="role">Роль:</b><br><input type="text" class="edit-input" id="edit-c-role" disabled></p>
           <p id="edit-c-bio-container" style="display:none;"><b data-i18n="bio">О себе:</b><br><textarea class="edit-input" id="edit-c-bio" rows="2" disabled></textarea></p>
           <button class="edit-btn" style="background:rgba(0,150,0,.2); border-color:rgba(0,150,0,.4); width:100%; margin-top:5px;" onclick="saveProfile(event, 'contact')" data-i18n="save">💾 Сохранить</button>
@@ -1245,9 +1245,9 @@
   // ==========================================
 
   const translations = {
-    ru: { title:"⚖️ Courtroom Live Messenger 2009", user:"Пользователь", online:"В сети", away:"Нет на месте", busy:"Занят", my_profile:"👤 Мой профиль", edit:"✏️ Изменить", name:"Имя:", phone:"Логин:", status:"Статус:", bio:"О себе:", welcome:"Добро пожаловать в мессенджер!", change_photo:"📷 Сменить фото", save:"💾 Сохранить", add_contact:"➕ Контакт", add_group:"➕ Группа", search:"Глобальный поиск (имя)...", select_chat:"Выберите собеседника...", select_chat_desc:"Выберите контакт или создайте новый...", profile:"ℹ️ Профиль", my_story:"Моя история", role:"Роль:", members:"Участники:", type_message:"Сообщение", add_contact_title:"Добавить новый контакт", add_group_title:"Создать групповой чат", group_name:"Название группы:", select_members:"Выберите участников:", cancel:"Отмена", create:"Создать", settings:"⚙️ Настройки", general:"Общие", account:"Аккаунт", privacy:"Приватность", notifications:"Уведомления", chat_settings:"Настройки чата", devices:"Устройства", advanced:"Продвинутые", language:"Язык", language_desc:"Выберите язык интерфейса", theme:"Тема оформления", theme_desc:"Светлая, темная или XP (для слабых ПК)", theme_light:"Светлая", theme_dark:"Темная", theme_xp:"Windows XP (для слабых ПК)", sounds:"Звуки", sounds_desc:"Звуки уведомлений и кликов", edit_profile_desc:"Изменить имя, фото и описание", username:"Имя пользователя", phone_visibility:"Кто видит номер", avatar_visibility:"Кто видит фото", everyone:"Все", contacts:"Контакты", nobody:"Никто", messages:"Сообщения", messages_desc:"Кто может писать первым", desktop_notif:"Уведомления на рабочем столе", message_preview:"Показывать текст сообщения", chat_wallpaper:"Фон чата", standard:"Стандартный", text_size:"Размер текста", active_sessions:"Активные сессии", data_usage:"Использование данных", data_usage_desc:"Настройки автоскачивания", proxy:"Настройки прокси", proxy_desc:"Использовать прокси-сервер", done:"Готово", create_story:"Создать историю", story_text:"Текст истории:", story_photo:"Фотография (необязательно):", choose_photo:"📷 Выбрать фото", remove_photo:"✕ Убрать фото", publish:"Опубликовать", recording:"ЗАПИСЬ", connecting:"Соединение..." },
-    uk: { title:"⚖️ Courtroom Live Messenger 2009", user:"Користувач", online:"В мережі", away:"Немає на місці", busy:"Зайнятий", my_profile:"👤 Мій профіль", edit:"✏️ Змінити", name:"Ім'я:", phone:"Логін:", status:"Статус:", bio:"Про себе:", welcome:"Ласкаво просимо до месенджера!", change_photo:"📷 Змінити фото", save:"💾 Зберегти", add_contact:"➕ Контакт", add_group:"➕ Група", search:"Глобальний пошук (ім'я)...", select_chat:"Виберіть співрозмовника...", select_chat_desc:"Виберіть контакт або створіть новий...", profile:"ℹ️ Профіль", my_story:"Моя історія", role:"Роль:", members:"Учасники:", type_message:"Повідомлення", add_contact_title:"Додати новий контакт", add_group_title:"Створити груповий чат", group_name:"Назва групи:", select_members:"Виберіть учасників:", cancel:"Скасувати", create:"Створити", settings:"⚙️ Налаштування", general:"Загальні", account:"Акаунт", privacy:"Приватність", notifications:"Сповіщення", chat_settings:"Налаштування чату", devices:"Пристрої", advanced:"Розширені", language:"Мова", language_desc:"Виберіть мову інтерфейсу", theme:"Тема оформлення", theme_desc:"Світла, темна або XP (для слабких ПК)", theme_light:"Світла", theme_dark:"Темна", theme_xp:"Windows XP (для слабких ПК)", sounds:"Звуки", sounds_desc:"Звуки сповіщень та кліків", edit_profile_desc:"Змінити ім'я, фото та опис", username:"Ім'я користувача", phone_visibility:"Хто бачить номер", avatar_visibility:"Хто бачить фото", everyone:"Всі", contacts:"Контакти", nobody:"Ніхто", messages:"Повідомлення", messages_desc:"Хто може писати першим", desktop_notif:"Сповіщення на робочому столі", message_preview:"Показувати текст повідомлення", chat_wallpaper:"Фон чату", standard:"Стандартний", text_size:"Розмір тексту", active_sessions:"Активні сесії", data_usage:"Використання даних", data_usage_desc:"Налаштування автозавантаження", proxy:"Налаштування проксі", proxy_desc:"Використовувати проксі-сервер", done:"Готово", create_story:"Створити історію", story_text:"Текст історії:", story_photo:"Фотографія (необов'язково):", choose_photo:"📷 Вибрати фото", remove_photo:"✕ Прибрати фото", publish:"Опублікувати", recording:"ЗАПИС", connecting:"З'єднання..." },
-    en: { title:"⚖️ Courtroom Live Messenger 2009", user:"User", online:"Online", away:"Away", busy:"Busy", my_profile:"👤 My Profile", edit:"✏️ Edit", name:"Name:", phone:"Login:", status:"Status:", bio:"Bio:", welcome:"Welcome to the messenger!", change_photo:"📷 Change Photo", save:"💾 Save", add_contact:"➕ Contact", add_group:"➕ Group", search:"Global search (name)...", select_chat:"Select a chat...", select_chat_desc:"Select a contact or create a new one...", profile:"ℹ️ Profile", my_story:"My Story", role:"Role:", members:"Members:", type_message:"Message", add_contact_title:"Add New Contact", add_group_title:"Create Group Chat", group_name:"Group Name:", select_members:"Select Members:", cancel:"Cancel", create:"Create", settings:"⚙️ Settings", general:"General", account:"Account", privacy:"Privacy", notifications:"Notifications", chat_settings:"Chat Settings", devices:"Devices", advanced:"Advanced", language:"Language", language_desc:"Choose interface language", theme:"Theme", theme_desc:"Light, dark or XP (for low-end PCs)", theme_light:"Light", theme_dark:"Dark", theme_xp:"Windows XP (for low-end PCs)", sounds:"Sounds", sounds_desc:"Notification and click sounds", edit_profile_desc:"Change name, photo and bio", username:"Username", phone_visibility:"Who sees my phone", avatar_visibility:"Who sees my photo", everyone:"Everyone", contacts:"Contacts", nobody:"Nobody", messages:"Messages", messages_desc:"Who can message me first", desktop_notif:"Desktop Notifications", message_preview:"Show message text", chat_wallpaper:"Chat Wallpaper", standard:"Standard", text_size:"Text Size", active_sessions:"Active Sessions", data_usage:"Data Usage", data_usage_desc:"Auto-download settings", proxy:"Proxy Settings", proxy_desc:"Use proxy server", done:"Done", create_story:"Create Story", story_text:"Story Text:", story_photo:"Photo (optional):", choose_photo:"📷 Choose Photo", remove_photo:"✕ Remove Photo", publish:"Publish", recording:"REC", connecting:"Connecting..." }
+    ru: { title:"⚖️ Courtroom Live Messenger 2009", user:"Пользователь", online:"В сети", away:"Нет на месте", busy:"Занят", my_profile:"👤 Мой профиль", edit:"✏️ Изменить", name:"Имя:", phone:"Телефон:", status:"Статус:", bio:"О себе:", welcome:"Добро пожаловать в мессенджер!", change_photo:"📷 Сменить фото", save:"💾 Сохранить", add_contact:"➕ Контакт", add_group:"➕ Группа", search:"Глобальный поиск (имя)...", select_chat:"Выберите собеседника...", select_chat_desc:"Выберите контакт или создайте новый...", profile:"ℹ️ Профиль", my_story:"Моя история", role:"Роль:", members:"Участники:", type_message:"Сообщение", add_contact_title:"Добавить новый контакт", add_group_title:"Создать групповой чат", group_name:"Название группы:", select_members:"Выберите участников:", cancel:"Отмена", create:"Создать", settings:"⚙️ Настройки", general:"Общие", account:"Аккаунт", privacy:"Приватность", notifications:"Уведомления", chat_settings:"Настройки чата", devices:"Устройства", advanced:"Продвинутые", language:"Язык", language_desc:"Выберите язык интерфейса", theme:"Тема оформления", theme_desc:"Светлая, темная или XP (для слабых ПК)", theme_light:"Светлая", theme_dark:"Темная", theme_xp:"Windows XP (для слабых ПК)", sounds:"Звуки", sounds_desc:"Звуки уведомлений и кликов", edit_profile_desc:"Изменить имя, фото и описание", username:"Имя пользователя", phone_visibility:"Кто видит номер", avatar_visibility:"Кто видит фото", everyone:"Все", contacts:"Контакты", nobody:"Никто", messages:"Сообщения", messages_desc:"Кто может писать первым", desktop_notif:"Уведомления на рабочем столе", message_preview:"Показывать текст сообщения", chat_wallpaper:"Фон чата", standard:"Стандартный", text_size:"Размер текста", active_sessions:"Активные сессии", data_usage:"Использование данных", data_usage_desc:"Настройки автоскачивания", proxy:"Настройки прокси", proxy_desc:"Использовать прокси-сервер", done:"Готово", create_story:"Создать историю", story_text:"Текст истории:", story_photo:"Фотография (необязательно):", choose_photo:"📷 Выбрать фото", remove_photo:"✕ Убрать фото", publish:"Опубликовать", recording:"ЗАПИСЬ", connecting:"Соединение..." },
+    uk: { title:"⚖️ Courtroom Live Messenger 2009", user:"Користувач", online:"В мережі", away:"Немає на місці", busy:"Зайнятий", my_profile:"👤 Мій профіль", edit:"✏️ Змінити", name:"Ім'я:", phone:"Телефон:", status:"Статус:", bio:"Про себе:", welcome:"Ласкаво просимо до месенджера!", change_photo:"📷 Змінити фото", save:"💾 Зберегти", add_contact:"➕ Контакт", add_group:"➕ Група", search:"Глобальний пошук (ім'я)...", select_chat:"Виберіть співрозмовника...", select_chat_desc:"Виберіть контакт або створіть новий...", profile:"ℹ️ Профіль", my_story:"Моя історія", role:"Роль:", members:"Учасники:", type_message:"Повідомлення", add_contact_title:"Додати новий контакт", add_group_title:"Створити груповий чат", group_name:"Назва групи:", select_members:"Виберіть учасників:", cancel:"Скасувати", create:"Створити", settings:"⚙️ Налаштування", general:"Загальні", account:"Акаунт", privacy:"Приватність", notifications:"Сповіщення", chat_settings:"Налаштування чату", devices:"Пристрої", advanced:"Розширені", language:"Мова", language_desc:"Виберіть мову інтерфейсу", theme:"Тема оформлення", theme_desc:"Світла, темна або XP (для слабких ПК)", theme_light:"Світла", theme_dark:"Темна", theme_xp:"Windows XP (для слабких ПК)", sounds:"Звуки", sounds_desc:"Звуки сповіщень та кліків", edit_profile_desc:"Змінити ім'я, фото та опис", username:"Ім'я користувача", phone_visibility:"Хто бачить номер", avatar_visibility:"Хто бачить фото", everyone:"Всі", contacts:"Контакти", nobody:"Ніхто", messages:"Повідомлення", messages_desc:"Хто може писати першим", desktop_notif:"Сповіщення на робочому столі", message_preview:"Показувати текст повідомлення", chat_wallpaper:"Фон чату", standard:"Стандартний", text_size:"Розмір тексту", active_sessions:"Активні сесії", data_usage:"Використання даних", data_usage_desc:"Налаштування автозавантаження", proxy:"Налаштування проксі", proxy_desc:"Використовувати проксі-сервер", done:"Готово", create_story:"Створити історію", story_text:"Текст історії:", story_photo:"Фотографія (необов'язково):", choose_photo:"📷 Вибрати фото", remove_photo:"✕ Прибрати фото", publish:"Опублікувати", recording:"ЗАПИС", connecting:"З'єднання..." },
+    en: { title:"⚖️ Courtroom Live Messenger 2009", user:"User", online:"Online", away:"Away", busy:"Busy", my_profile:"👤 My Profile", edit:"✏️ Edit", name:"Name:", phone:"Phone:", status:"Status:", bio:"Bio:", welcome:"Welcome to the messenger!", change_photo:"📷 Change Photo", save:"💾 Save", add_contact:"➕ Contact", add_group:"➕ Group", search:"Global search (name)...", select_chat:"Select a chat...", select_chat_desc:"Select a contact or create a new one...", profile:"ℹ️ Profile", my_story:"My Story", role:"Role:", members:"Members:", type_message:"Message", add_contact_title:"Add New Contact", add_group_title:"Create Group Chat", group_name:"Group Name:", select_members:"Select Members:", cancel:"Cancel", create:"Create", settings:"⚙️ Settings", general:"General", account:"Account", privacy:"Privacy", notifications:"Notifications", chat_settings:"Chat Settings", devices:"Devices", advanced:"Advanced", language:"Language", language_desc:"Choose interface language", theme:"Theme", theme_desc:"Light, dark or XP (for low-end PCs)", theme_light:"Light", theme_dark:"Dark", theme_xp:"Windows XP (for low-end PCs)", sounds:"Sounds", sounds_desc:"Notification and click sounds", edit_profile_desc:"Change name, photo and bio", username:"Username", phone_visibility:"Who sees my phone", avatar_visibility:"Who sees my photo", everyone:"Everyone", contacts:"Contacts", nobody:"Nobody", messages:"Messages", messages_desc:"Who can message me first", desktop_notif:"Desktop Notifications", message_preview:"Show message text", chat_wallpaper:"Chat Wallpaper", standard:"Standard", text_size:"Text Size", active_sessions:"Active Sessions", data_usage:"Data Usage", data_usage_desc:"Auto-download settings", proxy:"Proxy Settings", proxy_desc:"Use proxy server", done:"Done", create_story:"Create Story", story_text:"Story Text:", story_photo:"Photo (optional):", choose_photo:"📷 Choose Photo", remove_photo:"✕ Remove Photo", publish:"Publish", recording:"REC", connecting:"Connecting..." }
   };
   let currentLang = 'ru';
 
@@ -1471,44 +1471,8 @@
   }
 
   // ==========================================
-  // АВТОРИЗАЦИЯ И СЕССИЯ
+  // АВТОРИЗАЦИЯ
   // ==========================================
-
-  async function checkSession() {
-    const { data: { session }, error } = await supabaseClient.auth.getSession();
-    if (session) {
-      myProfile.id = session.user.id;
-      const { data: profile } = await supabaseClient
-        .from('profiles')
-        .select('*')
-        .eq('id', session.user.id)
-        .single();
-
-      if (profile) {
-        myProfile.name = profile.full_name || 'User';
-        myProfile.phone = profile.phone || '';
-        myProfile.role = profile.status || 'User';
-        myProfile.bio = profile.bio || '';
-        myProfile.avatar = profile.avatar_url || defaultAvatarUrl;
-      }
-      
-      myProfile.status = 'online';
-
-      document.getElementById('login-overlay').classList.add('hidden');
-      document.getElementById('main-window').classList.remove('hidden');
-      isLoggedIn = true;
-
-      document.getElementById('display-my-name').textContent = myProfile.name;
-      document.getElementById('view-name').textContent = myProfile.name;
-      document.getElementById('display-my-mood').textContent = getStatusText(myProfile.status);
-
-      await loadContactsFromDB();
-      updateProfileDisplay(); renderStories();
-      if (contacts.length > 0) selectContact(contacts[0].id);
-      
-      subscribeToRealtimeMessages();
-    }
-  }
 
   function selectLoginStatus(status, el) {
     selectedLoginStatus = status;
@@ -1569,14 +1533,7 @@
     if (error) {
       usernameInput.classList.add('input-error');
       passwordInput.classList.add('input-error');
-      const m = (error.message || '').toLowerCase();
-      if (m.includes('email not confirmed') || m.includes('confirm')) {
-        errEl.textContent = '❌ Email не подтверждён. Попросите админа отключить "Confirm email" в Supabase → Authentication → Providers → Email.';
-      } else if (m.includes('invalid login') || m.includes('invalid credentials')) {
-        errEl.textContent = '❌ Неверный логин или пароль';
-      } else {
-        errEl.textContent = '❌ ' + error.message;
-      }
+      errEl.textContent = '❌ Неверный логин или пароль';
       errEl.classList.add('show'); return;
     }
 
@@ -1631,7 +1588,6 @@
     const password = document.getElementById('phone-reg-password').value;
     const errEl = document.getElementById('phone-error');
     errEl.classList.remove('show');
-    errEl.style.color = '';
 
     if (!username) { errEl.textContent = 'Введите логин'; errEl.classList.add('show'); return; }
     if (!name) { errEl.textContent = 'Введите имя'; errEl.classList.add('show'); return; }
@@ -1645,43 +1601,21 @@
       options: { data: { full_name: name } }
     });
 
-    if (error) {
-      errEl.textContent = '❌ ' + error.message;
-      errEl.classList.add('show');
-      return;
-    }
+    if (error) { errEl.textContent = error.message; errEl.classList.add('show'); return; }
 
-    if (!data || !data.user) {
-      errEl.textContent = '❌ Сервер не вернул пользователя. Проверьте, что в Supabase включён Email-провайдер.';
-      errEl.classList.add('show');
-      return;
-    }
-
-    try {
-      const { error: pErr } = await supabaseClient.from('profiles').insert({
+    if (data.user) {
+      await supabaseClient.from('profiles').insert({
         id: data.user.id,
         full_name: name,
-        status: 'online',
+        status: 'User',
         phone: username
       });
-      if (pErr && !/duplicate/i.test(pErr.message || '')) {
-        console.warn('profiles insert:', pErr);
-      }
-    } catch (e) {
-      console.warn('profiles insert exception:', e);
-    }
 
-    if (!data.session) {
-      errEl.textContent = '✅ Аккаунт создан, но нужен email. Письмо не придёт (домен @courtroom.local фейковый). Отключите "Confirm email" в Supabase → Authentication → Providers → Email и войдите снова.';
-      errEl.style.color = '#b07000';
+      errEl.textContent = '✅ Аккаунт создан! Теперь войдите.';
+      errEl.style.color = '#008000';
       errEl.classList.add('show');
-      return;
+      setTimeout(() => showLoginView(), 1500);
     }
-
-    errEl.textContent = '✅ Аккаунт создан! Теперь войдите.';
-    errEl.style.color = '#008000';
-    errEl.classList.add('show');
-    setTimeout(() => showLoginView(), 1500);
   }
 
   async function registerWithGitHub() {
@@ -1689,12 +1623,12 @@
     const password = document.getElementById('gh-password').value;
     const errEl = document.getElementById('gh-error');
     errEl.classList.remove('show');
-    errEl.style.color = '';
 
     if (!username) { errEl.textContent = 'Введите GitHub username'; errEl.classList.add('show'); return; }
     if (!password || password.length < 6) { errEl.textContent = 'Пароль должен быть не менее 6 символов'; errEl.classList.add('show'); return; }
 
-    const email = `${username}@courtroom.local`;
+    playClick();
+    const email = `${username}@github.local`;
 
     const { data, error } = await supabaseClient.auth.signUp({
       email: email,
@@ -1702,29 +1636,17 @@
       options: { data: { full_name: username } }
     });
 
-    if (error) { errEl.textContent = '❌ ' + error.message; errEl.classList.add('show'); return; }
-    if (!data || !data.user) { errEl.textContent = '❌ Не удалось создать пользователя'; errEl.classList.add('show'); return; }
+    if (error) { errEl.textContent = error.message; errEl.classList.add('show'); return; }
 
-    try {
-      const { error: pErr } = await supabaseClient.from('profiles').insert({
+    if (data.user) {
+      await supabaseClient.from('profiles').insert({
         id: data.user.id,
         full_name: username,
-        status: 'online',
-        phone: username
+        status: 'GitHub User'
       });
-      if (pErr && !/duplicate/i.test(pErr.message || '')) console.warn('profiles insert:', pErr);
-    } catch (e) { console.warn(e); }
-
-    if (!data.session) {
-      errEl.textContent = '✅ Аккаунт создан, но нужен email. Отключите "Confirm email" в Supabase → Authentication → Providers → Email.';
-      errEl.style.color = '#b07000';
-      errEl.classList.add('show');
-      return;
+      alert('Аккаунт GitHub создан! Войдите.');
+      showLoginView();
     }
-    errEl.textContent = '✅ Аккаунт создан! Теперь войдите.';
-    errEl.style.color = '#008000';
-    errEl.classList.add('show');
-    setTimeout(() => showLoginView(), 1500);
   }
 
   async function registerWithGoogle() {
@@ -1732,11 +1654,11 @@
     const password = document.getElementById('gg-password').value;
     const errEl = document.getElementById('gg-error');
     errEl.classList.remove('show');
-    errEl.style.color = '';
 
     if (!email || !email.includes('@')) { errEl.textContent = 'Введите корректный Google Email'; errEl.classList.add('show'); return; }
     if (!password || password.length < 6) { errEl.textContent = 'Пароль должен быть не менее 6 символов'; errEl.classList.add('show'); return; }
 
+    playClick();
     const name = email.split('@')[0];
     const capitalizedName = name.charAt(0).toUpperCase() + name.slice(1);
 
@@ -1746,29 +1668,17 @@
       options: { data: { full_name: capitalizedName } }
     });
 
-    if (error) { errEl.textContent = '❌ ' + error.message; errEl.classList.add('show'); return; }
-    if (!data || !data.user) { errEl.textContent = '❌ Не удалось создать пользователя'; errEl.classList.add('show'); return; }
+    if (error) { errEl.textContent = error.message; errEl.classList.add('show'); return; }
 
-    try {
-      const { error: pErr } = await supabaseClient.from('profiles').insert({
+    if (data.user) {
+      await supabaseClient.from('profiles').insert({
         id: data.user.id,
         full_name: capitalizedName,
-        status: 'online',
-        phone: name
+        status: 'Google User'
       });
-      if (pErr && !/duplicate/i.test(pErr.message || '')) console.warn('profiles insert:', pErr);
-    } catch (e) { console.warn(e); }
-
-    if (!data.session) {
-      errEl.textContent = '✅ Аккаунт создан. Подтвердите email (проверьте почту), затем войдите.';
-      errEl.style.color = '#b07000';
-      errEl.classList.add('show');
-      return;
+      alert('Аккаунт Google создан! Войдите.');
+      showLoginView();
     }
-    errEl.textContent = '✅ Аккаунт создан! Теперь войдите.';
-    errEl.style.color = '#008000';
-    errEl.classList.add('show');
-    setTimeout(() => showLoginView(), 1500);
   }
 
   async function logout() {
@@ -2145,7 +2055,7 @@
     const { data: profile, error } = await supabaseClient
       .from('profiles')
       .select('*')
-      .eq('phone', username) 
+      .eq('username', username) 
       .single();
 
     if (!profile) {
@@ -2191,8 +2101,6 @@
     document.getElementById('view-name').textContent = myProfile.name;
     updateProfileDisplay(); changeLanguage('ru'); renderContacts(); renderChat(); renderStories();
     setTimeout(() => document.getElementById('login-username').focus(), 100);
-
-    checkSession();
   })();
 </script>
 </body>
