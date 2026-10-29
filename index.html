@@ -109,7 +109,6 @@
   body.theme-xp .msg-me .poll-container { background: #fff; }
   body.theme-xp .status-option, body.theme-xp .form-group input, body.theme-xp .register-tab, body.theme-xp .signin-btn, body.theme-xp .gh-btn, body.theme-xp .gg-btn { border-radius: 0 !important; }
 
-  /* ===== ANIMATIONS ===== */
   @keyframes modalPopIn { 0% { opacity: 0; transform: scale(0.85) translateY(25px); } 65% { opacity: 1; transform: scale(1.02) translateY(-3px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
   @keyframes slideInRight { from { opacity: 0; transform: translateX(25px); } to { opacity: 1; transform: translateX(0); } }
   @keyframes fadeInUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
@@ -266,7 +265,6 @@
   .contact-status { width: 10px; height: 10px; border-radius: 50%; border: 1px solid rgba(0,0,0,.2); flex-shrink: 0; box-shadow: inset 0 1px 2px rgba(255,255,255,.6); margin-left: 5px; }
   .status-online { background: #4cd964; } .status-court { background: #ff3b30; } .status-away { background: #ffcc00; }
   
-  /* NEW: Unread Badge */
   .unread-badge { background: #4a90e2; color: #fff; font-size: 10px; font-weight: bold; padding: 1px 6px; border-radius: 10px; margin-left: 5px; display: inline-block; }
 
   .popup {
@@ -288,7 +286,6 @@
   .edit-input { width: 100%; padding: 4px; margin-bottom: 5px; border: 1px solid var(--border-dark); border-radius: 4px; font-family: inherit; font-size: 12px; background: var(--bg-sidebar); color: var(--text-main); }
   .chat-area { flex: 1; background: var(--bg-chat); border: 1px solid var(--border-light); border-radius: 6px; box-shadow: 0 4px 15px rgba(0,0,0,.1); display: flex; flex-direction: column; position: relative; }
   
-  /* NEW: Pinned Banner */
   .pinned-banner {
     background: var(--bg-sidebar); border-bottom: 1px solid var(--border-dark);
     padding: 8px 15px; display: none; align-items: center; justify-content: space-between;
@@ -336,7 +333,6 @@
   .msg-them .msg-bubble { background: var(--msg-them-bg); border: 1px solid var(--border-dark); color: var(--msg-them-text); border-bottom-left-radius: 0; }
   .msg-me .msg-bubble { background: var(--msg-me-bg); border: 1px solid var(--border-dark); color: var(--msg-me-text); border-bottom-right-radius: 0; }
   
-  /* NEW: Read/Unread Icons */
   .read-status { font-size: 12px; margin-left: 4px; }
   .read-status.read { color: #4cd964; }
   .read-status.unread { color: #4a90e2; font-weight: bold; }
@@ -808,7 +804,6 @@
         </div>
       </div>
       
-      <!-- NEW: Pinned Message Banner -->
       <div class="pinned-banner" id="pinnedBanner">
         <div class="pinned-content" id="pinnedContent"></div>
         <button onclick="unpinMessage()" title="Открепить">✕</button>
@@ -824,7 +819,6 @@
           <p id="cp-members-container" style="display:none;"><b data-i18n="members">Участники:</b></p>
           <div id="cp-members-list" style="margin-top:5px; max-height:150px; overflow-y:auto; border:1px solid var(--border-dark); border-radius:4px;"></div>
           
-          <!-- NEW: Contact Actions (Mute/Block) -->
           <div style="display:flex; gap:10px; margin-top:15px;" id="contact-actions-buttons">
             <button class="edit-btn" id="mute-btn" onclick="toggleMute()" style="flex:1; padding:6px; font-size:11px;">🔇 Заглушить</button>
             <button class="edit-btn" id="block-btn" onclick="toggleBlock()" style="flex:1; padding:6px; font-size:11px; background:rgba(255,0,0,.1); border-color:rgba(255,0,0,.3); color:#c00;">🚫 Заблокировать</button>
@@ -913,7 +907,6 @@
           </button>
         </div>
 
-        <!-- Blocked Notice -->
         <div id="blockedNotice" style="display:none; text-align:center; padding:10px; color:#e53935; font-weight:bold;">
           🚫 Вы заблокировали этого пользователя. Разблокируйте в профиле, чтобы писать.
         </div>
@@ -1247,7 +1240,29 @@
   </div>
 </div>
 
+<!-- Подключение Supabase JS -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
+  // ==========================================
+  // НАСТРОЙКА SUPABASE
+  // ==========================================
+  // ⚠️ ВСТАВЬТЕ СЮДА ВАШИ ДАННЫЕ ИЗ ПАНЕЛИ SUPABASE (Project Settings -> API)
+  const SUPABASE_URL = 'https://anslgxegqxmilvtsjqivx.supabase.co'; 
+  const SUPABASE_ANON_KEY = 'sb_publishable_e50Mjn22c7DImob-XfqZRA_ZYi56...'; // Вставьте ваш Publishable key полностью
+
+  let supabaseClient = null;
+  try {
+    supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    console.log('Supabase клиент успешно инициализирован!');
+  } catch (error) {
+    console.warn('Ошибка инициализации Supabase (возможно, неверные ключи). Работаем в локальном режиме.', error);
+  }
+
+  // ==========================================
+  // ЛОКАЛЬНАЯ ЛОГИКА МЕССЕНДЖЕРА (осталась без изменений)
+  // ==========================================
+
   const translations = {
     ru: { title:"⚖️ Courtroom Live Messenger 2009", user:"Пользователь", online:"В сети", away:"Нет на месте", busy:"Занят", my_profile:"👤 Мой профиль", edit:"✏️ Изменить", name:"Имя:", phone:"Телефон:", status:"Статус:", bio:"О себе:", welcome:"Добро пожаловать в мессенджер!", change_photo:"📷 Сменить фото", save:"💾 Сохранить", add_contact:"➕ Контакт", add_group:"➕ Группа", search:"Глобальный поиск (имя, номер)...", select_chat:"Выберите собеседника...", select_chat_desc:"Выберите контакт или создайте новый...", profile:"ℹ️ Профиль", my_story:"Моя история", role:"Роль:", members:"Участники:", type_message:"Сообщение", add_contact_title:"Добавить новый контакт", add_group_title:"Создать групповой чат", group_name:"Название группы:", select_members:"Выберите участников:", cancel:"Отмена", create:"Создать", settings:"⚙️ Настройки", general:"Общие", account:"Аккаунт", privacy:"Приватность", notifications:"Уведомления", chat_settings:"Настройки чата", devices:"Устройства", advanced:"Продвинутые", language:"Язык", language_desc:"Выберите язык интерфейса", theme:"Тема оформления", theme_desc:"Светлая, темная или XP (для слабых ПК)", theme_light:"Светлая", theme_dark:"Темная", theme_xp:"Windows XP (для слабых ПК)", sounds:"Звуки", sounds_desc:"Звуки уведомлений и кликов", edit_profile_desc:"Изменить имя, фото и описание", username:"Имя пользователя", phone_visibility:"Кто видит номер", avatar_visibility:"Кто видит фото", everyone:"Все", contacts:"Контакты", nobody:"Никто", messages:"Сообщения", messages_desc:"Кто может писать первым", desktop_notif:"Уведомления на рабочем столе", message_preview:"Показывать текст сообщения", chat_wallpaper:"Фон чата", standard:"Стандартный", text_size:"Размер текста", active_sessions:"Активные сессии", data_usage:"Использование данных", data_usage_desc:"Настройки автоскачивания", proxy:"Настройки прокси", proxy_desc:"Использовать прокси-сервер", done:"Готово", create_story:"Создать историю", story_text:"Текст истории:", story_photo:"Фотография (необязательно):", choose_photo:"📷 Выбрать фото", remove_photo:"✕ Убрать фото", publish:"Опубликовать", recording:"ЗАПИСЬ", connecting:"Соединение..." },
     uk: { title:"⚖️ Courtroom Live Messenger 2009", user:"Користувач", online:"В мережі", away:"Немає на місці", busy:"Зайнятий", my_profile:"👤 Мій профіль", edit:"✏️ Змінити", name:"Ім'я:", phone:"Телефон:", status:"Статус:", bio:"Про себе:", welcome:"Ласкаво просимо до месенджера!", change_photo:"📷 Змінити фото", save:"💾 Зберегти", add_contact:"➕ Контакт", add_group:"➕ Група", search:"Глобальний пошук (ім'я, номер)...", select_chat:"Виберіть співрозмовника...", select_chat_desc:"Виберіть контакт або створіть новий...", profile:"ℹ️ Профіль", my_story:"Моя історія", role:"Роль:", members:"Учасники:", type_message:"Повідомлення", add_contact_title:"Додати новий контакт", add_group_title:"Створити груповий чат", group_name:"Назва групи:", select_members:"Виберіть учасників:", cancel:"Скасувати", create:"Створити", settings:"⚙️ Налаштування", general:"Загальні", account:"Акаунт", privacy:"Приватність", notifications:"Сповіщення", chat_settings:"Налаштування чату", devices:"Пристрої", advanced:"Розширені", language:"Мова", language_desc:"Виберіть мову інтерфейсу", theme:"Тема оформлення", theme_desc:"Світла, темна або XP (для слабких ПК)", theme_light:"Світла", theme_dark:"Темна", theme_xp:"Windows XP (для слабких ПК)", sounds:"Звуки", sounds_desc:"Звуки сповіщень та кліків", edit_profile_desc:"Змінити ім'я, фото та опис", username:"Ім'я користувача", phone_visibility:"Хто бачить номер", avatar_visibility:"Хто бачить фото", everyone:"Всі", contacts:"Контакти", nobody:"Ніхто", messages:"Повідомлення", messages_desc:"Хто може писати першим", desktop_notif:"Сповіщення на робочому столі", message_preview:"Показувати текст повідомлення", chat_wallpaper:"Фон чату", standard:"Стандартний", text_size:"Розмір тексту", active_sessions:"Активні сесії", data_usage:"Використання даних", data_usage_desc:"Налаштування автозавантаження", proxy:"Налаштування проксі", proxy_desc:"Використовувати проксі-сервер", done:"Готово", create_story:"Створити історію", story_text:"Текст історії:", story_photo:"Фотографія (необов'язково):", choose_photo:"📷 Вибрати фото", remove_photo:"✕ Прибрати фото", publish:"Опублікувати", recording:"ЗАПИС", connecting:"З'єднання..." },
@@ -1329,7 +1344,7 @@
   let isLoggedIn = false;
   let selectedLoginStatus = 'online';
 
-  // NEW: State for pinned, muted, blocked, unread
+  // State for pinned, muted, blocked, unread
   let pinnedMessages = {}; // { [contactId]: messageId }
   let mutedContacts = new Set();
   let blockedContacts = new Set();
@@ -1489,6 +1504,14 @@
       errEl.textContent = '❌ Заполните все поля: логин и пароль';
       errEl.classList.add('show'); return;
     }
+
+    // ⚠️ ЗДЕСЬ ВЫ МОЖЕТЕ ЗАМЕНИТЬ ЛОГИКУ НА SUPABASE AUTH
+    /*
+    supabaseClient.auth.signInWithPassword({ email: username, password }).then(({ data, error }) => {
+      if (error) { ... }
+      else { ... }
+    });
+    */
 
     const db = getUserDatabase();
     const account = db[username];
@@ -1931,7 +1954,6 @@
     msg.options[optionIndex].votes++; msg.voted = true; msg.myVote = optionIndex; renderChat();
   }
 
-  // === КОНТЕКСТНОЕ МЕНЮ ===
   messagesEl.addEventListener('dblclick', (e) => {
     const msgEl = e.target.closest('.msg'); if (!msgEl) return;
     window.getSelection().removeAllRanges();
@@ -1939,7 +1961,6 @@
     const c = contacts.find(x => x.id === activeId); if (!c) return;
     contextTargetMsg = threads[activeId].find(m => m.id === msgId); if (!contextTargetMsg) return;
     
-    // Update Pin button text
     const isPinned = pinnedMessages[activeId] === contextTargetMsg.id;
     document.getElementById('pinMenuText').textContent = isPinned ? 'Открепить' : 'Закрепить';
 
@@ -1967,7 +1988,6 @@
     renderChat();
   }
 
-  // === NEW: PIN MESSAGE ===
   function actionPin() {
     if (!contextTargetMsg) return;
     playClick();
@@ -2001,7 +2021,6 @@
     pinnedBanner.classList.remove('active');
   }
 
-  // === NEW: MUTE/BLOCK ===
   function toggleMute() {
     if (!activeId) return;
     playClick();
@@ -2117,7 +2136,6 @@
 
   inputEl.addEventListener('keydown', e => { if (e.key.length === 1 && !e.ctrlKey && !e.altKey && !e.metaKey) playTypeSound(); });
   
-  // === NEW: RENDER CONTACTS WITH UNREAD BADGE ===
   function renderContacts() {
     contactListEl.innerHTML = ''; 
     const q = document.getElementById('search-input').value.toLowerCase().trim();
@@ -2133,7 +2151,6 @@
       let pt = c.phone || 'Hidden';
       let ah = renderAvatar(c.avatar); if (privacySettings.avatar === 'nobody') ah = `<div style="font-size:16px;color:#ccc;">👤</div>`;
       
-      // Unread badge
       let badgeHtml = '';
       if (unreadCounts[c.id] > 0) {
         badgeHtml = `<span class="unread-badge">${unreadCounts[c.id]}</span>`;
@@ -2153,7 +2170,7 @@
 
   function selectContact(id) {
     activeId = id;
-    unreadCounts[id] = 0; // Reset unread
+    unreadCounts[id] = 0;
     contactProfilePopup.classList.remove('active');
     renderContacts();
     renderChat();
@@ -2197,7 +2214,7 @@
   function triggerBotResponse() {
     setTimeout(() => {
       if (!threads[botId]) return;
-      if (blockedContacts.has(botId)) return; // Bot won't reply if blocked
+      if (blockedContacts.has(botId)) return;
 
       const myMsgs = threads[botId].filter(m => m.who === 'me');
       const lastMsg = myMsgs[myMsgs.length - 1];
@@ -2224,12 +2241,10 @@
       };
       threads[botId].push(newMsg);
       
-      // Mute logic for sound
       if (!mutedContacts.has(botId)) {
         playIncomingSound();
       }
 
-      // Unread count logic
       if (activeId !== botId) {
         unreadCounts[botId] = (unreadCounts[botId] || 0) + 1;
         renderContacts();
@@ -2256,12 +2271,10 @@
     viewContactProfileBtn.style.display = 'flex';
     if (callBtn) callBtn.style.display = 'flex';
     
-    // Check Blocked
     const isBlocked = blockedContacts.has(activeId);
     document.getElementById('inputArea').style.display = isBlocked ? 'none' : 'flex';
     blockedNotice.style.display = isBlocked ? 'block' : 'none';
 
-    // Update Profile Mute/Block Buttons
     document.getElementById('mute-btn').innerHTML = mutedContacts.has(activeId) ? '🔊 Включить звук' : '🔇 Заглушить';
     document.getElementById('block-btn').innerHTML = blockedContacts.has(activeId) ? '✅ Разблокировать' : '🚫 Заблокировать';
     if (blockedContacts.has(activeId)) {
@@ -2272,7 +2285,6 @@
       document.getElementById('block-btn').style.color = '#c00';
     }
 
-    // Render Pinned Message
     renderPinnedBanner();
 
     messagesEl.innerHTML = '';
@@ -2310,7 +2322,6 @@
       }
       else bubbleContent += m.text;
       
-      // NEW: Read status for my messages
       let readIcon = '';
       if (m.who === 'me') {
         readIcon = m.read ? '<span class="read-status read">✓✓</span>' : '<span class="read-status unread">✓</span>';
