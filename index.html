@@ -1100,4 +1100,1008 @@
               <div class="tg-row-value">›</div>
             </div>
             <div class="tg-row"><div class="tg-row-info"><div class="tg-row-title" data-i18n="phone">Номер телефона</div><div class="tg-row-desc" id="tg-acc-phone">+7 (000) 000-00-00</div></div></div>
-            <div class="
+            <div class="tg-row"><div class="tg-row-info"><div class="tg-row-title" data-i18n="username">Имя пользователя</div><div class="tg-row-desc" id="tg-acc-username">@user1</div></div></div>
+          </div>
+        </div>
+        <div class="settings-main" id="tab-privacy">
+          <div class="tg-section">
+            <div class="tg-row">
+              <div class="tg-row-info"><div class="tg-row-title" data-i18n="phone_visibility">Кто видит номер</div></div>
+              <select class="tg-select" id="privacy-phone" onchange="savePrivacySettings()">
+                <option value="all" data-i18n="everyone">Все</option><option value="contacts" data-i18n="contacts">Контакты</option><option value="nobody" data-i18n="nobody">Никто</option>
+              </select>
+            </div>
+            <div class="tg-row">
+              <div class="tg-row-info"><div class="tg-row-title" data-i18n="avatar_visibility">Кто видит фото</div></div>
+              <select class="tg-select" id="privacy-avatar" onchange="savePrivacySettings()">
+                <option value="all" data-i18n="everyone">Все</option><option value="contacts" data-i18n="contacts">Контакты</option><option value="nobody" data-i18n="nobody">Никто</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="settings-main" id="tab-notifications">
+          <div class="tg-section">
+            <div class="tg-row"><div class="tg-row-info"><div class="tg-row-title" data-i18n="desktop_notif">Уведомления на рабочем столе</div></div><label class="toggle-switch"><input type="checkbox" id="notif-desktop" checked onchange="saveNotificationSettings()"><span class="toggle-slider"></span></label></div>
+            <div class="tg-row"><div class="tg-row-info"><div class="tg-row-title" data-i18n="message_preview">Показывать текст сообщения</div></div><label class="toggle-switch"><input type="checkbox" id="notif-preview" checked onchange="saveNotificationSettings()"><span class="toggle-slider"></span></label></div>
+          </div>
+        </div>
+        <div class="settings-main" id="tab-chat">
+          <div class="tg-section">
+            <div class="tg-row"><div class="tg-row-info"><div class="tg-row-title" data-i18n="chat_wallpaper">Фон чата</div><div class="tg-row-desc">Отдельное оформление для чата</div></div>
+              <select class="tg-select" id="chat-wallpaper" onchange="changeWallpaper(this.value)">
+                <option value="default">Стандартный (тема)</option>
+                <option value="telegram">Telegram (сетка)</option>
+                <option value="nature">Природа (зелёный)</option>
+                <option value="abstract">Абстракция (тёмный)</option>
+                <option value="plain">Однотонный</option>
+              </select>
+            </div>
+            <div class="tg-row"><div class="tg-row-info"><div class="tg-row-title" data-i18n="text_size">Размер текста</div></div>
+              <select class="tg-select" id="chat-text-size" onchange="changeTextSize(this.value)">
+                <option value="12px">12px</option>
+                <option value="14px" selected>14px</option>
+                <option value="16px">16px</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="settings-main" id="tab-devices">
+          <div class="tg-section">
+            <div class="tg-row"><div class="tg-row-info"><div class="tg-row-title" data-i18n="active_sessions">Активные сессии</div><div class="tg-row-desc">1</div></div></div>
+            <div class="tg-row"><div class="tg-row-info"><div class="tg-row-title">💻 Windows • Chrome</div><div class="tg-row-desc">Текущая сессия</div></div></div>
+          </div>
+          <button class="tg-btn danger" style="align-self:flex-start;" onclick="terminateSessions()">Завершить другие сессии</button>
+        </div>
+        <div class="settings-main" id="tab-advanced">
+          <div class="tg-section">
+            <div class="tg-row" onclick="alert('Настройки автоскачивания: фото (вкл), видео (выкл)')"><div class="tg-row-info"><div class="tg-row-title" data-i18n="data_usage">Использование данных</div><div class="tg-row-desc" data-i18n="data_usage_desc">Настройки автоскачивания</div></div><div class="tg-row-value">›</div></div>
+            <div class="tg-row" onclick="alert('Прокси-сервер не используется.')"><div class="tg-row-info"><div class="tg-row-title" data-i18n="proxy">Настройки прокси</div><div class="tg-row-desc" data-i18n="proxy_desc">Использовать прокси-сервер</div></div><div class="tg-row-value">›</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer" style="padding:10px 20px; background:var(--bg-sidebar);">
+        <button class="primary" onclick="closeModal('modal-settings')" data-i18n="done">Готово</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-add-story">
+    <div class="modal-window">
+      <div class="modal-header" data-i18n="create_story">Создать историю</div>
+      <div class="modal-body">
+        <label data-i18n="story_text">Текст истории:</label><input type="text" id="new-story-text" placeholder="...">
+        <label data-i18n="story_photo">Фотография (необязательно):</label>
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <button class="edit-btn" style="align-self:flex-start;" onclick="triggerStoryUpload()" data-i18n="choose_photo">📷 Выбрать фото</button>
+          <div id="story-image-preview" style="display:none; flex-direction:column; align-items:center; gap:6px;">
+            <img id="story-preview-img" style="max-width:100%; max-height:140px; border-radius:6px; object-fit:cover; border:1px solid var(--border-dark);">
+            <button class="edit-btn" style="background:rgba(255,0,0,.15); border-color:rgba(255,0,0,.35); color:#c00;" onclick="clearStoryImage()" data-i18n="remove_photo">✕ Убрать фото</button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button onclick="closeModal('modal-add-story')" data-i18n="cancel">Отмена</button>
+        <button class="primary" onclick="addStory()" data-i18n="publish">Опубликовать</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="story-viewer" id="story-viewer">
+    <div class="story-viewer-content" id="story-content">Текст истории</div>
+    <div class="story-viewer-header">
+      <div class="story-viewer-avatar" id="story-viewer-avatar"></div>
+      <span id="story-viewer-name">Имя</span>
+    </div>
+    <button class="story-viewer-close" onclick="closeStoryViewer()">✕</button>
+  </div>
+
+  <div class="call-overlay" id="call-overlay">
+    <div class="record-indicator" id="record-indicator"><div class="record-dot"></div> <span data-i18n="recording">ЗАПИСЬ</span></div>
+    <div class="call-top-bar">
+      <div class="call-user-info"><h2 id="call-name">Имя</h2><p id="call-status" data-i18n="connecting">Соединение...</p></div>
+      <div class="call-top-actions"><div class="call-top-avatar" id="call-top-avatar"></div></div>
+    </div>
+    <div class="call-center">
+      <div class="call-center-avatar" id="call-center-avatar"></div>
+      <div class="call-screen-share" id="call-screen-share">
+        <video id="screen-share-video" autoplay playsinline></video>
+      </div>
+      <div class="call-self-video" id="call-self-video"><video id="self-video" autoplay playsinline muted></video></div>
+    </div>
+    <div class="call-bottom-bar">
+      <div class="call-controls">
+        <button class="call-control-btn white" id="mic-btn" onclick="toggleMic()">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
+        </button>
+        <button class="call-control-btn black" id="cam-toggle-btn" onclick="toggleCamera()">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 10l4.553-2.276A1 1 0 0 1 21 8.618v6.764a1 1 0 0 1-1.447.894L15 14v-4z"/><rect x="3" y="6" width="12" height="12" rx="2"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+        </button>
+        <button class="call-control-btn black" id="share-btn" onclick="toggleScreenShare()">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        </button>
+        <button class="call-control-btn red" onclick="endCall()">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Подключение Supabase JS -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+  // ==========================================
+  // НАСТРОЙКА SUPABASE
+  // ==========================================
+  const SUPABASE_URL = 'https://anslgxegqxmilvtsjqivx.supabase.co'; 
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFuc2xneGVxZ3htbHZ0cWpxanZ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMzMDI2ODQsImV4cCI6MjEwODg3ODY4NH0.mIl8iqseRiRdyK-s4JyjAOTQXJ8KI055IX9TMHhB55I'; 
+
+  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  console.log('Supabase клиент успешно инициализирован!');
+
+  // ==========================================
+  // ЛОКАЛЬНАЯ ЛОГИКА (UI)
+  // ==========================================
+
+  const translations = {
+    ru: { title:"⚖️ Courtroom Live Messenger 2009", user:"Пользователь", online:"В сети", away:"Нет на месте", busy:"Занят", my_profile:"👤 Мой профиль", edit:"✏️ Изменить", name:"Имя:", phone:"Телефон:", status:"Статус:", bio:"О себе:", welcome:"Добро пожаловать в мессенджер!", change_photo:"📷 Сменить фото", save:"💾 Сохранить", add_contact:"➕ Контакт", add_group:"➕ Группа", search:"Глобальный поиск (имя)...", select_chat:"Выберите собеседника...", select_chat_desc:"Выберите контакт или создайте новый...", profile:"ℹ️ Профиль", my_story:"Моя история", role:"Роль:", members:"Участники:", type_message:"Сообщение", add_contact_title:"Добавить новый контакт", add_group_title:"Создать групповой чат", group_name:"Название группы:", select_members:"Выберите участников:", cancel:"Отмена", create:"Создать", settings:"⚙️ Настройки", general:"Общие", account:"Аккаунт", privacy:"Приватность", notifications:"Уведомления", chat_settings:"Настройки чата", devices:"Устройства", advanced:"Продвинутые", language:"Язык", language_desc:"Выберите язык интерфейса", theme:"Тема оформления", theme_desc:"Светлая, темная или XP (для слабых ПК)", theme_light:"Светлая", theme_dark:"Темная", theme_xp:"Windows XP (для слабых ПК)", sounds:"Звуки", sounds_desc:"Звуки уведомлений и кликов", edit_profile_desc:"Изменить имя, фото и описание", username:"Имя пользователя", phone_visibility:"Кто видит номер", avatar_visibility:"Кто видит фото", everyone:"Все", contacts:"Контакты", nobody:"Никто", messages:"Сообщения", messages_desc:"Кто может писать первым", desktop_notif:"Уведомления на рабочем столе", message_preview:"Показывать текст сообщения", chat_wallpaper:"Фон чата", standard:"Стандартный", text_size:"Размер текста", active_sessions:"Активные сессии", data_usage:"Использование данных", data_usage_desc:"Настройки автоскачивания", proxy:"Настройки прокси", proxy_desc:"Использовать прокси-сервер", done:"Готово", create_story:"Создать историю", story_text:"Текст истории:", story_photo:"Фотография (необязательно):", choose_photo:"📷 Выбрать фото", remove_photo:"✕ Убрать фото", publish:"Опубликовать", recording:"ЗАПИСЬ", connecting:"Соединение..." },
+    uk: { title:"⚖️ Courtroom Live Messenger 2009", user:"Користувач", online:"В мережі", away:"Немає на місці", busy:"Зайнятий", my_profile:"👤 Мій профіль", edit:"✏️ Змінити", name:"Ім'я:", phone:"Телефон:", status:"Статус:", bio:"Про себе:", welcome:"Ласкаво просимо до месенджера!", change_photo:"📷 Змінити фото", save:"💾 Зберегти", add_contact:"➕ Контакт", add_group:"➕ Група", search:"Глобальний пошук (ім'я)...", select_chat:"Виберіть співрозмовника...", select_chat_desc:"Виберіть контакт або створіть новий...", profile:"ℹ️ Профіль", my_story:"Моя історія", role:"Роль:", members:"Учасники:", type_message:"Повідомлення", add_contact_title:"Додати новий контакт", add_group_title:"Створити груповий чат", group_name:"Назва групи:", select_members:"Виберіть учасників:", cancel:"Скасувати", create:"Створити", settings:"⚙️ Налаштування", general:"Загальні", account:"Акаунт", privacy:"Приватність", notifications:"Сповіщення", chat_settings:"Налаштування чату", devices:"Пристрої", advanced:"Розширені", language:"Мова", language_desc:"Виберіть мову інтерфейсу", theme:"Тема оформлення", theme_desc:"Світла, темна або XP (для слабких ПК)", theme_light:"Світла", theme_dark:"Темна", theme_xp:"Windows XP (для слабких ПК)", sounds:"Звуки", sounds_desc:"Звуки сповіщень та кліків", edit_profile_desc:"Змінити ім'я, фото та опис", username:"Ім'я користувача", phone_visibility:"Хто бачить номер", avatar_visibility:"Хто бачить фото", everyone:"Всі", contacts:"Контакти", nobody:"Ніхто", messages:"Повідомлення", messages_desc:"Хто може писати першим", desktop_notif:"Сповіщення на робочому столі", message_preview:"Показувати текст повідомлення", chat_wallpaper:"Фон чату", standard:"Стандартний", text_size:"Розмір тексту", active_sessions:"Активні сесії", data_usage:"Використання даних", data_usage_desc:"Налаштування автозавантаження", proxy:"Налаштування проксі", proxy_desc:"Використовувати проксі-сервер", done:"Готово", create_story:"Створити історію", story_text:"Текст історії:", story_photo:"Фотографія (необов'язково):", choose_photo:"📷 Вибрати фото", remove_photo:"✕ Прибрати фото", publish:"Опублікувати", recording:"ЗАПИС", connecting:"З'єднання..." },
+    en: { title:"⚖️ Courtroom Live Messenger 2009", user:"User", online:"Online", away:"Away", busy:"Busy", my_profile:"👤 My Profile", edit:"✏️ Edit", name:"Name:", phone:"Phone:", status:"Status:", bio:"Bio:", welcome:"Welcome to the messenger!", change_photo:"📷 Change Photo", save:"💾 Save", add_contact:"➕ Contact", add_group:"➕ Group", search:"Global search (name)...", select_chat:"Select a chat...", select_chat_desc:"Select a contact or create a new one...", profile:"ℹ️ Profile", my_story:"My Story", role:"Role:", members:"Members:", type_message:"Message", add_contact_title:"Add New Contact", add_group_title:"Create Group Chat", group_name:"Group Name:", select_members:"Select Members:", cancel:"Cancel", create:"Create", settings:"⚙️ Settings", general:"General", account:"Account", privacy:"Privacy", notifications:"Notifications", chat_settings:"Chat Settings", devices:"Devices", advanced:"Advanced", language:"Language", language_desc:"Choose interface language", theme:"Theme", theme_desc:"Light, dark or XP (for low-end PCs)", theme_light:"Light", theme_dark:"Dark", theme_xp:"Windows XP (for low-end PCs)", sounds:"Sounds", sounds_desc:"Notification and click sounds", edit_profile_desc:"Change name, photo and bio", username:"Username", phone_visibility:"Who sees my phone", avatar_visibility:"Who sees my photo", everyone:"Everyone", contacts:"Contacts", nobody:"Nobody", messages:"Messages", messages_desc:"Who can message me first", desktop_notif:"Desktop Notifications", message_preview:"Show message text", chat_wallpaper:"Chat Wallpaper", standard:"Standard", text_size:"Text Size", active_sessions:"Active Sessions", data_usage:"Data Usage", data_usage_desc:"Auto-download settings", proxy:"Proxy Settings", proxy_desc:"Use proxy server", done:"Done", create_story:"Create Story", story_text:"Story Text:", story_photo:"Photo (optional):", choose_photo:"📷 Choose Photo", remove_photo:"✕ Remove Photo", publish:"Publish", recording:"REC", connecting:"Connecting..." }
+  };
+  let currentLang = 'ru';
+
+  function changeLanguage(lang) {
+    currentLang = lang;
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (translations[lang] && translations[lang][key]) el.textContent = translations[lang][key];
+    });
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+      const key = el.getAttribute('data-i18n-placeholder');
+      if (translations[lang] && translations[lang][key]) el.placeholder = translations[lang][key];
+    });
+    if (typeof myProfile !== 'undefined' && myProfile) {
+      const moodEl = document.getElementById('display-my-mood');
+      if (moodEl) moodEl.textContent = getStatusText(myProfile.status);
+    }
+    playClick();
+  }
+
+  function getStatusText(status) {
+    if (status === 'away') return translations[currentLang].away;
+    if (status === 'busy') return translations[currentLang].busy;
+    return translations[currentLang].online;
+  }
+
+  const defaultAvatarUrl = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23005f8a'/><circle cx='50' cy='35' r='18' fill='%23fff'/><path d='M 15 80 C 15 50, 85 50, 85 80 Z' fill='%23fff'/></svg>";
+  const defaultGroupAvatar = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><mask id='m'><rect width='100' height='100' fill='%23fff'/><circle cx='50' cy='35' r='22' fill='%23000'/><path d='M 20 85 C 20 55, 80 55, 80 85 V 100 H 20 Z' fill='%23000'/></mask></defs><g mask='url(%23m)'><circle cx='25' cy='35' r='20' fill='%2300a8ff'/><path d='M 0 80 C 0 55, 50 55, 50 80 V 100 H 0 Z' fill='%2300a8ff'/><circle cx='75' cy='35' r='20' fill='%2300a8ff'/><path d='M 50 80 C 50 55, 100 55, 100 80 V 100 H 50 Z' fill='%2300a8ff'/></g><circle cx='50' cy='35' r='22' fill='%2300a8ff'/><path d='M 20 85 C 20 55, 80 55, 80 85 V 100 H 20 Z' fill='%2300a8ff'/></svg>";
+  const botAvatar = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='20' y='20' width='60' height='60' rx='15' fill='%23fff' stroke='%23000' stroke-width='6'/><path d='M 35 80 L 35 95 L 55 80' fill='%23fff' stroke='%23000' stroke-width='6' stroke-linejoin='round'/><line x1='50' y1='8' x2='50' y2='20' stroke='%23000' stroke-width='6'/><line x1='40' y1='8' x2='60' y2='8' stroke='%23000' stroke-width='6' stroke-linecap='round'/><circle cx='40' cy='45' r='5' fill='%23000'/><circle cx='60' cy='45' r='5' fill='%23000'/><path d='M 40 60 Q 50 70 60 60' fill='none' stroke='%23000' stroke-width='5' stroke-linecap='round'/><path d='M 20 35 Q 10 35 10 50 Q 10 65 20 65' fill='none' stroke='%23000' stroke-width='6' stroke-linecap='round'/><path d='M 80 35 Q 90 35 90 50 Q 90 65 80 65' fill='none' stroke='%23000' stroke-width='6' stroke-linecap='round'/></svg>";
+  const locationIcon = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234a90e2' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z'></path><circle cx='12' cy='10' r='3'></circle><ellipse cx='12' cy='21' rx='7' ry='3' stroke-width='1.5'></ellipse></svg>";
+  const botId = 'bot_courtroom';
+
+  let soundsEnabled = true;
+  let privacySettings = { phone: 'all', avatar: 'all' };
+  let notificationSettings = { desktop: true, preview: true };
+  let isLoggedIn = false;
+  let selectedLoginStatus = 'online';
+
+  let pinnedMessages = {}; 
+  let mutedContacts = new Set();
+  let blockedContacts = new Set();
+  let unreadCounts = {}; 
+
+  function switchSettingsTab(tabId, el) {
+    document.querySelectorAll('.settings-main').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.settings-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(tabId).classList.add('active');
+    el.classList.add('active');
+    playClick();
+  }
+  function toggleSounds(v) { soundsEnabled = v; if (v) playClick(); }
+  function changeTheme(theme) {
+    document.body.className = '';
+    if (theme === 'dark') document.body.classList.add('theme-dark');
+    else if (theme === 'xp') document.body.classList.add('theme-xp');
+    else document.body.classList.add('theme-light');
+    playClick();
+  }
+  function savePrivacySettings() {
+    privacySettings.phone = document.getElementById('privacy-phone').value;
+    privacySettings.avatar = document.getElementById('privacy-avatar').value;
+    playClick(); updateProfileDisplay(); renderContacts();
+  }
+  function saveNotificationSettings() {
+    notificationSettings.desktop = document.getElementById('notif-desktop').checked;
+    notificationSettings.preview = document.getElementById('notif-preview').checked;
+    playClick();
+  }
+  function changeWallpaper(value) {
+    const messagesEl = document.getElementById('messages');
+    messagesEl.className = 'messages';
+    messagesEl.classList.add('chat-theme-' + value);
+    playClick();
+  }
+  function changeTextSize(size) {
+    document.querySelectorAll('.msg-bubble').forEach(b => b.style.fontSize = size);
+    playClick();
+  }
+  function terminateSessions() {
+    if (confirm('Завершить все другие сессии? Это действие нельзя отменить.')) {
+      playClick(); alert('Все другие сессии завершены (имитация).');
+    }
+  }
+
+  let myProfile = { id: null, name:'User1', phone:'+7 (000) 000-00-00', role:'User', bio:'Welcome to the messenger!', avatar:defaultAvatarUrl, status:'online' };
+  let contacts = [];
+  let threads = {};
+  let stories = [];
+  let activeId = null;
+  let avatarTarget = 'me';
+  let currentEditContactId = null;
+  let isHolding = false, isScreenSharing = false, isMicMuted = false;
+  let pendingStoryImage = null;
+  let callState = { active:false, contactId:null, seconds:0, connectTimeout:null, timerInterval:null, ringInterval:null };
+  let cameraStream = null, screenStream = null, cameraOn = false;
+  let lastSentMsgId = null;
+  let voiceRecorder = null, voiceChunks = [], voiceTimerInterval = null, voiceSeconds = 0;
+  let contextTargetMsg = null;
+  let replyToMsg = null;
+  let isSelectMode = false;
+  let selectedMsgs = new Set();
+  let botMediaRecorder = null;
+  let botAudioChunks = [];
+
+  const messagesEl = document.getElementById('messages');
+  const inputEl = document.getElementById('message-input');
+  const contactListEl = document.getElementById('contact-list');
+  const chatTitleEl = document.getElementById('chat-title');
+  const infoCloud = document.getElementById('info-cloud');
+  const contactProfilePopup = document.getElementById('contact-profile-popup');
+  const viewContactProfileBtn = document.getElementById('view-contact-profile-btn');
+  const callBtn = document.getElementById('call-btn');
+  const hiddenFileInput = document.getElementById('hidden-file-input');
+  const storyFileInput = document.getElementById('story-file-input');
+  const mediaInput = document.getElementById('media-input');
+  const docInput = document.getElementById('doc-input');
+  const statusMenu = document.getElementById('status-menu');
+  const attachmentMenu = document.getElementById('attachmentMenu');
+  const contextMenu = document.getElementById('contextMenu');
+  const emojiPicker = document.getElementById('emojiPicker');
+  const pinnedBanner = document.getElementById('pinnedBanner');
+  const pinnedContent = document.getElementById('pinnedContent');
+  const inputArea = document.getElementById('inputArea');
+  const blockedNotice = document.getElementById('blockedNotice');
+
+  // ==========================================
+  // ИНТЕГРАЦИЯ С SUPABASE
+  // ==========================================
+
+  async function loadContactsFromDB() {
+    const { data, error } = await supabaseClient
+      .from('contacts')
+      .select(`
+        contact_id,
+        profiles:contact_id (id, full_name, phone, avatar_url, status, bio)
+      `)
+      .eq('user_id', myProfile.id);
+
+    if (error) { console.error('Ошибка загрузки контактов:', error); return; }
+
+    contacts = []; 
+    if (data) {
+      data.forEach(item => {
+        const p = item.profiles;
+        if (p) {
+          contacts.push({
+            id: p.id, 
+            name: p.full_name || 'Без имени',
+            phone: p.phone || '',
+            status: p.status || 'offline',
+            avatar: p.avatar_url || defaultAvatarUrl,
+            role: 'User',
+            bio: p.bio || ''
+          });
+          threads[p.id] = []; 
+        }
+      });
+    }
+    renderContacts();
+  }
+
+  async function loadMessagesFromDB(contactId) {
+    const { data, error } = await supabaseClient
+      .from('messages')
+      .select('*')
+      .or(`and(sender_id.eq.${myProfile.id},chat_id.eq.${contactId}),and(sender_id.eq.${contactId},chat_id.eq.${myProfile.id})`)
+      .order('created_at', { ascending: true });
+
+    if (error) { console.error('Ошибка загрузки сообщений:', error); return; }
+
+    threads[contactId] = data.map(m => ({
+      id: m.id,
+      who: m.sender_id === myProfile.id ? 'me' : 'them',
+      text: m.content,
+      time: new Date(m.created_at).toLocaleTimeString().slice(0,5),
+      type: m.message_type,
+      media: m.media_url,
+      read: m.is_read
+    }));
+    renderChat();
+  }
+
+  function subscribeToRealtimeMessages() {
+    supabaseClient
+      .channel('public:messages')
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'messages' },
+        (payload) => {
+          const newMsg = payload.new;
+          const senderId = newMsg.sender_id;
+          const chatId = newMsg.chat_id;
+
+          const isCurrentChat = (chatId === activeId && senderId === myProfile.id) || (chatId === myProfile.id && senderId === activeId);
+
+          if (isCurrentChat) {
+            if (!threads[activeId]) threads[activeId] = [];
+            if (!threads[activeId].find(m => m.id === newMsg.id)) {
+              threads[activeId].push({
+                id: newMsg.id,
+                who: newMsg.sender_id === myProfile.id ? 'me' : 'them',
+                text: newMsg.content,
+                time: new Date(newMsg.created_at).toLocaleTimeString().slice(0,5),
+                type: newMsg.message_type,
+                media: newMsg.media_url,
+                read: newMsg.is_read
+              });
+              renderChat();
+              if (newMsg.sender_id !== myProfile.id) playIncomingSound();
+            }
+          } else {
+            if (newMsg.sender_id !== myProfile.id) {
+              unreadCounts[newMsg.sender_id] = (unreadCounts[newMsg.sender_id] || 0) + 1;
+              renderContacts();
+              playIncomingSound();
+            }
+          }
+        }
+      )
+      .subscribe();
+  }
+
+  // ==========================================
+  // АВТОРИЗАЦИЯ
+  // ==========================================
+
+  function selectLoginStatus(status, el) {
+    selectedLoginStatus = status;
+    document.querySelectorAll('.status-option').forEach(o => o.classList.remove('active'));
+    el.classList.add('active');
+    playClick();
+  }
+
+  function showRegisterView() {
+    playClick();
+    document.getElementById('login-view').style.display = 'none';
+    document.getElementById('register-view').style.display = 'block';
+    document.getElementById('login-tagline').textContent = 'Создать аккаунт · Sign up';
+    ['gh-error','gg-error','phone-error'].forEach(id => { const el = document.getElementById(id); if (el) el.classList.remove('show'); });
+  }
+  function showLoginView() {
+    playClick();
+    document.getElementById('login-view').style.display = 'block';
+    document.getElementById('register-view').style.display = 'none';
+    document.getElementById('login-tagline').textContent = 'Вход в аккаунт · Sign in';
+  }
+
+  function switchRegTab(tab, el) {
+    playClick();
+    document.querySelectorAll('.register-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.register-section').forEach(s => s.classList.remove('active'));
+    el.classList.add('active');
+    const sec = document.getElementById('reg-section-' + tab);
+    sec.classList.add('active');
+  }
+
+  async function doLogin() {
+    const usernameInput = document.getElementById('login-username');
+    const passwordInput = document.getElementById('login-password');
+    const errEl = document.getElementById('login-error');
+
+    const username = usernameInput.value.trim();
+    const password = passwordInput.value;
+
+    usernameInput.classList.remove('input-error');
+    passwordInput.classList.remove('input-error');
+    errEl.classList.remove('show');
+
+    if (!username || !password) {
+      if(!username) usernameInput.classList.add('input-error');
+      if(!password) passwordInput.classList.add('input-error');
+      errEl.textContent = '❌ Заполните все поля: логин и пароль';
+      errEl.classList.add('show'); return;
+    }
+
+    const email = username.includes('@') ? username : `${username}@courtroom.local`;
+
+    const { data, error } = await supabaseClient.auth.signInWithPassword({
+      email: email,
+      password: password,
+    });
+
+    if (error) {
+      usernameInput.classList.add('input-error');
+      passwordInput.classList.add('input-error');
+      errEl.textContent = '❌ Неверный логин или пароль';
+      errEl.classList.add('show'); return;
+    }
+
+    errEl.classList.remove('show');
+    playClick();
+
+    myProfile.id = data.user.id;
+
+    const { data: profile } = await supabaseClient
+      .from('profiles')
+      .select('*')
+      .eq('id', data.user.id)
+      .single();
+
+    if (profile) {
+      myProfile.name = profile.full_name || username;
+      myProfile.phone = profile.phone || '+7 (000) 000-00-00';
+      myProfile.role = profile.status || 'User';
+      myProfile.bio = profile.bio || 'Привет!';
+      myProfile.avatar = profile.avatar_url || defaultAvatarUrl;
+    }
+
+    myProfile.status = selectedLoginStatus;
+
+    if (document.getElementById('login-remember').checked) {
+      try { localStorage.setItem('courtroom_remembered_user', username); } catch(e) {}
+    } else {
+      try { localStorage.removeItem('courtroom_remembered_user'); } catch(e) {}
+    }
+
+    document.getElementById('login-overlay').classList.add('hidden');
+    document.getElementById('main-window').classList.remove('hidden');
+    isLoggedIn = true;
+
+    document.getElementById('display-my-name').textContent = myProfile.name;
+    document.getElementById('view-name').textContent = myProfile.name;
+    document.getElementById('display-my-mood').textContent = getStatusText(myProfile.status);
+
+    await loadContactsFromDB();
+    updateProfileDisplay(); renderStories();
+    if (contacts.length > 0) selectContact(contacts[0].id);
+    
+    subscribeToRealtimeMessages();
+
+    const dot = document.getElementById('my-status-dot');
+    if (dot) { dot.classList.add('pop'); setTimeout(() => dot.classList.remove('pop'), 500); }
+  }
+
+  async function registerWithPhone() {
+    const username = document.getElementById('phone-reg-number').value.trim();
+    const name = document.getElementById('phone-reg-name').value.trim();
+    const password = document.getElementById('phone-reg-password').value;
+    const errEl = document.getElementById('phone-error');
+    errEl.classList.remove('show');
+
+    if (!username) { errEl.textContent = 'Введите логин'; errEl.classList.add('show'); return; }
+    if (!name) { errEl.textContent = 'Введите имя'; errEl.classList.add('show'); return; }
+    if (!password || password.length < 6) { errEl.textContent = 'Пароль должен быть не менее 6 символов'; errEl.classList.add('show'); return; }
+
+    const email = `${username}@courtroom.local`;
+
+    const { data, error } = await supabaseClient.auth.signUp({
+      email: email,
+      password: password,
+      options: { data: { full_name: name } }
+    });
+
+    if (error) { errEl.textContent = error.message; errEl.classList.add('show'); return; }
+
+    if (data.user) {
+      await supabaseClient.from('profiles').insert({
+        id: data.user.id,
+        full_name: name,
+        status: 'User',
+        phone: username
+      });
+
+      errEl.textContent = '✅ Аккаунт создан! Теперь войдите.';
+      errEl.style.color = '#008000';
+      errEl.classList.add('show');
+      setTimeout(() => showLoginView(), 1500);
+    }
+  }
+
+  async function registerWithGitHub() {
+    const username = document.getElementById('gh-username').value.trim();
+    const password = document.getElementById('gh-password').value;
+    const errEl = document.getElementById('gh-error');
+    errEl.classList.remove('show');
+
+    if (!username) { errEl.textContent = 'Введите GitHub username'; errEl.classList.add('show'); return; }
+    if (!password || password.length < 6) { errEl.textContent = 'Пароль должен быть не менее 6 символов'; errEl.classList.add('show'); return; }
+
+    playClick();
+    const email = `${username}@github.local`;
+
+    const { data, error } = await supabaseClient.auth.signUp({
+      email: email,
+      password: password,
+      options: { data: { full_name: username } }
+    });
+
+    if (error) { errEl.textContent = error.message; errEl.classList.add('show'); return; }
+
+    if (data.user) {
+      await supabaseClient.from('profiles').insert({
+        id: data.user.id,
+        full_name: username,
+        status: 'GitHub User'
+      });
+      alert('Аккаунт GitHub создан! Войдите.');
+      showLoginView();
+    }
+  }
+
+  async function registerWithGoogle() {
+    const email = document.getElementById('gg-email').value.trim();
+    const password = document.getElementById('gg-password').value;
+    const errEl = document.getElementById('gg-error');
+    errEl.classList.remove('show');
+
+    if (!email || !email.includes('@')) { errEl.textContent = 'Введите корректный Google Email'; errEl.classList.add('show'); return; }
+    if (!password || password.length < 6) { errEl.textContent = 'Пароль должен быть не менее 6 символов'; errEl.classList.add('show'); return; }
+
+    playClick();
+    const name = email.split('@')[0];
+    const capitalizedName = name.charAt(0).toUpperCase() + name.slice(1);
+
+    const { data, error } = await supabaseClient.auth.signUp({
+      email: email,
+      password: password,
+      options: { data: { full_name: capitalizedName } }
+    });
+
+    if (error) { errEl.textContent = error.message; errEl.classList.add('show'); return; }
+
+    if (data.user) {
+      await supabaseClient.from('profiles').insert({
+        id: data.user.id,
+        full_name: capitalizedName,
+        status: 'Google User'
+      });
+      alert('Аккаунт Google создан! Войдите.');
+      showLoginView();
+    }
+  }
+
+  async function logout() {
+    if (!confirm('Выйти из аккаунта?')) return;
+    playClick(); 
+    await supabaseClient.auth.signOut();
+    isLoggedIn = false; closeModal('modal-settings');
+    document.getElementById('main-window').classList.add('hidden');
+    document.getElementById('login-overlay').classList.remove('hidden');
+    document.getElementById('login-password').value = '';
+    document.getElementById('login-password').focus(); showLoginView();
+    const mw = document.getElementById('main-window');
+    mw.classList.remove('maximized','minimized','hidden'); mw.classList.add('hidden');
+    document.getElementById('login-username').classList.remove('input-error');
+    document.getElementById('login-password').classList.remove('input-error');
+    document.getElementById('login-error').classList.remove('show');
+    
+    contacts = [];
+    threads = {};
+    activeId = null;
+    unreadCounts = {};
+    mutedContacts.clear();
+    blockedContacts.clear();
+    pinnedMessages = {};
+    myProfile = { id: null, name:'User1', phone:'+7 (000) 000-00-00', role:'User', bio:'Welcome to the messenger!', avatar:defaultAvatarUrl, status:'online' };
+  }
+
+  // ==========================================
+  // ОСТАЛЬНАЯ ЛОГИКА UI
+  // ==========================================
+
+  function renderAvatar(avatarStr) {
+    if (avatarStr && (avatarStr.startsWith('data:image') || avatarStr.startsWith('http'))) {
+      return `<img src="${avatarStr}" alt="avatar" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+    }
+    return avatarStr || `<img src="${defaultAvatarUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+  }
+  function getNowTime() {
+    const d = new Date();
+    return String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+  }
+  function updateProfileDisplay() {
+    const ac = document.getElementById('my-avatar-display');
+    if (privacySettings.avatar === 'nobody') {
+      ac.innerHTML = `<div style="font-size:24px;color:#ccc;">👤</div>`;
+    } else {
+      ac.innerHTML = `${renderAvatar(myProfile.avatar)}<div class="my-status-dot ${myProfile.status}" id="my-status-dot" onclick="toggleStatusMenu(event)" title="Change status"></div>`;
+    }
+    document.getElementById('tg-acc-phone').textContent = privacySettings.phone === 'nobody' ? 'Hidden' : myProfile.phone;
+    document.getElementById('tg-acc-username').textContent = '@' + (myProfile.name || '').toLowerCase();
+    document.getElementById('my-story-avatar').innerHTML = renderAvatar(myProfile.avatar);
+  }
+
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  function playClick() { if (!soundsEnabled) return; if (audioCtx.state === 'suspended') audioCtx.resume(); const o = audioCtx.createOscillator(), g = audioCtx.createGain(); o.type = 'sine'; o.frequency.setValueAtTime(800, audioCtx.currentTime); o.frequency.exponentialRampToValueAtTime(300, audioCtx.currentTime + .05); g.gain.setValueAtTime(.05, audioCtx.currentTime); g.gain.exponentialRampToValueAtTime(.001, audioCtx.currentTime + .05); o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime + .05); }
+  function playTypeSound() { if (!soundsEnabled) return; if (audioCtx.state === 'suspended') audioCtx.resume(); const o = audioCtx.createOscillator(), g = audioCtx.createGain(); o.type = 'square'; o.frequency.setValueAtTime(1200, audioCtx.currentTime); o.frequency.exponentialRampToValueAtTime(600, audioCtx.currentTime + .02); g.gain.setValueAtTime(.02, audioCtx.currentTime); g.gain.exponentialRampToValueAtTime(.001, audioCtx.currentTime + .02); o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime + .02); }
+  function playTrashSound() { if (!soundsEnabled) return; if (audioCtx.state === 'suspended') audioCtx.resume(); const bs = audioCtx.sampleRate * .4, buf = audioCtx.createBuffer(1, bs, audioCtx.sampleRate), d = buf.getChannelData(0); for (let i = 0; i < bs; i++) d[i] = Math.random() * 2 - 1; const n = audioCtx.createBufferSource(); n.buffer = buf; const f = audioCtx.createBiquadFilter(); f.type = 'lowpass'; f.frequency.setValueAtTime(800, audioCtx.currentTime); f.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + .4); const g = audioCtx.createGain(); g.gain.setValueAtTime(.2, audioCtx.currentTime); g.gain.exponentialRampToValueAtTime(.01, audioCtx.currentTime + .4); n.connect(f); f.connect(g); g.connect(audioCtx.destination); n.start(); }
+  function playRingSound() { if (!soundsEnabled) return; if (audioCtx.state === 'suspended') audioCtx.resume(); const t = audioCtx.currentTime; [0, .45].forEach(off => { const o = audioCtx.createOscillator(), g = audioCtx.createGain(); o.type = 'sine'; o.frequency.setValueAtTime(620, t + off); o.frequency.setValueAtTime(780, t + off + .18); g.gain.setValueAtTime(.001, t + off); g.gain.exponentialRampToValueAtTime(.12, t + off + .02); g.gain.setValueAtTime(.12, t + off + .18); g.gain.exponentialRampToValueAtTime(.001, t + off + .25); o.connect(g); g.connect(audioCtx.destination); o.start(t + off); o.stop(t + off + .3); }); }
+  function playConnectSound() { if (!soundsEnabled) return; if (audioCtx.state === 'suspended') audioCtx.resume(); const t = audioCtx.currentTime; [523.25, 659.25, 783.99].forEach((fr, i) => { const o = audioCtx.createOscillator(), g = audioCtx.createGain(); o.type = 'sine'; o.frequency.setValueAtTime(fr, t + i * .1); g.gain.setValueAtTime(.001, t + i * .1); g.gain.exponentialRampToValueAtTime(.09, t + i * .1 + .02); g.gain.exponentialRampToValueAtTime(.001, t + i * .1 + .18); o.connect(g); g.connect(audioCtx.destination); o.start(t + i * .1); o.stop(t + i * .1 + .2); }); }
+  function playHangupSound() { if (!soundsEnabled) return; if (audioCtx.state === 'suspended') audioCtx.resume(); const t = audioCtx.currentTime, o = audioCtx.createOscillator(), g = audioCtx.createGain(); o.type = 'sine'; o.frequency.setValueAtTime(520, t); o.frequency.exponentialRampToValueAtTime(140, t + .35); g.gain.setValueAtTime(.12, t); g.gain.exponentialRampToValueAtTime(.001, t + .35); o.connect(g); g.connect(audioCtx.destination); o.start(t); o.stop(t + .35); }
+  function playIncomingSound() { if (!soundsEnabled) return; if (audioCtx.state === 'suspended') audioCtx.resume(); const t = audioCtx.currentTime; const note = (freq, start, dur, vol) => { const o = audioCtx.createOscillator(); const g = audioCtx.createGain(); o.type = 'sine'; o.frequency.setValueAtTime(freq, t + start); g.gain.setValueAtTime(0.001, t + start); g.gain.exponentialRampToValueAtTime(vol, t + start + 0.02); g.gain.exponentialRampToValueAtTime(0.001, t + start + dur); o.connect(g); g.connect(audioCtx.destination); o.start(t + start); o.stop(t + start + dur + 0.05); }; note(880, 0, 0.15, 0.1); note(1046.50, 0.12, 0.3, 0.1); }
+
+  function toggleStatusMenu(event) {
+    event.stopPropagation(); playClick();
+    const isActive = statusMenu.classList.toggle('active');
+    const dot = document.getElementById('my-status-dot');
+    if (dot) isActive ? dot.classList.add('menu-open') : dot.classList.remove('menu-open');
+    infoCloud.classList.remove('active'); contactProfilePopup.classList.remove('active');
+  }
+  function setMyStatus(status) {
+    playClick(); myProfile.status = status;
+    const dot = document.getElementById('my-status-dot');
+    if (dot) { dot.className = `my-status-dot ${status}`; void dot.offsetWidth; dot.classList.add('pop'); setTimeout(() => dot.classList.remove('pop'), 500); }
+    document.getElementById('display-my-mood').textContent = getStatusText(status);
+    statusMenu.classList.remove('active'); if (dot) dot.classList.remove('menu-open');
+  }
+
+  function renderStories() {
+    const bar = document.getElementById('stories-bar');
+    bar.innerHTML = `<div class="story-item my-story" onclick="openAddStoryModal()"><div class="story-avatar" id="my-story-avatar">${renderAvatar(myProfile.avatar)}</div><div class="story-name" data-i18n="my_story">${translations[currentLang].my_story}</div></div>`;
+  }
+  function openAddStoryModal() {
+    playClick(); document.getElementById('new-story-text').value = '';
+    pendingStoryImage = null; document.getElementById('story-preview-img').src = '';
+    document.getElementById('story-image-preview').style.display = 'none';
+    document.getElementById('modal-add-story').classList.add('active');
+  }
+  function clearStoryImage() { pendingStoryImage = null; document.getElementById('story-preview-img').src = ''; document.getElementById('story-image-preview').style.display = 'none'; playClick(); }
+  
+  function addStory() {
+    alert('Функция в разработке (нужен Storage Bucket)');
+    closeModal('modal-add-story');
+  }
+  function closeStoryViewer() { playClick(); document.getElementById('story-viewer').classList.remove('active'); }
+
+  function triggerFileUpload(target) { playClick(); avatarTarget = target; if (target === 'contact') currentEditContactId = activeId; hiddenFileInput.click(); }
+  hiddenFileInput.addEventListener('change', function(e) {
+    const file = e.target.files[0]; if (!file) return;
+    const r = new FileReader();
+    r.onload = ev => {
+      const img = new Image();
+      img.onload = () => {
+        const c = document.createElement('canvas'), ctx = c.getContext('2d');
+        const max = 128; let w = img.width, h = img.height;
+        if (w > h) { if (w > max) { h *= max / w; w = max; } } else { if (h > max) { w *= max / h; h = max; } }
+        c.width = w; c.height = h; ctx.drawImage(img, 0, 0, w, h);
+        const base64 = c.toDataURL('image/jpeg', .8);
+        if (avatarTarget === 'me') { myProfile.avatar = base64; updateProfileDisplay(); renderStories(); }
+        else { const ct = contacts.find(x => x.id === currentEditContactId); if (ct) { ct.avatar = base64; renderContacts(); renderChat(); } }
+        playClick();
+      };
+      img.src = ev.target.result;
+    };
+    r.readAsDataURL(file); hiddenFileInput.value = '';
+  });
+
+  function toggleAttachmentMenu(event) { event.stopPropagation(); playClick(); attachmentMenu.classList.toggle('active'); emojiPicker.classList.remove('active'); }
+  function toggleEmojiPicker(event) { event.stopPropagation(); playClick(); emojiPicker.classList.toggle('active'); attachmentMenu.classList.remove('active'); }
+  function insertEmoji(emoji) {
+    const startPos = inputEl.selectionStart;
+    const endPos = inputEl.selectionEnd;
+    inputEl.value = inputEl.value.substring(0, startPos) + emoji + inputEl.value.substring(endPos, inputEl.value.length);
+    inputEl.focus();
+    inputEl.selectionStart = inputEl.selectionEnd = startPos + emoji.length;
+    playClick();
+  }
+
+  document.addEventListener('click', (e) => {
+    if (!attachmentMenu.contains(e.target) && !e.target.closest('#paperclipBtn')) closeAttachmentMenu();
+    if (!emojiPicker.contains(e.target) && !e.target.closest('#emojiBtn')) emojiPicker.classList.remove('active');
+    if (!contextMenu.contains(e.target)) contextMenu.classList.remove('active');
+  });
+  function closeAttachmentMenu() { attachmentMenu.classList.remove('active'); }
+
+  function triggerMediaUpload() { closeAttachmentMenu(); alert('Загрузка медиа в разработке (нужен Storage Bucket)'); }
+  function triggerDocUpload() { closeAttachmentMenu(); alert('Загрузка файлов в разработке'); }
+
+  function shareLocation() { closeAttachmentMenu(); alert('Геолокация в разработке'); }
+  function openPollModal() { closeAttachmentMenu(); alert('Опросы в разработке'); }
+
+  function addReaction(emoji) { contextMenu.classList.remove('active'); }
+
+  function actionPin() { contextMenu.classList.remove('active'); }
+  function unpinMessage() { playClick(); delete pinnedMessages[activeId]; renderChat(); }
+  function renderPinnedBanner() { pinnedBanner.classList.remove('active'); }
+
+  function toggleMute() {
+    if (!activeId) return;
+    playClick();
+    if (mutedContacts.has(activeId)) {
+      mutedContacts.delete(activeId);
+      document.getElementById('mute-btn').innerHTML = '🔇 Заглушить';
+    } else {
+      mutedContacts.add(activeId);
+      document.getElementById('mute-btn').innerHTML = '🔊 Включить звук';
+    }
+  }
+
+  function toggleBlock() {
+    if (!activeId) return;
+    playClick();
+    if (blockedContacts.has(activeId)) {
+      blockedContacts.delete(activeId);
+      document.getElementById('block-btn').innerHTML = '🚫 Заблокировать';
+      document.getElementById('block-btn').style.background = 'rgba(255,0,0,.1)';
+      document.getElementById('block-btn').style.color = '#c00';
+      document.getElementById('inputArea').style.display = 'flex';
+      blockedNotice.style.display = 'none';
+    } else {
+      blockedContacts.add(activeId);
+      document.getElementById('block-btn').innerHTML = '✅ Разблокировать';
+      document.getElementById('block-btn').style.background = 'rgba(0,150,0,.1)';
+      document.getElementById('block-btn').style.color = '#009000';
+      document.getElementById('inputArea').style.display = 'none';
+      blockedNotice.style.display = 'block';
+    }
+    renderChat();
+  }
+
+  function actionReply() {
+    if (!contextTargetMsg) return; playClick(); replyToMsg = contextTargetMsg;
+    document.getElementById('replyName').textContent = contextTargetMsg.who === 'me' ? myProfile.name : (contextTargetMsg.author || contacts.find(x=>x.id===activeId).name);
+    let text = contextTargetMsg.text || 'Медиафайл'; 
+    document.getElementById('replyText').textContent = text;
+    document.getElementById('replyBanner').classList.add('active'); inputEl.focus(); contextMenu.classList.remove('active');
+  }
+  function cancelReply() { replyToMsg = null; document.getElementById('replyBanner').classList.remove('active'); playClick(); }
+
+  function actionForward() { contextMenu.classList.remove('active'); alert('Пересылка в разработке'); }
+  function actionSelect() { contextMenu.classList.remove('active'); alert('Выделение в разработке'); }
+  function actionDelete() {
+    if (!contextTargetMsg) return;
+    contextMenu.classList.remove('active');
+    alert('Удаление в разработке (пока удаляется только визуально)');
+  }
+
+  inputEl.addEventListener('keydown', e => { if (e.key.length === 1 && !e.ctrlKey && !e.altKey && !e.metaKey) playTypeSound(); });
+  
+  function renderContacts() {
+    contactListEl.innerHTML = ''; 
+    const q = document.getElementById('search-input').value.toLowerCase().trim();
+    
+    contacts.filter(c => {
+      if (!q) return true;
+      return c.name.toLowerCase().includes(q);
+    }).forEach(c => {
+      const div = document.createElement('div'); div.className = 'contact' + (c.id === activeId ? ' active' : '');
+      let sc = ''; if (c.status === 'online') sc = 'status-online'; if (c.status === 'court') sc = 'status-court'; if (c.status === 'away') sc = 'status-away';
+      let pt = c.phone || 'Hidden';
+      let ah = renderAvatar(c.avatar); if (privacySettings.avatar === 'nobody') ah = `<div style="font-size:16px;color:#ccc;">👤</div>`;
+      
+      let badgeHtml = '';
+      if (unreadCounts[c.id] > 0) {
+        badgeHtml = `<span class="unread-badge">${unreadCounts[c.id]}</span>`;
+      }
+
+      div.innerHTML = `<div class="contact-avatar-container">${ah}</div><div class="contact-info" onclick="event.stopPropagation(); selectContact('${c.id}')"><div class="contact-name">${c.name} ${badgeHtml}</div><div class="contact-phone">📞 ${pt}</div></div><div class="contact-status ${sc}"></div>`;
+      contactListEl.appendChild(div);
+    });
+  }
+
+  function selectContact(id) {
+    activeId = id;
+    unreadCounts[id] = 0;
+    contactProfilePopup.classList.remove('active');
+    renderContacts();
+    renderChat();
+    loadMessagesFromDB(id);
+  }
+
+  function openDetailedProfile(id) { activeId = id; unreadCounts[id] = 0; renderContacts(); renderChat(); toggleContactProfile({ stopPropagation: () => {} }); }
+
+  function renderChat() {
+    const c = contacts.find(x => x.id === activeId);
+    if (!c) {
+      chatTitleEl.innerHTML = translations[currentLang].select_chat; viewContactProfileBtn.style.display = 'none';
+      if (callBtn) callBtn.style.display = 'none';
+      messagesEl.innerHTML = `<div style="text-align:center; color:var(--text-muted); margin-top:50px;">${translations[currentLang].select_chat_desc}</div>`;
+      pinnedBanner.classList.remove('active');
+      return;
+    }
+    let st = c.isGroup ? 'Group' : (c.status === 'court' ? 'In Court' : translations[currentLang].online);
+    let ah = renderAvatar(c.avatar); if (privacySettings.avatar === 'nobody') ah = `<div style="font-size:16px;color:#ccc;">👤</div>`;
+    
+    chatTitleEl.innerHTML = `<div class="contact-avatar-container" style="width:28px;height:28px;font-size:16px;">${ah}</div><span>${c.name}</span> <span>[${st}]</span>`;
+    
+    viewContactProfileBtn.style.display = 'flex';
+    if (callBtn) callBtn.style.display = 'flex';
+    
+    const isBlocked = blockedContacts.has(activeId);
+    document.getElementById('inputArea').style.display = isBlocked ? 'none' : 'flex';
+    blockedNotice.style.display = isBlocked ? 'block' : 'none';
+
+    messagesEl.innerHTML = '';
+    if (threads[activeId]) threads[activeId].forEach(m => {
+      const div = document.createElement('div');
+      div.className = `msg ${m.who === 'me' ? 'msg-me' : 'msg-them'}`;
+      div.dataset.id = m.id;
+      
+      const an = m.who === 'me' ? myProfile.name : c.name;
+      let bubbleContent = m.text;
+      
+      let readIcon = '';
+      if (m.who === 'me') {
+        readIcon = m.read ? '<span class="read-status read">✓✓</span>' : '<span class="read-status unread">✓</span>';
+      }
+
+      div.innerHTML = `<div class="msg-meta">${an} • ${m.time} ${readIcon}</div><div class="msg-bubble">${bubbleContent}</div>`;
+      
+      messagesEl.appendChild(div);
+    });
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+  }
+  
+  async function sendMessage() {
+    const text = inputEl.value.trim(); if (!text || !activeId) return;
+    if (blockedContacts.has(activeId)) return;
+    playClick(); 
+    
+    const { error } = await supabaseClient
+      .from('messages')
+      .insert({
+        chat_id: activeId, 
+        sender_id: myProfile.id,
+        content: text,
+        message_type: 'text'
+      });
+
+    if (error) {
+      console.error('Ошибка отправки:', error);
+      alert('Не удалось отправить сообщение');
+      return;
+    }
+
+    inputEl.value = ''; 
+  }
+  document.getElementById('send-btn').onclick = sendMessage;
+  inputEl.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } });
+  document.getElementById('search-input').addEventListener('input', renderContacts);
+
+  function openModal(id) { playClick(); document.getElementById(id).classList.add('active'); }
+  function closeModal(id) { playClick(); document.getElementById(id).classList.remove('active'); }
+  function toggleCloud(event) {
+    event.stopPropagation(); playClick(); infoCloud.classList.toggle('active');
+    contactProfilePopup.classList.remove('active'); statusMenu.classList.remove('active');
+    const dot = document.getElementById('my-status-dot'); if (dot) dot.classList.remove('menu-open');
+    closeModal('modal-settings');
+  }
+  function toggleEditProfile(event, targetType) {
+    event.stopPropagation(); playClick();
+    if (targetType === 'me') {
+      const vm = document.getElementById('profile-view-mode'), em = document.getElementById('profile-edit-mode');
+      if (vm.style.display !== 'none') {
+        vm.style.display = 'none'; em.style.display = 'block';
+        document.getElementById('edit-name').value = myProfile.name;
+        document.getElementById('edit-phone').value = myProfile.phone;
+        document.getElementById('edit-role').value = myProfile.role;
+        document.getElementById('edit-bio').value = myProfile.bio;
+      } else { vm.style.display = 'block'; em.style.display = 'none'; }
+    }
+  }
+  function saveProfile(event, targetType) {
+    event.stopPropagation(); playClick();
+    if (targetType === 'me') {
+      myProfile.name = document.getElementById('edit-name').value || myProfile.name;
+      myProfile.phone = document.getElementById('edit-phone').value;
+      myProfile.role = document.getElementById('edit-role').value;
+      myProfile.bio = document.getElementById('edit-bio').value;
+      updateProfileDisplay();
+      document.getElementById('view-name').textContent = myProfile.name;
+      document.getElementById('view-role').textContent = myProfile.role;
+      document.getElementById('view-bio').textContent = myProfile.bio;
+      document.getElementById('display-my-name').textContent = myProfile.name;
+      document.getElementById('profile-view-mode').style.display = 'block';
+      document.getElementById('profile-edit-mode').style.display = 'none';
+    }
+  }
+  function toggleContactProfile(event) {
+    if (event && event.stopPropagation) event.stopPropagation(); playClick();
+    if (contactProfilePopup.classList.contains('active')) { contactProfilePopup.classList.remove('active'); return; }
+    const c = contacts.find(x => x.id === activeId); if (!c) return;
+    document.getElementById('contact-popup-title').innerHTML = `👤 ${c.name}`;
+    document.getElementById('contact-view-mode').style.display = 'block';
+    document.getElementById('contact-edit-mode').style.display = 'none';
+    
+    let pt = c.phone || 'Not specified'; 
+    document.getElementById('cp-phone').textContent = pt;
+    document.getElementById('cp-phone').parentElement.style.display = 'block';
+    document.getElementById('cp-role').textContent = c.role || 'Not specified';
+    document.getElementById('cp-status').textContent = c.status || 'online';
+    document.getElementById('cp-status').parentElement.style.display = 'block';
+    document.getElementById('cp-bio-container').style.display = 'block';
+    document.getElementById('cp-bio').textContent = c.bio || 'Hidden.';
+    document.getElementById('cp-members-container').style.display = 'none';
+
+    contactProfilePopup.classList.add('active');
+    infoCloud.classList.remove('active'); statusMenu.classList.remove('active');
+  }
+  document.addEventListener('click', e => {
+    if (!infoCloud.contains(e.target) && !e.target.closest('.cloud-btn')) infoCloud.classList.remove('active');
+    if (!contactProfilePopup.contains(e.target) && !e.target.closest('.header-btn')) contactProfilePopup.classList.remove('active');
+    if (!statusMenu.contains(e.target) && !e.target.closest('.my-status-dot')) {
+      statusMenu.classList.remove('active');
+      const dot = document.getElementById('my-status-dot'); if (dot) dot.classList.remove('menu-open');
+    }
+  });
+
+  async function addNewContact() {
+    const username = document.getElementById('new-contact-phone').value.trim();
+    const errEl = document.getElementById('add-contact-error');
+    errEl.classList.remove('show');
+    if (!username) { errEl.textContent = 'Введите логин'; errEl.classList.add('show'); return; }
+
+    const { data: profile, error } = await supabaseClient
+      .from('profiles')
+      .select('*')
+      .eq('username', username) 
+      .single();
+
+    if (!profile) {
+      errEl.textContent = '❌ Пользователь не найден!';
+      errEl.classList.add('show'); return;
+    }
+
+    const { error: errAdd } = await supabaseClient
+      .from('contacts')
+      .insert({
+        user_id: myProfile.id,
+        contact_id: profile.id
+      });
+
+    if (errAdd) {
+       errEl.textContent = 'Ошибка добавления: ' + errAdd.message;
+       errEl.classList.add('show'); return;
+    }
+
+    playClick(); closeModal('modal-add-contact');
+    await loadContactsFromDB();
+  }
+
+  (function init() {
+    try {
+      const saved = localStorage.getItem('courtroom_remembered_user');
+      if (saved) { document.getElementById('login-username').value = saved; document.getElementById('login-remember').checked = true; }
+    } catch(e) {}
+    
+    ['login-username', 'login-password'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.addEventListener('input', function() { this.classList.remove('input-error'); const err = document.getElementById('login-error'); if (err) err.classList.remove('show'); });
+        el.addEventListener('focus', function() { this.classList.remove('input-error'); });
+      }
+    });
+    ['login-username', 'login-password'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); doLogin(); } });
+    });
+
+    document.getElementById('display-my-name').textContent = myProfile.name;
+    document.getElementById('view-name').textContent = myProfile.name;
+    updateProfileDisplay(); changeLanguage('ru'); renderContacts(); renderChat(); renderStories();
+    setTimeout(() => document.getElementById('login-username').focus(), 100);
+  })();
+</script>
+</body>
+</html>
