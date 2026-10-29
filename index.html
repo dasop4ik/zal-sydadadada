@@ -22,6 +22,7 @@
     --btn-hover: rgba(255,255,255,.6); --story-ring: #4a90e2;
     --tg-accent: #3390ec; --tg-bg: #fff; --tg-hover: #f1f1f1; --tg-border: #e6e6e6;
     --chat-wallpaper: radial-gradient(rgba(0,0,0,.08) 1px, transparent 1px);
+    --msg-selected: rgba(51,144,236,0.15);
   }
   body.theme-dark {
     --bg-body: radial-gradient(circle at 50% 30%,#1a1a1a 0%,#0a0a0a 100%);
@@ -37,6 +38,7 @@
     --btn-hover: rgba(255,255,255,.3); --story-ring: #64b5f6;
     --tg-accent: #64b5f6; --tg-bg: #212121; --tg-hover: #2c2c2c; --tg-border: #333;
     --chat-wallpaper: radial-gradient(rgba(255,255,255,.06) 1px, transparent 1px);
+    --msg-selected: rgba(100,181,246,0.2);
   }
   body {
     margin: 0; min-height: 100vh; background: var(--bg-body); background-attachment: fixed;
@@ -53,8 +55,7 @@
     display: flex; flex-direction: column; position: relative; overflow: hidden; transition: all .3s;
   }
   .aero-window.minimized { height: 40px; width: 300px; transform: translateY(calc(50vh - 20px)); }
-  .aero-window.minimized .main-area,
-  .aero-window.minimized .title-bar-text span { display: none; }
+  .aero-window.minimized .main-area, .aero-window.minimized .title-bar-text span { display: none; }
   .aero-window.maximized { width: 100vw; height: 100vh; border-radius: 0; padding: 0; }
   .aero-window.hidden { display: none; }
   .title-bar {
@@ -173,7 +174,7 @@
   .popup h3 { margin: 0 0 10px 0; font-size: 14px; color: #4a90e2; border-bottom: 1px solid var(--border-dark); padding-bottom: 5px; display: flex; justify-content: space-between; align-items: center; }
   .popup p { margin: 5px 0; color: var(--text-main); } .popup b { color: #4a90e2; }
   .info-cloud-popup { top: 70px; left: 15px; }
-  .contact-profile-popup { top: 60px; right: 15px; width: 300px; }
+  .contact-profile-popup { top: 60px; right: 15px; width: 320px; }
   .contact-profile-popup::before { left: auto; right: 30px; }
   .edit-btn { background: rgba(74,144,226,.2); border: 1px solid rgba(74,144,226,.4); border-radius: 4px; padding: 3px 8px; font-size: 10px; cursor: pointer; color: #4a90e2; font-weight: bold; transition: all .2s; }
   .edit-btn:hover { background: rgba(74,144,226,.4); color: #fff; }
@@ -202,13 +203,29 @@
   .my-story .story-avatar { border-color: #4cd964; background: var(--bg-messages); }
   .my-story .story-avatar::after { content: '+'; position: absolute; bottom: -2px; right: -2px; background: #4cd964; color: #fff; width: 16px; height: 16px; border-radius: 50%; font-size: 14px; line-height: 14px; text-align: center; border: 2px solid var(--bg-sidebar); }
   .messages { flex: 1; overflow-y: auto; padding: 15px; background: var(--bg-messages); background-image: var(--chat-wallpaper); background-size: 20px 20px; display: flex; flex-direction: column; gap: 12px; }
-  .msg { display: flex; flex-direction: column; max-width: 80%; }
+  
+  /* Сообщения */
+  .msg { display: flex; flex-direction: column; max-width: 80%; position: relative; }
   .msg-them { align-self: flex-start; } .msg-me { align-self: flex-end; align-items: flex-end; }
   .msg-meta { font-size: 11px; color: var(--text-muted); margin-bottom: 4px; padding: 0 4px; font-weight: 600; }
-  .msg-bubble { padding: 8px 14px; border-radius: 8px; font-size: 13px; line-height: 1.4; word-wrap: break-word; box-shadow: 0 2px 5px rgba(0,0,0,.1); }
+  .msg-bubble { padding: 8px 14px; border-radius: 8px; font-size: 13px; line-height: 1.4; word-wrap: break-word; box-shadow: 0 2px 5px rgba(0,0,0,.1); position: relative; }
   .msg-them .msg-bubble { background: var(--msg-them-bg); border: 1px solid var(--border-dark); color: var(--msg-them-text); border-bottom-left-radius: 0; }
   .msg-me .msg-bubble { background: var(--msg-me-bg); border: 1px solid var(--border-dark); color: var(--msg-me-text); border-bottom-right-radius: 0; }
-  
+
+  /* Выделение сообщений */
+  .msg.selected { background: var(--msg-selected); border-radius: 8px; }
+  .msg.selected .msg-bubble { border-color: var(--tg-accent); }
+  .msg-checkbox { position: absolute; left: -25px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; border-radius: 50%; border: 2px solid #ccc; display: none; align-items: center; justify-content: center; background: #fff; }
+  .msg.selected .msg-checkbox { display: flex; border-color: var(--tg-accent); background: var(--tg-accent); color: #fff; }
+  .msg-checkbox::after { content: '✓'; font-size: 12px; color: #fff; }
+  .msg-me .msg-checkbox { left: auto; right: -25px; }
+
+  /* Ответ на сообщение */
+  .reply-quote { border-left: 3px solid #4a90e2; padding-left: 8px; margin-bottom: 4px; font-size: 11px; color: #555; cursor: pointer; }
+  .msg-me .reply-quote { border-left-color: #fff; color: #003366; opacity: 0.8; }
+  .reply-quote b { display: block; margin-bottom: 1px; }
+
+  /* Медиа */
   .msg-bubble img, .msg-bubble video { max-width: 100%; max-height: 240px; border-radius: 6px; display: block; }
   .msg-bubble audio { width: 100%; max-width: 260px; margin-top: 4px; }
   .file-attachment {
@@ -218,7 +235,6 @@
     font-size: 12px; font-weight: 600; border: 1px solid rgba(0,0,0,.1);
   }
   .msg-me .file-attachment { background: rgba(255,255,255,.7); }
-  .file-attachment:hover { background: #fff; }
 
   /* ===== POLL STYLES ===== */
   .poll-container {
@@ -263,7 +279,9 @@
     justify-content: space-between;
     align-items: center;
     color: #555;
+    cursor: pointer;
   }
+  .poll-option-result:hover { background: rgba(0,0,0,0.05); }
   .poll-option-result.voted {
     border-color: #4a90e2;
     color: #004080;
@@ -287,8 +305,26 @@
     text-align: center;
   }
 
+  /* ===== ПАНЕЛЬ ВВОДА ===== */
   .input-area { padding: 10px; background: var(--bg-input); border-top: 1px solid var(--border-dark); border-radius: 0 0 6px 6px; display: flex; flex-direction: column; gap: 8px; flex-shrink: 0; position: relative; }
   
+  .reply-banner {
+    display: none;
+    padding: 6px 10px;
+    background: var(--bg-sidebar);
+    border: 1px solid var(--border-dark);
+    border-left: 4px solid #4a90e2;
+    border-radius: 6px;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 4px;
+  }
+  .reply-banner.active { display: flex; }
+  .reply-banner-content { flex: 1; overflow: hidden; font-size: 12px; }
+  .reply-banner-content b { color: #4a90e2; display: block; }
+  .reply-banner-content span { color: var(--text-muted); font-style: italic; }
+  .reply-banner button { background: transparent; border: none; cursor: pointer; font-size: 16px; color: #999; padding: 0 5px; }
+
   .recording-banner {
     display: none;
     padding: 8px 12px;
@@ -362,6 +398,7 @@
   @keyframes msgPop { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
   .msg-new { animation: msgPop 0.3s ease-out; }
 
+  /* Меню вложений */
   .attachment-menu {
     position: absolute;
     bottom: calc(100% + 8px);
@@ -400,6 +437,47 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
+  /* Контекстное меню ПКМ */
+  .context-menu {
+    position: fixed;
+    background: var(--bg-messages);
+    border: 1px solid var(--border-dark);
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.3);
+    padding: 6px;
+    z-index: 1000;
+    display: none;
+    flex-direction: column;
+    min-width: 180px;
+  }
+  .context-menu.active { display: flex; }
+  .context-menu-item {
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 6px;
+    font-size: 13px;
+    display: flex; align-items: center; gap: 10px;
+    color: var(--text-main);
+    transition: background .15s;
+  }
+  .context-menu-item:hover { background: var(--tg-hover); }
+  .context-menu-item.danger { color: #e53935; }
+  .context-menu-item .icon { width: 18px; text-align: center; font-size: 15px; }
+
+  /* Панель выделения */
+  .select-toolbar {
+    position: absolute; top: 55px; left: 0; width: 100%;
+    background: var(--bg-messages); border-bottom: 1px solid var(--border-dark);
+    padding: 8px 15px; display: none; align-items: center; justify-content: space-between;
+    z-index: 9; box-shadow: 0 2px 10px rgba(0,0,0,.1);
+  }
+  .select-toolbar.active { display: flex; }
+  .select-toolbar button {
+    background: transparent; border: none; cursor: pointer; font-size: 13px; font-weight: 600; color: #4a90e2;
+    display: flex; align-items: center; gap: 5px;
+  }
+
+  /* ===== МОДАЛЬНЫЕ ОКНА ===== */
   .modal-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,.5); backdrop-filter: blur(5px); z-index: 200; display: none; align-items: center; justify-content: center; }
   .modal-overlay.active { display: flex; }
   .modal-window { background: var(--bg-chat); backdrop-filter: blur(25px); border: 1px solid var(--border-light); border-radius: 8px; width: 380px; box-shadow: 0 25px 50px rgba(0,0,0,.6), inset 0 0 0 1px var(--border-light); overflow: hidden; color: var(--text-main); display: flex; flex-direction: column; }
@@ -441,6 +519,20 @@
   .checkbox-list { max-height: 120px; overflow-y: auto; border: 1px solid var(--border-dark); border-radius: 4px; padding: 5px; background: var(--bg-messages); }
   .checkbox-list label { display: flex; align-items: center; gap: 6px; font-weight: normal; padding: 3px; cursor: pointer; }
 
+  /* Опрос - добавление вариантов */
+  .poll-option-row { display: flex; gap: 5px; align-items: center; margin-bottom: 5px; }
+  .poll-option-input { flex: 1; padding: 6px; border: 1px solid var(--border-dark); border-radius: 4px; font-size: 12px; background: var(--bg-messages); color: var(--text-main); }
+  .poll-remove-btn { background: rgba(255,0,0,.1); border: 1px solid rgba(255,0,0,.3); color: #c00; border-radius: 4px; width: 28px; height: 28px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0; }
+  .poll-remove-btn:hover { background: rgba(255,0,0,.2); }
+
+  /* Админ группы */
+  .member-row { display: flex; align-items: center; justify-content: space-between; padding: 8px; border-bottom: 1px solid var(--border-dark); font-size: 12px; }
+  .member-row:last-child { border-bottom: none; }
+  .member-row .actions { display: flex; gap: 5px; }
+  .member-row .actions button { background: var(--bg-sidebar); border: 1px solid var(--border-dark); border-radius: 4px; padding: 2px 6px; font-size: 10px; cursor: pointer; color: var(--text-main); }
+  .member-row .actions button:hover { background: var(--btn-hover); }
+
+  /* ===== ЗВОНОК ===== */
   .call-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(180deg,#4a7cb1 0%,#a7a6b5 50%,#e3d1cd 100%); z-index: 500; display: none; flex-direction: column; opacity: 0; transition: opacity .3s; font-family: 'Segoe UI', Tahoma, sans-serif; }
   .call-overlay.active { display: flex; opacity: 1; }
   .call-top-bar { display: flex; justify-content: space-between; align-items: flex-start; padding: 20px 30px; color: #fff; }
@@ -474,10 +566,6 @@
   .story-viewer-avatar { width: 32px; height: 32px; border-radius: 50%; background: #555; display: flex; align-items: center; justify-content: center; overflow: hidden; }
   .story-viewer-avatar img { width: 100%; height: 100%; object-fit: cover; }
   .story-viewer-close { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,.5); border: none; color: #fff; font-size: 20px; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; z-index: 2; }
-  ::-webkit-scrollbar { width: 12px; }
-  ::-webkit-scrollbar-track { background: rgba(240,240,240,.1); border-radius: 6px; }
-  ::-webkit-scrollbar-thumb { background: rgba(150,150,150,.5); border-radius: 6px; border: 2px solid transparent; background-clip: padding-box; }
-  ::-webkit-scrollbar-thumb:hover { background: rgba(100,100,100,.7); background-clip: padding-box; border: 2px solid transparent; }
 
   /* ===== LOGIN ===== */
   .login-overlay {
@@ -574,6 +662,12 @@
   .register-tab.active { color: #00aff0; border-bottom-color: #00aff0; }
   .register-section { display: none; flex-direction: column; gap: 12px; }
   .register-section.active { display: flex; }
+
+  /* Кастомный скроллбар */
+  ::-webkit-scrollbar { width: 12px; }
+  ::-webkit-scrollbar-track { background: rgba(240,240,240,.1); border-radius: 6px; }
+  ::-webkit-scrollbar-thumb { background: rgba(150,150,150,.5); border-radius: 6px; border: 2px solid transparent; background-clip: padding-box; }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(100,100,100,.7); background-clip: padding-box; border: 2px solid transparent; }
 </style>
 </head>
 <body>
@@ -743,7 +837,8 @@
           <p><b data-i18n="role">Роль:</b> <span id="cp-role">-</span></p>
           <p><b data-i18n="status">Статус:</b> <span id="cp-status">-</span></p>
           <p id="cp-bio-container"><b data-i18n="bio">О себе:</b> <span id="cp-bio">-</span></p>
-          <p id="cp-members-container" style="display:none;"><b data-i18n="members">Участники:</b> <span id="cp-members">-</span></p>
+          <p id="cp-members-container" style="display:none;"><b data-i18n="members">Участники:</b></p>
+          <div id="cp-members-list" style="margin-top:5px; max-height:150px; overflow-y:auto; border:1px solid var(--border-dark); border-radius:4px;"></div>
         </div>
         <div id="contact-edit-mode" style="display:none;">
           <div class="avatar-edit-area"><button class="edit-btn" onclick="triggerFileUpload('contact')" data-i18n="change_photo">📷 Сменить фото</button></div>
@@ -754,11 +849,29 @@
           <button class="edit-btn" style="background:rgba(0,150,0,.2); border-color:rgba(0,150,0,.4); width:100%; margin-top:5px;" onclick="saveProfile(event, 'contact')" data-i18n="save">💾 Сохранить</button>
         </div>
       </div>
+
+      <div class="select-toolbar" id="selectToolbar">
+        <button onclick="closeSelectMode()">✕ Отмена</button>
+        <div style="font-weight: bold; color: var(--text-main);" id="selectedCount">Выбрано: 0</div>
+        <div style="display:flex; gap:15px;">
+          <button onclick="forwardSelected()">➡️ Переслать</button>
+          <button onclick="deleteSelected()" style="color:#e53935;">🗑️ Удалить</button>
+        </div>
+      </div>
+
       <div class="messages" id="messages">
         <div style="text-align:center; color:var(--text-muted); margin-top:50px;" data-i18n="select_chat_desc">Выберите контакт или создайте новый...</div>
       </div>
 
       <div class="input-area">
+        <div class="reply-banner" id="replyBanner">
+          <div class="reply-banner-content">
+            <b id="replyName">Имя</b>
+            <span id="replyText">Текст сообщения...</span>
+          </div>
+          <button onclick="cancelReply()">✕</button>
+        </div>
+
         <div class="recording-banner" id="recordingBanner">
           <span><span class="rec-dot"></span>Запись: <span id="recordingTimer">00:00</span></span>
           <div style="display:flex; gap:8px;">
@@ -770,7 +883,6 @@
         <div class="input-row">
           <textarea id="message-input" placeholder="Введите вашу речь... (Enter - отправить)" data-i18n-placeholder="type_message"></textarea>
           
-          <!-- GAVEL -->
           <button id="send-btn" class="gavel-btn" title="Send">
             <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
               <g id="board">
@@ -786,14 +898,12 @@
             </svg>
           </button>
 
-          <!-- PAPERCLIP -->
           <button class="tool-btn" id="paperclipBtn" onclick="toggleAttachmentMenu(event)" title="Прикрепить">
             <svg viewBox="0 0 24 24" fill="none" stroke="#b0c4de" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path>
             </svg>
           </button>
 
-          <!-- MICROPHONE -->
           <button class="tool-btn" id="voiceBtn" onclick="startVoiceRecording()" title="Голосовое сообщение">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #4a90e2;">
               <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
@@ -824,7 +934,28 @@
     </div>
   </div>
 
-  <!-- Poll Modal -->
+  <!-- Контекстное меню -->
+  <div class="context-menu" id="contextMenu">
+    <div class="context-menu-item" onclick="actionReply()"><span class="icon">↩️</span> Ответить</div>
+    <div class="context-menu-item" onclick="actionForward()"><span class="icon">➡️</span> Переслать</div>
+    <div class="context-menu-item" onclick="actionSelect()"><span class="icon">☑️</span> Выделить</div>
+    <div class="context-menu-item danger" onclick="actionDelete()"><span class="icon">🗑️</span> Удалить</div>
+  </div>
+
+  <!-- Модалка пересылки -->
+  <div class="modal-overlay" id="modal-forward">
+    <div class="modal-window">
+      <div class="modal-header">Переслать сообщение</div>
+      <div class="modal-body">
+        <div id="forward-contact-list" style="max-height:300px; overflow-y:auto;"></div>
+      </div>
+      <div class="modal-footer">
+        <button onclick="closeModal('modal-forward')">Отмена</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Модалка создания опроса -->
   <div class="modal-overlay" id="modal-create-poll">
     <div class="modal-window">
       <div class="modal-header">Создать опрос</div>
@@ -832,10 +963,7 @@
         <label>Вопрос:</label>
         <input type="text" id="poll-question" placeholder="О чем спросить?">
         <label style="margin-top: 5px;">Варианты ответа:</label>
-        <div id="poll-options-container" style="display: flex; flex-direction: column; gap: 8px;">
-          <input type="text" class="poll-option-input" placeholder="Вариант 1">
-          <input type="text" class="poll-option-input" placeholder="Вариант 2">
-        </div>
+        <div id="poll-options-container" style="display: flex; flex-direction: column;"></div>
         <button class="edit-btn" style="align-self: flex-start; margin-top: 5px;" onclick="addPollOptionField()">+ Добавить вариант</button>
       </div>
       <div class="modal-footer">
@@ -1150,10 +1278,17 @@
   let cameraStream = null, cameraOn = false;
   let lastSentMsgId = null;
 
+  // Voice recording
   let voiceRecorder = null;
   let voiceChunks = [];
   let voiceTimerInterval = null;
   let voiceSeconds = 0;
+
+  // Context menu & actions state
+  let contextTargetMsg = null;
+  let replyToMsg = null;
+  let isSelectMode = false;
+  let selectedMsgs = new Set();
 
   const messagesEl = document.getElementById('messages');
   const inputEl = document.getElementById('message-input');
@@ -1169,6 +1304,7 @@
   const docInput = document.getElementById('doc-input');
   const statusMenu = document.getElementById('status-menu');
   const attachmentMenu = document.getElementById('attachmentMenu');
+  const contextMenu = document.getElementById('contextMenu');
 
   function selectLoginStatus(status, el) {
     selectedLoginStatus = status;
@@ -1577,6 +1713,9 @@
     if (!attachmentMenu.contains(e.target) && !e.target.closest('#paperclipBtn')) {
       closeAttachmentMenu();
     }
+    if (!contextMenu.contains(e.target)) {
+      contextMenu.classList.remove('active');
+    }
   });
 
   function triggerMediaUpload() {
@@ -1621,6 +1760,10 @@
     if (!threads[activeId]) threads[activeId] = [];
     const msgObj = { who: 'me', text: '', time: getNowTime(), id: Date.now(), type: type, media: dataUrl };
     if (filename) msgObj.filename = filename;
+    if (replyToMsg) {
+      msgObj.replyTo = { name: replyToMsg.author || contacts.find(x=>x.id===activeId).name, text: replyToMsg.text || 'Медиа' };
+      cancelReply();
+    }
     threads[activeId].push(msgObj);
     lastSentMsgId = msgObj.id;
     renderChat();
@@ -1632,10 +1775,9 @@
     playClick();
     document.getElementById('poll-question').value = '';
     const container = document.getElementById('poll-options-container');
-    container.innerHTML = `
-      <input type="text" class="poll-option-input" placeholder="Вариант 1">
-      <input type="text" class="poll-option-input" placeholder="Вариант 2">
-    `;
+    container.innerHTML = '';
+    addPollOptionField();
+    addPollOptionField();
     document.getElementById('modal-create-poll').classList.add('active');
   }
 
@@ -1643,12 +1785,15 @@
     playClick();
     const container = document.getElementById('poll-options-container');
     const count = container.querySelectorAll('.poll-option-input').length + 1;
-    const input = document.createElement('input');
-    input.type = 'text';
-    input.className = 'poll-option-input';
-    input.placeholder = 'Вариант ' + count;
-    container.appendChild(input);
-    input.focus();
+    
+    const row = document.createElement('div');
+    row.className = 'poll-option-row';
+    row.innerHTML = `
+      <input type="text" class="poll-option-input" placeholder="Вариант ${count}">
+      <button class="poll-remove-btn" onclick="this.parentElement.remove()">✕</button>
+    `;
+    container.appendChild(row);
+    row.querySelector('input').focus();
   }
 
   function createPoll() {
@@ -1678,6 +1823,10 @@
       voted: false,
       myVote: null
     };
+    if (replyToMsg) {
+      msgObj.replyTo = { name: replyToMsg.author || contacts.find(x=>x.id===activeId).name, text: replyToMsg.text || 'Опрос' };
+      cancelReply();
+    }
     threads[activeId].push(msgObj);
     lastSentMsgId = msgObj.id;
     closeModal('modal-create-poll');
@@ -1689,95 +1838,200 @@
     const thread = threads[activeId];
     if (!thread) return;
     const msg = thread.find(m => m.id === msgId);
-    if (!msg || msg.voted) return;
+    if (!msg) return;
 
     playClick();
+    // Если уже голосовал, убираем старый голос
+    if (msg.voted && msg.myVote !== null) {
+      msg.options[msg.myVote].votes--;
+    }
+    // Добавляем новый голос
     msg.options[optionIndex].votes++;
     msg.voted = true;
     msg.myVote = optionIndex;
     renderChat();
   }
 
-  /* ===== VOICE RECORDING ===== */
-  async function startVoiceRecording() {
+  /* ===== КОНТЕКСТНОЕ МЕНЮ И ДЕЙСТВИЯ ===== */
+  messagesEl.addEventListener('contextmenu', (e) => {
+    e.preventDefault();
+    const msgEl = e.target.closest('.msg');
+    if (!msgEl) return;
+    
+    // Находим сообщение по ID
+    const msgId = parseInt(msgEl.dataset.id);
+    const c = contacts.find(x => x.id === activeId);
+    if (!c) return;
+    contextTargetMsg = threads[activeId].find(m => m.id === msgId);
+    if (!contextTargetMsg) return;
+
+    contextMenu.style.left = e.pageX + 'px';
+    contextMenu.style.top = e.pageY + 'px';
+    contextMenu.classList.add('active');
+  });
+
+  function actionReply() {
+    if (!contextTargetMsg) return;
     playClick();
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      voiceRecorder = new MediaRecorder(stream);
-      voiceChunks = [];
-      voiceSeconds = 0;
-      
-      voiceRecorder.ondataavailable = e => { if (e.data.size > 0) voiceChunks.push(e.data); };
-      voiceRecorder.onstop = () => {
-        const blob = new Blob(voiceChunks, { type: 'audio/webm' });
-        const reader = new FileReader();
-        reader.onload = ev => {
-          if (ev.target.result && ev.target.result.length > 100) {
-            sendMedia('audio', ev.target.result);
+    replyToMsg = contextTargetMsg;
+    document.getElementById('replyName').textContent = contextTargetMsg.who === 'me' ? myProfile.name : (contextTargetMsg.author || contacts.find(x=>x.id===activeId).name);
+    let text = contextTargetMsg.text || 'Медиафайл';
+    if (contextTargetMsg.type === 'poll') text = 'Опрос';
+    document.getElementById('replyText').textContent = text;
+    document.getElementById('replyBanner').classList.add('active');
+    inputEl.focus();
+    contextMenu.classList.remove('active');
+  }
+
+  function cancelReply() {
+    replyToMsg = null;
+    document.getElementById('replyBanner').classList.remove('active');
+    playClick();
+  }
+
+  function actionForward() {
+    if (!contextTargetMsg) return;
+    playClick();
+    contextMenu.classList.remove('active');
+    const list = document.getElementById('forward-contact-list');
+    list.innerHTML = '';
+    contacts.forEach(c => {
+      const div = document.createElement('div');
+      div.style.padding = '10px';
+      div.style.cursor = 'pointer';
+      div.style.borderBottom = '1px solid var(--border-dark)';
+      div.style.display = 'flex';
+      div.style.alignItems = 'center';
+      div.style.gap = '10px';
+      div.innerHTML = `<div class="contact-avatar-container">${renderAvatar(c.avatar)}</div><div style="font-weight:bold;">${c.name}</div>`;
+      div.onclick = () => forwardTo(c.id);
+      list.appendChild(div);
+    });
+    document.getElementById('modal-forward').classList.add('active');
+  }
+
+  function forwardTo(contactId) {
+    if (!contextTargetMsg) return;
+    playClick();
+    if (!threads[contactId]) threads[contactId] = [];
+    const forwardedMsg = JSON.parse(JSON.stringify(contextTargetMsg));
+    forwardedMsg.id = Date.now();
+    forwardedMsg.time = getNowTime();
+    forwardedMsg.who = 'me';
+    forwardedMsg.forwardedFrom = contextTargetMsg.author || contacts.find(x=>x.id===activeId).name;
+    threads[contactId].push(forwardedMsg);
+    closeModal('modal-forward');
+    if (activeId === contactId) renderChat();
+  }
+
+  function actionSelect() {
+    if (!contextTargetMsg) return;
+    playClick();
+    isSelectMode = true;
+    selectedMsgs.clear();
+    selectedMsgs.add(contextTargetMsg.id);
+    document.getElementById('selectToolbar').classList.add('active');
+    contextMenu.classList.remove('active');
+    renderChat();
+  }
+
+  function closeSelectMode() {
+    playClick();
+    isSelectMode = false;
+    selectedMsgs.clear();
+    document.getElementById('selectToolbar').classList.remove('active');
+    renderChat();
+  }
+
+  function toggleSelectMsg(msgId) {
+    if (!isSelectMode) return;
+    if (selectedMsgs.has(msgId)) selectedMsgs.delete(msgId);
+    else selectedMsgs.add(msgId);
+    document.getElementById('selectedCount').textContent = `Выбрано: ${selectedMsgs.size}`;
+    renderChat();
+  }
+
+  function deleteSelected() {
+    if (selectedMsgs.size === 0) return;
+    if (!confirm(`Удалить ${selectedMsgs.size} сообщений?`)) return;
+    playTrashSound();
+    threads[activeId] = threads[activeId].filter(m => !selectedMsgs.has(m.id));
+    closeSelectMode();
+  }
+
+  function forwardSelected() {
+    if (selectedMsgs.size === 0) return;
+    playClick();
+    const list = document.getElementById('forward-contact-list');
+    list.innerHTML = '';
+    contacts.forEach(c => {
+      const div = document.createElement('div');
+      div.style.padding = '10px';
+      div.style.cursor = 'pointer';
+      div.style.borderBottom = '1px solid var(--border-dark)';
+      div.style.display = 'flex';
+      div.style.alignItems = 'center';
+      div.style.gap = '10px';
+      div.innerHTML = `<div class="contact-avatar-container">${renderAvatar(c.avatar)}</div><div style="font-weight:bold;">${c.name}</div>`;
+      div.onclick = () => {
+        if (!threads[c.id]) threads[c.id] = [];
+        selectedMsgs.forEach(id => {
+          const msg = threads[activeId].find(m => m.id === id);
+          if (msg) {
+            const fwd = JSON.parse(JSON.stringify(msg));
+            fwd.id = Date.now() + Math.random();
+            fwd.time = getNowTime();
+            fwd.who = 'me';
+            threads[c.id].push(fwd);
           }
-        };
-        reader.readAsDataURL(blob);
-        stream.getTracks().forEach(t => t.stop());
+        });
+        closeModal('modal-forward');
+        closeSelectMode();
       };
-      
-      voiceRecorder.start();
-      
-      document.getElementById('recordingBanner').classList.add('active');
-      document.getElementById('recordingTimer').textContent = '00:00';
-      const btn = document.getElementById('voiceBtn');
-      btn.style.background = '#ffcccc';
-      btn.style.animation = 'pulse-red 1s infinite';
-      
-      voiceTimerInterval = setInterval(() => {
-        voiceSeconds++;
-        const m = String(Math.floor(voiceSeconds / 60)).padStart(2, '0');
-        const s = String(voiceSeconds % 60).padStart(2, '0');
-        document.getElementById('recordingTimer').textContent = `${m}:${s}`;
-      }, 1000);
-      
-    } catch (err) {
-      alert('Микрофон недоступен. Выберите аудиофайл.');
-      const input = document.createElement('input');
-      input.type = 'file';
-      input.accept = 'audio/*';
-      input.onchange = e => {
-        const file = e.target.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = ev => sendMedia('audio', ev.target.result);
-        reader.readAsDataURL(file);
-      };
-      input.click();
-    }
+      list.appendChild(div);
+    });
+    document.getElementById('modal-forward').classList.add('active');
   }
 
-  function stopAndSendVoice() {
-    if (voiceRecorder && voiceRecorder.state !== 'inactive') {
-      voiceRecorder.stop();
-    }
-    clearInterval(voiceTimerInterval);
-    document.getElementById('recordingBanner').classList.remove('active');
-    const btn = document.getElementById('voiceBtn');
-    btn.style.background = '';
-    btn.style.animation = '';
-  }
-
-  function cancelVoice() {
-    if (voiceRecorder && voiceRecorder.state !== 'inactive') {
-      voiceRecorder.ondataavailable = null;
-      voiceRecorder.onstop = null;
-      voiceRecorder.stop();
-      voiceRecorder.stream?.getTracks().forEach(t => t.stop());
-    }
-    clearInterval(voiceTimerInterval);
-    document.getElementById('recordingBanner').classList.remove('active');
-    const btn = document.getElementById('voiceBtn');
-    btn.style.background = '';
-    btn.style.animation = '';
+  function actionDelete() {
+    if (!contextTargetMsg) return;
     playClick();
+    // Проверка прав: можно удалять свои сообщения, или если ты админ группы
+    const c = contacts.find(x => x.id === activeId);
+    const isAdmin = c.isGroup && c.admin === myProfile.name;
+    if (contextTargetMsg.who !== 'me' && !isAdmin) {
+      alert('Вы можете удалять только свои сообщения!');
+      contextMenu.classList.remove('active');
+      return;
+    }
+    if (!confirm('Удалить это сообщение?')) return;
+    playTrashSound();
+    threads[activeId] = threads[activeId].filter(m => m.id !== contextTargetMsg.id);
+    renderChat();
+    contextMenu.classList.remove('active');
   }
 
-  /* ===== CONTACTS ===== */
+  /* ===== ГРУППЫ И АДМИНЫ ===== */
+  function promoteMember(groupId, memberName) {
+    playClick();
+    const g = contacts.find(x => x.id === groupId);
+    if (!g) return;
+    g.admin = memberName;
+    alert(`${memberName} теперь администратор группы.`);
+    toggleContactProfile({ stopPropagation: () => {} }); // Обновляем профиль
+  }
+
+  function kickMember(groupId, memberName) {
+    if (!confirm(`Исключить ${memberName} из группы?`)) return;
+    playTrashSound();
+    const g = contacts.find(x => x.id === groupId);
+    if (!g) return;
+    g.members = g.members.filter(name => name !== memberName);
+    renderChat();
+    toggleContactProfile({ stopPropagation: () => {} });
+  }
+
+  /* ===== ОТПРАВКА ТЕКСТА ===== */
   inputEl.addEventListener('keydown', e => { if (e.key.length === 1 && !e.ctrlKey && !e.altKey && !e.metaKey) playTypeSound(); });
   function renderContacts() {
     contactListEl.innerHTML = '';
@@ -1834,26 +2088,38 @@
     viewContactProfileBtn.style.display = 'flex';
     if (callBtn) callBtn.style.display = 'flex';
     messagesEl.innerHTML = '';
+    
     if (threads[activeId]) threads[activeId].forEach(m => {
       const div = document.createElement('div');
       div.className = `msg ${m.who === 'me' ? 'msg-me' : 'msg-them'}`;
+      div.dataset.id = m.id;
+      if (isSelectMode && selectedMsgs.has(m.id)) div.classList.add('selected');
+      
       if (m.id === lastSentMsgId) {
         div.classList.add('msg-new');
         lastSentMsgId = null;
       }
+      
       const an = m.who === 'me' ? myProfile.name : (m.author || c.name);
       let bubbleContent = '';
       
-      if (m.type === 'image') bubbleContent = `<img src="${m.media}" alt="image">`;
-      else if (m.type === 'video') bubbleContent = `<video src="${m.media}" controls></video>`;
-      else if (m.type === 'audio') bubbleContent = `<audio src="${m.media}" controls></audio>`;
-      else if (m.type === 'file') bubbleContent = `<a href="${m.media}" download="${m.filename || 'file'}" class="file-attachment">📄 ${m.filename || 'Файл'}</a>`;
+      if (m.forwardedFrom) {
+        bubbleContent += `<div style="font-size:10px; color:#888; margin-bottom:4px;">Переслано от ${m.forwardedFrom}</div>`;
+      }
+      if (m.replyTo) {
+        bubbleContent += `<div class="reply-quote"><b>${m.replyTo.name}</b>${m.replyTo.text}</div>`;
+      }
+
+      if (m.type === 'image') bubbleContent += `<img src="${m.media}" alt="image">`;
+      else if (m.type === 'video') bubbleContent += `<video src="${m.media}" controls></video>`;
+      else if (m.type === 'audio') bubbleContent += `<audio src="${m.media}" controls></audio>`;
+      else if (m.type === 'file') bubbleContent += `<a href="${m.media}" download="${m.filename || 'file'}" class="file-attachment">📄 ${m.filename || 'Файл'}</a>`;
       else if (m.type === 'poll') {
         let optionsHtml = m.options.map((opt, idx) => {
           const totalVotes = m.options.reduce((a, b) => a + b.votes, 0);
           const percent = totalVotes === 0 ? 0 : Math.round((opt.votes / totalVotes) * 100);
           if (m.voted) {
-            return `<div class="poll-option-result ${m.myVote === idx ? 'voted' : ''}">
+            return `<div class="poll-option-result ${m.myVote === idx ? 'voted' : ''}" onclick="votePoll(${m.id}, ${idx})">
                       <div class="poll-option-bar" style="width: ${percent}%"></div>
                       <div class="poll-option-text">${opt.text}</div>
                       <div class="poll-option-percent">${percent}%</div>
@@ -1863,15 +2129,25 @@
           }
         }).join('');
         
-        bubbleContent = `<div class="poll-container">
+        bubbleContent += `<div class="poll-container">
                             <div class="poll-question">${m.question}</div>
                             <div class="poll-options">${optionsHtml}</div>
-                            <div class="poll-footer">${m.voted ? 'Вы проголосовали' : 'Нажмите, чтобы проголосовать'}</div>
+                            <div class="poll-footer">${m.voted ? 'Нажмите, чтобы изменить голос' : 'Нажмите, чтобы проголосовать'}</div>
                           </div>`;
       }
-      else bubbleContent = m.text;
+      else bubbleContent += m.text;
       
-      div.innerHTML = `<div class="msg-meta">${an} • ${m.time}</div><div class="msg-bubble">${bubbleContent}</div>`;
+      // Чекбокс для выделения
+      div.innerHTML = `<div class="msg-checkbox"></div><div class="msg-meta">${an} • ${m.time}</div><div class="msg-bubble">${bubbleContent}</div>`;
+      
+      if (isSelectMode) {
+        div.onclick = (e) => {
+          if (e.target.tagName !== 'AUDIO' && e.target.tagName !== 'VIDEO') {
+            toggleSelectMsg(m.id);
+          }
+        };
+      }
+      
       messagesEl.appendChild(div);
     });
     messagesEl.scrollTop = messagesEl.scrollHeight;
@@ -1892,6 +2168,10 @@
     playClick(); animateGavel();
     if (!threads[activeId]) threads[activeId] = [];
     const msgObj = { who:'me', text, time:getNowTime(), id: Date.now() };
+    if (replyToMsg) {
+      msgObj.replyTo = { name: replyToMsg.author || contacts.find(x=>x.id===activeId).name, text: replyToMsg.text || 'Медиа' };
+      cancelReply();
+    }
     threads[activeId].push(msgObj);
     lastSentMsgId = msgObj.id;
     inputEl.value = ''; renderChat();
@@ -2045,20 +2325,40 @@
     }
   }
   function toggleContactProfile(event) {
-    event.stopPropagation(); playClick();
+    if (event && event.stopPropagation) event.stopPropagation();
+    playClick();
     if (contactProfilePopup.classList.contains('active')) { contactProfilePopup.classList.remove('active'); return; }
     const c = contacts.find(x => x.id === activeId); if (!c) return;
     document.getElementById('contact-popup-title').innerHTML = `👤 ${c.name} <button class="edit-btn" onclick="toggleEditProfile(event, 'contact')">${translations[currentLang].edit}</button>`;
     document.getElementById('contact-view-mode').style.display = 'block';
     document.getElementById('contact-edit-mode').style.display = 'none';
+    
     if (c.isGroup) {
       document.getElementById('cp-phone').parentElement.style.display = 'none';
       document.getElementById('cp-role').textContent = 'Group Chat';
       document.getElementById('cp-status').parentElement.style.display = 'none';
       document.getElementById('cp-bio-container').style.display = 'none';
       document.getElementById('cp-members-container').style.display = 'block';
-      const mn = c.members.map(id => { const m = contacts.find(x => x.id === id); return m ? m.name : 'Unknown'; }).join(', ');
-      document.getElementById('cp-members').textContent = mn || 'None';
+      
+      const listEl = document.getElementById('cp-members-list');
+      listEl.innerHTML = '';
+      
+      c.members.forEach(memberName => {
+        if (!memberName) return;
+        const isAdmin = c.admin === memberName;
+        const amIAdmin = c.admin === myProfile.name;
+        
+        let actionsHtml = '';
+        if (amIAdmin && !isAdmin && memberName !== myProfile.name) {
+          actionsHtml = `<button onclick="promoteMember('${c.id}', '${memberName}')">👑</button>
+                         <button onclick="kickMember('${c.id}', '${memberName}')" style="color:red;">✕</button>`;
+        }
+        
+        const row = document.createElement('div');
+        row.className = 'member-row';
+        row.innerHTML = `<span>${memberName} ${isAdmin ? '👑' : ''}</span> <div class="actions">${actionsHtml}</div>`;
+        listEl.appendChild(row);
+      });
     } else {
       let pt = c.phone || 'Not specified'; if (privacySettings.phone === 'nobody') pt = 'Hidden';
       document.getElementById('cp-phone').textContent = pt;
@@ -2103,7 +2403,7 @@
     container.innerHTML = '';
     contacts.filter(c => !c.isGroup).forEach(c => {
       const label = document.createElement('label');
-      label.innerHTML = `<input type="checkbox" value="${c.id}"> ${c.name}`;
+      label.innerHTML = `<input type="checkbox" value="${c.name}"> ${c.name}`;
       container.appendChild(label);
     });
   }
@@ -2113,9 +2413,23 @@
     const cbs = document.querySelectorAll('#group-members-list input[type="checkbox"]:checked');
     const members = Array.from(cbs).map(cb => cb.value);
     if (members.length === 0) { alert('Select at least one member!'); return; }
+    
     const nid = 'group_' + Date.now();
-    contacts.push({ id:nid, name, avatar:defaultGroupAvatar, isGroup:true, members, status:'online', phone:'Group Chat' });
-    threads[nid] = [{ who:'them', text:`Group "${name}" created.`, time:getNowTime(), author:'System' }];
+    members.push(myProfile.name); // Добавляем себя
+    
+    // Создатель - админ
+    contacts.push({ 
+      id: nid, 
+      name, 
+      avatar: defaultGroupAvatar, 
+      isGroup: true, 
+      members: members, 
+      admin: myProfile.name,
+      status: 'online', 
+      phone: 'Group Chat' 
+    });
+    
+    threads[nid] = [{ who:'them', text:`Группа "${name}" создана.`, time:getNowTime(), author:'System' }];
     playClick(); closeModal('modal-add-group'); activeId = nid;
     renderContacts(); renderChat();
     document.getElementById('new-group-name').value = '';
