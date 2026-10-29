@@ -1569,7 +1569,14 @@
     if (error) {
       usernameInput.classList.add('input-error');
       passwordInput.classList.add('input-error');
-      errEl.textContent = '❌ Неверный логин или пароль';
+      const m = (error.message || '').toLowerCase();
+      if (m.includes('email not confirmed') || m.includes('confirm')) {
+        errEl.textContent = '❌ Email не подтверждён. Попросите админа отключить "Confirm email" в Supabase → Authentication → Providers → Email.';
+      } else if (m.includes('invalid login') || m.includes('invalid credentials')) {
+        errEl.textContent = '❌ Неверный логин или пароль';
+      } else {
+        errEl.textContent = '❌ ' + error.message;
+      }
       errEl.classList.add('show'); return;
     }
 
@@ -1624,6 +1631,7 @@
     const password = document.getElementById('phone-reg-password').value;
     const errEl = document.getElementById('phone-error');
     errEl.classList.remove('show');
+    errEl.style.color = '';
 
     if (!username) { errEl.textContent = 'Введите логин'; errEl.classList.add('show'); return; }
     if (!name) { errEl.textContent = 'Введите имя'; errEl.classList.add('show'); return; }
@@ -1637,21 +1645,43 @@
       options: { data: { full_name: name } }
     });
 
-    if (error) { errEl.textContent = error.message; errEl.classList.add('show'); return; }
+    if (error) {
+      errEl.textContent = '❌ ' + error.message;
+      errEl.classList.add('show');
+      return;
+    }
 
-    if (data.user) {
-      await supabaseClient.from('profiles').insert({
+    if (!data || !data.user) {
+      errEl.textContent = '❌ Сервер не вернул пользователя. Проверьте, что в Supabase включён Email-провайдер.';
+      errEl.classList.add('show');
+      return;
+    }
+
+    try {
+      const { error: pErr } = await supabaseClient.from('profiles').insert({
         id: data.user.id,
         full_name: name,
-        status: 'User',
+        status: 'online',
         phone: username
       });
-
-      errEl.textContent = '✅ Аккаунт создан! Теперь войдите.';
-      errEl.style.color = '#008000';
-      errEl.classList.add('show');
-      setTimeout(() => showLoginView(), 1500);
+      if (pErr && !/duplicate/i.test(pErr.message || '')) {
+        console.warn('profiles insert:', pErr);
+      }
+    } catch (e) {
+      console.warn('profiles insert exception:', e);
     }
+
+    if (!data.session) {
+      errEl.textContent = '✅ Аккаунт создан, но нужен email. Письмо не придёт (домен @courtroom.local фейковый). Отключите "Confirm email" в Supabase → Authentication → Providers → Email и войдите снова.';
+      errEl.style.color = '#b07000';
+      errEl.classList.add('show');
+      return;
+    }
+
+    errEl.textContent = '✅ Аккаунт создан! Теперь войдите.';
+    errEl.style.color = '#008000';
+    errEl.classList.add('show');
+    setTimeout(() => showLoginView(), 1500);
   }
 
   async function registerWithGitHub() {
@@ -1659,13 +1689,12 @@
     const password = document.getElementById('gh-password').value;
     const errEl = document.getElementById('gh-error');
     errEl.classList.remove('show');
+    errEl.style.color = '';
 
     if (!username) { errEl.textContent = 'Введите GitHub username'; errEl.classList.add('show'); return; }
     if (!password || password.length < 6) { errEl.textContent = 'Пароль должен быть не менее 6 символов'; errEl.classList.add('show'); return; }
 
-    playClick();
-    // Исправлено: используем тот же домен, чтобы можно было войти
-    const email = `${username}@courtroom.local`; 
+    const email = `${username}@courtroom.local`;
 
     const { data, error } = await supabaseClient.auth.signUp({
       email: email,
@@ -1673,18 +1702,29 @@
       options: { data: { full_name: username } }
     });
 
-    if (error) { errEl.textContent = error.message; errEl.classList.add('show'); return; }
+    if (error) { errEl.textContent = '❌ ' + error.message; errEl.classList.add('show'); return; }
+    if (!data || !data.user) { errEl.textContent = '❌ Не удалось создать пользователя'; errEl.classList.add('show'); return; }
 
-    if (data.user) {
-      await supabaseClient.from('profiles').insert({
+    try {
+      const { error: pErr } = await supabaseClient.from('profiles').insert({
         id: data.user.id,
         full_name: username,
-        status: 'GitHub User',
+        status: 'online',
         phone: username
       });
-      alert('Аккаунт GitHub создан! Войдите.');
-      showLoginView();
+      if (pErr && !/duplicate/i.test(pErr.message || '')) console.warn('profiles insert:', pErr);
+    } catch (e) { console.warn(e); }
+
+    if (!data.session) {
+      errEl.textContent = '✅ Аккаунт создан, но нужен email. Отключите "Confirm email" в Supabase → Authentication → Providers → Email.';
+      errEl.style.color = '#b07000';
+      errEl.classList.add('show');
+      return;
     }
+    errEl.textContent = '✅ Аккаунт создан! Теперь войдите.';
+    errEl.style.color = '#008000';
+    errEl.classList.add('show');
+    setTimeout(() => showLoginView(), 1500);
   }
 
   async function registerWithGoogle() {
@@ -1692,11 +1732,11 @@
     const password = document.getElementById('gg-password').value;
     const errEl = document.getElementById('gg-error');
     errEl.classList.remove('show');
+    errEl.style.color = '';
 
     if (!email || !email.includes('@')) { errEl.textContent = 'Введите корректный Google Email'; errEl.classList.add('show'); return; }
     if (!password || password.length < 6) { errEl.textContent = 'Пароль должен быть не менее 6 символов'; errEl.classList.add('show'); return; }
 
-    playClick();
     const name = email.split('@')[0];
     const capitalizedName = name.charAt(0).toUpperCase() + name.slice(1);
 
@@ -1706,18 +1746,29 @@
       options: { data: { full_name: capitalizedName } }
     });
 
-    if (error) { errEl.textContent = error.message; errEl.classList.add('show'); return; }
+    if (error) { errEl.textContent = '❌ ' + error.message; errEl.classList.add('show'); return; }
+    if (!data || !data.user) { errEl.textContent = '❌ Не удалось создать пользователя'; errEl.classList.add('show'); return; }
 
-    if (data.user) {
-      await supabaseClient.from('profiles').insert({
+    try {
+      const { error: pErr } = await supabaseClient.from('profiles').insert({
         id: data.user.id,
         full_name: capitalizedName,
-        status: 'Google User',
-        phone: name // сохраняем имя из почты как логин
+        status: 'online',
+        phone: name
       });
-      alert('Аккаунт Google создан! Войдите.');
-      showLoginView();
+      if (pErr && !/duplicate/i.test(pErr.message || '')) console.warn('profiles insert:', pErr);
+    } catch (e) { console.warn(e); }
+
+    if (!data.session) {
+      errEl.textContent = '✅ Аккаунт создан. Подтвердите email (проверьте почту), затем войдите.';
+      errEl.style.color = '#b07000';
+      errEl.classList.add('show');
+      return;
     }
+    errEl.textContent = '✅ Аккаунт создан! Теперь войдите.';
+    errEl.style.color = '#008000';
+    errEl.classList.add('show');
+    setTimeout(() => showLoginView(), 1500);
   }
 
   async function logout() {
@@ -2091,7 +2142,6 @@
     errEl.classList.remove('show');
     if (!username) { errEl.textContent = 'Введите логин'; errEl.classList.add('show'); return; }
 
-    // ИСПРАВЛЕНО: Ищем по колонке 'phone', так как логин сохраняется туда
     const { data: profile, error } = await supabaseClient
       .from('profiles')
       .select('*')
@@ -2142,7 +2192,6 @@
     updateProfileDisplay(); changeLanguage('ru'); renderContacts(); renderChat(); renderStories();
     setTimeout(() => document.getElementById('login-username').focus(), 100);
 
-    // Проверка активной сессии при загрузке (чтобы не выкидывало)
     checkSession();
   })();
 </script>
