@@ -40,6 +40,163 @@
     --chat-wallpaper: radial-gradient(rgba(255,255,255,.06) 1px, transparent 1px);
     --msg-selected: rgba(100,181,246,0.2);
   }
+  /* ===== WINDOWS XP THEME (облегчённая, для слабых ПК) ===== */
+  body.theme-xp {
+    --bg-body: linear-gradient(180deg, #235ad1 0%, #4a7fe8 100%);
+    --bg-window: #ECE9D8; --bg-sidebar: #ECE9D8;
+    --bg-chat: #ffffff; --bg-messages: #ffffff; --bg-input: #ECE9D8;
+    --text-main: #000000; --text-muted: #666666;
+    --border-light: #ffffff; --border-dark: #808080;
+    --msg-them-bg: #ffffff; --msg-them-text: #000000;
+    --msg-me-bg: #D9E7FF; --msg-me-text: #000000;
+    --contact-hover: #D4E0F7;
+    --contact-active: #316AC5;
+    --popup-bg: #ffffff; --btn-bg: #ECE9D8;
+    --btn-hover: #ffffff; --story-ring: #0058EE;
+    --tg-accent: #0058EE; --tg-bg: #ECE9D8; --tg-hover: #D4E0F7; --tg-border: #808080;
+    --chat-wallpaper: none;
+    --msg-selected: rgba(49,106,197,0.25);
+    font-family: Tahoma, 'MS Sans Serif', sans-serif;
+  }
+  body.theme-xp * { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+  body.theme-xp .aero-window {
+    background: #ECE9D8;
+    border: 2px solid #0058EE; border-radius: 0;
+    box-shadow: 3px 3px 0 rgba(0,0,0,.35);
+  }
+  body.theme-xp .title-bar {
+    background: linear-gradient(180deg,#0058EE 0%,#3A93FF 8%,#0058EE 40%,#0046C8 95%);
+    border-bottom: none; border-radius: 0; padding: 4px 6px;
+  }
+  body.theme-xp .title-bar-text { text-shadow: 1px 1px 1px #000; }
+  body.theme-xp .title-bar-controls button {
+    border-radius: 3px;
+    background: linear-gradient(180deg,#fff 0%,#ECE9D8 50%,#D4D0C8 100%);
+    border: 1px solid #808080; color: #000;
+    box-shadow: inset 0 1px 0 #fff, inset 0 -1px 0 #808080;
+  }
+  body.theme-xp .title-bar-controls button.close-btn {
+    background: linear-gradient(180deg,#FFA0A0 0%,#E85050 50%,#C02020 100%);
+    border-color: #800000; color: #fff;
+  }
+  body.theme-xp .main-area { padding: 6px; gap: 6px; }
+  body.theme-xp .sidebar,
+  body.theme-xp .chat-area {
+    background: #ECE9D8; border: 1px solid #808080;
+    border-radius: 0; box-shadow: none;
+  }
+  body.theme-xp .chat-header {
+    background: linear-gradient(180deg,#ECE9D8,#D4D0C8);
+    border-bottom: 1px solid #808080; border-radius: 0;
+  }
+  body.theme-xp .chat-header::before { content: none; }
+  body.theme-xp .messages { background: #fff; background-image: none; }
+  body.theme-xp .msg-bubble {
+    border-radius: 0; box-shadow: none; border: 1px solid #808080;
+  }
+  body.theme-xp .msg-them .msg-bubble { background: #fff; color: #000; }
+  body.theme-xp .msg-me .msg-bubble { background: #D9E7FF; color: #000; }
+  body.theme-xp .input-area {
+    background: #ECE9D8; border-top: 1px solid #808080; border-radius: 0;
+  }
+  body.theme-xp .input-row textarea,
+  body.theme-xp .search-box input {
+    background: #fff; border: 1px solid #808080; border-radius: 0;
+    box-shadow: inset 1px 1px 2px rgba(0,0,0,.2);
+  }
+  body.theme-xp .input-row textarea:focus,
+  body.theme-xp .search-box input:focus {
+    border-color: #0058EE;
+    box-shadow: inset 1px 1px 2px rgba(0,0,0,.2);
+  }
+  body.theme-xp .tool-btn,
+  body.theme-xp .action-bar button,
+  body.theme-xp .header-btn,
+  body.theme-xp .cloud-btn,
+  body.theme-xp .edit-btn {
+    background: linear-gradient(180deg,#fff 0%,#ECE9D8 50%,#D4D0C8 100%);
+    border: 1px solid #808080; border-radius: 3px; color: #000;
+    box-shadow: inset 0 1px 0 #fff, inset 0 -1px 0 #808080;
+  }
+  body.theme-xp .tool-btn:hover,
+  body.theme-xp .action-bar button:hover,
+  body.theme-xp .header-btn:hover,
+  body.theme-xp .cloud-btn:hover { background: linear-gradient(180deg,#fff,#fff); }
+  body.theme-xp .contact { border-radius: 0; border: 1px solid transparent; }
+  body.theme-xp .contact:hover { background: #D4E0F7; border-color: #808080; }
+  body.theme-xp .contact.active { background: #316AC5; border-color: #1a3f8e; }
+  body.theme-xp .contact.active .contact-name,
+  body.theme-xp .contact.active .contact-phone { color: #fff; }
+  body.theme-xp .my-profile { background: #D4D0C8; border-radius: 0; }
+  body.theme-xp .contact-avatar-container,
+  body.theme-xp .my-avatar-container {
+    border-radius: 0; border: 1px solid #808080; background: #fff;
+  }
+  body.theme-xp .contact-avatar-container img,
+  body.theme-xp .my-avatar-container img { border-radius: 0; }
+  body.theme-xp .modal-window {
+    background: #ECE9D8; border: 2px solid #0058EE; border-radius: 0;
+    box-shadow: 3px 3px 0 rgba(0,0,0,.35);
+  }
+  body.theme-xp .modal-header {
+    background: linear-gradient(180deg,#0058EE 0%,#3A93FF 8%,#0058EE 40%,#0046C8 95%);
+    color: #fff; border-bottom: none; text-shadow: 1px 1px 1px #000;
+  }
+  body.theme-xp .modal-footer { background: #D4D0C8; border-top: 1px solid #808080; }
+  body.theme-xp .modal-footer button,
+  body.theme-xp .tg-btn {
+    background: linear-gradient(180deg,#fff 0%,#ECE9D8 50%,#D4D0C8 100%);
+    border: 1px solid #808080; border-radius: 3px; color: #000;
+    box-shadow: inset 0 1px 0 #fff, inset 0 -1px 0 #808080;
+  }
+  body.theme-xp .modal-footer button.primary {
+    background: linear-gradient(180deg,#A0D0FF 0%,#4A90D0 50%,#2050A0 100%);
+    color: #fff; border-color: #104080;
+  }
+  body.theme-xp .settings-sidebar { background: #ECE9D8; border-right: 1px solid #808080; }
+  body.theme-xp .settings-tab.active {
+    background: #316AC5; border-radius: 0; margin-right: 0; color: #fff;
+  }
+  body.theme-xp .settings-main { background: #ECE9D8; }
+  body.theme-xp .tg-section {
+    background: #fff; border: 1px solid #808080; border-radius: 0; box-shadow: none;
+  }
+  body.theme-xp .tg-row { border-bottom: 1px solid #D4D0C8; }
+  body.theme-xp .tg-row:hover { background: #D4E0F7; }
+  body.theme-xp .tg-select {
+    background: #fff; border: 1px solid #808080; border-radius: 0;
+  }
+  body.theme-xp .status-menu,
+  body.theme-xp .popup,
+  body.theme-xp .attachment-menu,
+  body.theme-xp .context-menu {
+    background: #fff; border: 1px solid #808080; border-radius: 0;
+    box-shadow: 2px 2px 0 rgba(0,0,0,.35);
+  }
+  body.theme-xp .popup::before { display: none; }
+  body.theme-xp .modal-overlay { background: rgba(0,0,0,.3); }
+  body.theme-xp .stories-bar { background: #ECE9D8; border-bottom: 1px solid #808080; }
+  body.theme-xp .gavel-btn svg { filter: none; }
+  body.theme-xp .reply-quote { border-left-color: #0058EE; }
+  body.theme-xp .msg-me .reply-quote { border-left-color: #0058EE; color: #000; }
+  body.theme-xp .file-attachment {
+    background: #fff; border: 1px solid #808080; color: #0058EE; border-radius: 0;
+  }
+  body.theme-xp .msg-me .file-attachment { background: #fff; }
+  body.theme-xp .poll-container { background: #fff; border: 1px solid #808080; border-radius: 0; }
+  body.theme-xp .poll-option-btn,
+  body.theme-xp .poll-option-result {
+    background: #fff; border: 1px solid #808080; border-radius: 0;
+  }
+  body.theme-xp .poll-option-result.voted { border-color: #0058EE; color: #0058EE; }
+  body.theme-xp .msg-me .poll-container { background: #fff; }
+  body.theme-xp .status-option,
+  body.theme-xp .form-group input,
+  body.theme-xp .register-tab,
+  body.theme-xp .signin-btn,
+  body.theme-xp .gh-btn,
+  body.theme-xp .gg-btn { border-radius: 0 !important; }
+
   body {
     margin: 0; min-height: 100vh; background: var(--bg-body); background-attachment: fixed;
     display: flex; align-items: center; justify-content: center;
@@ -204,7 +361,6 @@
   .my-story .story-avatar::after { content: '+'; position: absolute; bottom: -2px; right: -2px; background: #4cd964; color: #fff; width: 16px; height: 16px; border-radius: 50%; font-size: 14px; line-height: 14px; text-align: center; border: 2px solid var(--bg-sidebar); }
   .messages { flex: 1; overflow-y: auto; padding: 15px; background: var(--bg-messages); background-image: var(--chat-wallpaper); background-size: 20px 20px; display: flex; flex-direction: column; gap: 12px; }
   
-  /* Сообщения */
   .msg { display: flex; flex-direction: column; max-width: 80%; position: relative; }
   .msg-them { align-self: flex-start; } .msg-me { align-self: flex-end; align-items: flex-end; }
   .msg-meta { font-size: 11px; color: var(--text-muted); margin-bottom: 4px; padding: 0 4px; font-weight: 600; }
@@ -212,7 +368,6 @@
   .msg-them .msg-bubble { background: var(--msg-them-bg); border: 1px solid var(--border-dark); color: var(--msg-them-text); border-bottom-left-radius: 0; }
   .msg-me .msg-bubble { background: var(--msg-me-bg); border: 1px solid var(--border-dark); color: var(--msg-me-text); border-bottom-right-radius: 0; }
 
-  /* Выделение сообщений */
   .msg.selected { background: var(--msg-selected); border-radius: 8px; }
   .msg.selected .msg-bubble { border-color: var(--tg-accent); }
   .msg-checkbox { position: absolute; left: -25px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; border-radius: 50%; border: 2px solid #ccc; display: none; align-items: center; justify-content: center; background: #fff; }
@@ -220,12 +375,10 @@
   .msg-checkbox::after { content: '✓'; font-size: 12px; color: #fff; }
   .msg-me .msg-checkbox { left: auto; right: -25px; }
 
-  /* Ответ на сообщение */
   .reply-quote { border-left: 3px solid #4a90e2; padding-left: 8px; margin-bottom: 4px; font-size: 11px; color: #555; cursor: pointer; }
   .msg-me .reply-quote { border-left-color: #fff; color: #003366; opacity: 0.8; }
   .reply-quote b { display: block; margin-bottom: 1px; }
 
-  /* Медиа */
   .msg-bubble img, .msg-bubble video { max-width: 100%; max-height: 240px; border-radius: 6px; display: block; }
   .msg-bubble audio { width: 100%; max-width: 260px; margin-top: 4px; }
   .file-attachment {
@@ -236,7 +389,6 @@
   }
   .msg-me .file-attachment { background: rgba(255,255,255,.7); }
 
-  /* ===== POLL STYLES ===== */
   .poll-container {
     background: var(--bg-messages);
     border: 1px solid var(--border-dark);
@@ -248,76 +400,37 @@
     box-shadow: 0 2px 6px rgba(0,0,0,.08);
   }
   .msg-me .poll-container { background: #fff; }
-  .poll-question {
-    font-weight: 700;
-    font-size: 14px;
-    margin-bottom: 10px;
-    line-height: 1.3;
-  }
+  .poll-question { font-weight: 700; font-size: 14px; margin-bottom: 10px; line-height: 1.3; }
   .poll-options { display: flex; flex-direction: column; gap: 6px; }
   .poll-option-btn {
-    background: var(--bg-sidebar);
-    border: 1px solid var(--border-light);
-    border-radius: 6px;
-    padding: 8px 12px;
-    font-size: 13px;
-    cursor: pointer;
-    transition: all .2s;
-    text-align: left;
+    background: var(--bg-sidebar); border: 1px solid var(--border-light);
+    border-radius: 6px; padding: 8px 12px; font-size: 13px;
+    cursor: pointer; transition: all .2s; text-align: left;
   }
   .poll-option-btn:hover { background: var(--btn-hover); }
-  
   .poll-option-result {
-    position: relative;
-    background: var(--bg-sidebar);
-    border: 1px solid var(--border-light);
-    border-radius: 6px;
-    padding: 8px 12px;
-    font-size: 13px;
-    overflow: hidden;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: #555;
-    cursor: pointer;
+    position: relative; background: var(--bg-sidebar);
+    border: 1px solid var(--border-light); border-radius: 6px;
+    padding: 8px 12px; font-size: 13px; overflow: hidden;
+    display: flex; justify-content: space-between; align-items: center;
+    color: #555; cursor: pointer;
   }
   .poll-option-result:hover { background: rgba(0,0,0,0.05); }
-  .poll-option-result.voted {
-    border-color: #4a90e2;
-    color: #004080;
-    font-weight: 600;
-  }
+  .poll-option-result.voted { border-color: #4a90e2; color: #004080; font-weight: 600; }
   .poll-option-result.voted::before { content: '✓ '; color: #4a90e2; }
-  .poll-option-bar {
-    position: absolute;
-    left: 0; top: 0; bottom: 0;
-    background: rgba(74,144,226,.15);
-    z-index: 0;
-    transition: width 0.4s ease;
-  }
+  .poll-option-bar { position: absolute; left: 0; top: 0; bottom: 0; background: rgba(74,144,226,.15); z-index: 0; transition: width 0.4s ease; }
   .poll-option-result.voted .poll-option-bar { background: rgba(74,144,226,.25); }
   .poll-option-text { position: relative; z-index: 1; }
   .poll-option-percent { position: relative; z-index: 1; font-weight: 700; font-size: 12px; }
-  .poll-footer {
-    margin-top: 10px;
-    font-size: 11px;
-    color: var(--text-muted);
-    text-align: center;
-  }
+  .poll-footer { margin-top: 10px; font-size: 11px; color: var(--text-muted); text-align: center; }
 
-  /* ===== ПАНЕЛЬ ВВОДА ===== */
   .input-area { padding: 10px; background: var(--bg-input); border-top: 1px solid var(--border-dark); border-radius: 0 0 6px 6px; display: flex; flex-direction: column; gap: 8px; flex-shrink: 0; position: relative; }
   
   .reply-banner {
-    display: none;
-    padding: 6px 10px;
-    background: var(--bg-sidebar);
-    border: 1px solid var(--border-dark);
-    border-left: 4px solid #4a90e2;
-    border-radius: 6px;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 4px;
+    display: none; padding: 6px 10px;
+    background: var(--bg-sidebar); border: 1px solid var(--border-dark);
+    border-left: 4px solid #4a90e2; border-radius: 6px;
+    align-items: center; justify-content: space-between; margin-bottom: 4px;
   }
   .reply-banner.active { display: flex; }
   .reply-banner-content { flex: 1; overflow: hidden; font-size: 12px; }
@@ -326,16 +439,11 @@
   .reply-banner button { background: transparent; border: none; cursor: pointer; font-size: 16px; color: #999; padding: 0 5px; }
 
   .recording-banner {
-    display: none;
-    padding: 8px 12px;
+    display: none; padding: 8px 12px;
     background: linear-gradient(180deg, #ff4444, #cc0000);
-    color: white;
-    font-size: 12px;
-    font-weight: 600;
-    align-items: center;
-    justify-content: space-between;
-    border-radius: 6px;
-    box-shadow: 0 2px 8px rgba(255,50,50,.3);
+    color: white; font-size: 12px; font-weight: 600;
+    align-items: center; justify-content: space-between;
+    border-radius: 6px; box-shadow: 0 2px 8px rgba(255,50,50,.3);
     margin-bottom: 8px;
   }
   .recording-banner.active { display: flex; animation: recordPulse 1.5s infinite; }
@@ -371,9 +479,7 @@
     width: 46px; height: 58px;
     cursor: pointer;
     display: flex; align-items: center; justify-content: center;
-    transition: all .2s;
-    flex-shrink: 0;
-    padding: 0;
+    transition: all .2s; flex-shrink: 0; padding: 0;
   }
   .tool-btn:hover { background: var(--btn-hover); transform: scale(1.05); }
   .tool-btn svg { width: 24px; height: 24px; }
@@ -398,7 +504,6 @@
   @keyframes msgPop { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
   .msg-new { animation: msgPop 0.3s ease-out; }
 
-  /* Меню вложений */
   .attachment-menu {
     position: absolute;
     bottom: calc(100% + 8px);
@@ -416,12 +521,8 @@
   }
   .attachment-menu.active { display: flex; }
   .attachment-menu-item {
-    padding: 10px 14px;
-    cursor: pointer;
-    border-radius: 6px;
-    font-size: 13px;
-    display: flex; align-items: center; gap: 12px;
-    color: var(--text-main);
+    padding: 10px 14px; cursor: pointer; border-radius: 6px; font-size: 13px;
+    display: flex; align-items: center; gap: 12px; color: var(--text-main);
     transition: background .15s;
   }
   .attachment-menu-item:hover { background: var(--tg-hover); }
@@ -437,7 +538,6 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
-  /* Контекстное меню ПКМ */
   .context-menu {
     position: fixed;
     background: var(--bg-messages);
@@ -452,19 +552,15 @@
   }
   .context-menu.active { display: flex; }
   .context-menu-item {
-    padding: 8px 12px;
-    cursor: pointer;
-    border-radius: 6px;
-    font-size: 13px;
-    display: flex; align-items: center; gap: 10px;
-    color: var(--text-main);
+    padding: 8px 12px; cursor: pointer; border-radius: 6px; font-size: 13px;
+    display: flex; align-items: center; gap: 10px; color: var(--text-main);
     transition: background .15s;
   }
   .context-menu-item:hover { background: var(--tg-hover); }
   .context-menu-item.danger { color: #e53935; }
-  .context-menu-item .icon { width: 18px; text-align: center; font-size: 15px; }
+  .context-menu-item .icon { width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; }
+  .context-menu-item .icon svg { width: 18px; height: 18px; }
 
-  /* Панель выделения */
   .select-toolbar {
     position: absolute; top: 55px; left: 0; width: 100%;
     background: var(--bg-messages); border-bottom: 1px solid var(--border-dark);
@@ -477,7 +573,6 @@
     display: flex; align-items: center; gap: 5px;
   }
 
-  /* ===== МОДАЛЬНЫЕ ОКНА ===== */
   .modal-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,.5); backdrop-filter: blur(5px); z-index: 200; display: none; align-items: center; justify-content: center; }
   .modal-overlay.active { display: flex; }
   .modal-window { background: var(--bg-chat); backdrop-filter: blur(25px); border: 1px solid var(--border-light); border-radius: 8px; width: 380px; box-shadow: 0 25px 50px rgba(0,0,0,.6), inset 0 0 0 1px var(--border-light); overflow: hidden; color: var(--text-main); display: flex; flex-direction: column; }
@@ -519,20 +614,17 @@
   .checkbox-list { max-height: 120px; overflow-y: auto; border: 1px solid var(--border-dark); border-radius: 4px; padding: 5px; background: var(--bg-messages); }
   .checkbox-list label { display: flex; align-items: center; gap: 6px; font-weight: normal; padding: 3px; cursor: pointer; }
 
-  /* Опрос - добавление вариантов */
   .poll-option-row { display: flex; gap: 5px; align-items: center; margin-bottom: 5px; }
   .poll-option-input { flex: 1; padding: 6px; border: 1px solid var(--border-dark); border-radius: 4px; font-size: 12px; background: var(--bg-messages); color: var(--text-main); }
   .poll-remove-btn { background: rgba(255,0,0,.1); border: 1px solid rgba(255,0,0,.3); color: #c00; border-radius: 4px; width: 28px; height: 28px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0; }
   .poll-remove-btn:hover { background: rgba(255,0,0,.2); }
 
-  /* Админ группы */
   .member-row { display: flex; align-items: center; justify-content: space-between; padding: 8px; border-bottom: 1px solid var(--border-dark); font-size: 12px; }
   .member-row:last-child { border-bottom: none; }
   .member-row .actions { display: flex; gap: 5px; }
   .member-row .actions button { background: var(--bg-sidebar); border: 1px solid var(--border-dark); border-radius: 4px; padding: 2px 6px; font-size: 10px; cursor: pointer; color: var(--text-main); }
   .member-row .actions button:hover { background: var(--btn-hover); }
 
-  /* ===== ЗВОНОК ===== */
   .call-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(180deg,#4a7cb1 0%,#a7a6b5 50%,#e3d1cd 100%); z-index: 500; display: none; flex-direction: column; opacity: 0; transition: opacity .3s; font-family: 'Segoe UI', Tahoma, sans-serif; }
   .call-overlay.active { display: flex; opacity: 1; }
   .call-top-bar { display: flex; justify-content: space-between; align-items: flex-start; padding: 20px 30px; color: #fff; }
@@ -567,7 +659,6 @@
   .story-viewer-avatar img { width: 100%; height: 100%; object-fit: cover; }
   .story-viewer-close { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,.5); border: none; color: #fff; font-size: 20px; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; z-index: 2; }
 
-  /* ===== LOGIN ===== */
   .login-overlay {
     position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
     background: linear-gradient(180deg,#d9eefc 0%,#b5dcf5 25%,#7fc1ea 60%,#4a9bd1 100%);
@@ -602,11 +693,20 @@
     width: 100%; padding: 9px 11px; border: 1px solid #c8d8e8;
     border-radius: 4px; font-size: 13px; font-family: inherit; outline: none;
     color: #1a1a1a; background: #fafcfe;
-    transition: border-color .2s, box-shadow .2s, background .2s;
+    transition: border-color .2s, box-shadow .2s, background .2s, border-bottom .2s;
   }
   .form-group input:focus {
     border-color: #00aff0; background: #fff;
     box-shadow: 0 0 0 3px rgba(0,175,240,.15);
+  }
+  /* Красное подчёркивание для незаполненных/неверных полей */
+  .form-group input.input-error {
+    border-bottom: 2px solid #e53935 !important;
+    background: #fff5f5;
+  }
+  .form-group input.input-error:focus {
+    box-shadow: 0 0 0 3px rgba(229,57,53,.15);
+    border-color: #e53935;
   }
   .status-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
   .status-row > label { font-size: 12px; font-weight: 600; color: #4a4a4a; white-space: nowrap; }
@@ -662,8 +762,8 @@
   .register-tab.active { color: #00aff0; border-bottom-color: #00aff0; }
   .register-section { display: none; flex-direction: column; gap: 12px; }
   .register-section.active { display: flex; }
+  .db-hint { font-size: 10px; color: #8a9aa5; margin-top: 8px; padding: 6px; background: #f5f9fc; border-radius: 4px; line-height: 1.4; }
 
-  /* Кастомный скроллбар */
   ::-webkit-scrollbar { width: 12px; }
   ::-webkit-scrollbar-track { background: rgba(240,240,240,.1); border-radius: 6px; }
   ::-webkit-scrollbar-thumb { background: rgba(150,150,150,.5); border-radius: 6px; border: 2px solid transparent; background-clip: padding-box; }
@@ -677,7 +777,6 @@
 <input type="file" id="media-input" accept="image/*,video/*" style="display:none">
 <input type="file" id="doc-input" accept="*" style="display:none">
 
-<!-- ===== LOGIN ===== -->
 <div class="login-overlay" id="login-overlay">
   <div class="login-box">
     <div class="login-header">
@@ -715,6 +814,9 @@
         <input type="checkbox" id="login-remember" checked>Запомнить меня
       </label>
       <button class="signin-btn" onclick="doLogin()">Вход</button>
+      <div class="db-hint">
+        💡 Демо-аккаунты: <b>User1 / password</b>, <b>Admin / admin</b>, <b>Test / test</b>. Остальные — только через регистрацию (GitHub/Google).
+      </div>
       <div class="footer-links">
         <a onclick="showRegisterView()">Регистрация</a> · <a onclick="alert('Сброс пароля недоступен в демо')">Забыли пароль?</a>
       </div>
@@ -746,6 +848,10 @@
           <svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
           Войти через Google
         </button>
+      </div>
+
+      <div class="db-hint">
+        ℹ️ После регистрации через GitHub/Google аккаунт сохраняется в локальной базе. Для повторного входа используйте логин (username/email) и тот же пароль — при OAuth-регистрации пароль не обязателен.
       </div>
 
       <div class="footer-links" style="margin-top: 16px;">
@@ -934,15 +1040,29 @@
     </div>
   </div>
 
-  <!-- Контекстное меню -->
   <div class="context-menu" id="contextMenu">
-    <div class="context-menu-item" onclick="actionReply()"><span class="icon">↩️</span> Ответить</div>
-    <div class="context-menu-item" onclick="actionForward()"><span class="icon">➡️</span> Переслать</div>
-    <div class="context-menu-item" onclick="actionSelect()"><span class="icon">☑️</span> Выделить</div>
-    <div class="context-menu-item danger" onclick="actionDelete()"><span class="icon">🗑️</span> Удалить</div>
+    <div class="context-menu-item" onclick="actionReply()">
+      <span class="icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14L4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5v0a5.5 5.5 0 0 1-5.5 5.5H11"/></svg>
+      </span> Ответить
+    </div>
+    <div class="context-menu-item" onclick="actionForward()">
+      <span class="icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14l5-5-5-5"/><path d="M20 9H9.5A5.5 5.5 0 0 0 4 14.5v0A5.5 5.5 0 0 0 9.5 20H13"/></svg>
+      </span> Переслать
+    </div>
+    <div class="context-menu-item" onclick="actionSelect()">
+      <span class="icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#4cd964" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-5"/></svg>
+      </span> Выделить
+    </div>
+    <div class="context-menu-item danger" onclick="actionDelete()">
+      <span class="icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+      </span> Удалить
+    </div>
   </div>
 
-  <!-- Модалка пересылки -->
   <div class="modal-overlay" id="modal-forward">
     <div class="modal-window">
       <div class="modal-header">Переслать сообщение</div>
@@ -955,7 +1075,6 @@
     </div>
   </div>
 
-  <!-- Модалка создания опроса -->
   <div class="modal-overlay" id="modal-create-poll">
     <div class="modal-window">
       <div class="modal-header">Создать опрос</div>
@@ -1026,9 +1145,11 @@
               </select>
             </div>
             <div class="tg-row">
-              <div class="tg-row-info"><div class="tg-row-title" data-i18n="theme">Тема оформления</div><div class="tg-row-desc" data-i18n="theme_desc">Светлая или темная</div></div>
+              <div class="tg-row-info"><div class="tg-row-title" data-i18n="theme">Тема оформления</div><div class="tg-row-desc" data-i18n="theme_desc">Светлая, темная или XP (для слабых ПК)</div></div>
               <select class="tg-select" id="setting-theme" onchange="changeTheme(this.value)">
-                <option value="light" data-i18n="theme_light">Светлая</option><option value="dark" data-i18n="theme_dark">Темная</option>
+                <option value="light" data-i18n="theme_light">Светлая</option>
+                <option value="dark" data-i18n="theme_dark">Темная</option>
+                <option value="xp" data-i18n="theme_xp">Windows XP (для слабых ПК)</option>
               </select>
             </div>
           </div>
@@ -1176,9 +1297,9 @@
 
 <script>
   const translations = {
-    ru: { title:"⚖️ Courtroom Live Messenger 2009", user:"Пользователь", online:"В сети", away:"Нет на месте", busy:"Занят", my_profile:"👤 Мой профиль", edit:"✏️ Изменить", name:"Имя:", phone:"Телефон:", status:"Статус:", bio:"О себе:", welcome:"Добро пожаловать в мессенджер!", change_photo:"📷 Сменить фото", save:"💾 Сохранить", add_contact:"➕ Контакт", add_group:"➕ Группа", search:"Поиск по контактам...", select_chat:"Выберите собеседника...", select_chat_desc:"Выберите контакт или создайте новый...", profile:"ℹ️ Профиль", my_story:"Моя история", role:"Роль:", members:"Участники:", type_message:"Введите вашу речь... (Enter - отправить)", add_contact_title:"Добавить новый контакт", add_group_title:"Создать групповой чат", group_name:"Название группы:", select_members:"Выберите участников:", cancel:"Отмена", create:"Создать", settings:"⚙️ Настройки", general:"Общие", account:"Аккаунт", privacy:"Приватность", notifications:"Уведомления", chat_settings:"Настройки чата", devices:"Устройства", advanced:"Продвинутые", language:"Язык", language_desc:"Выберите язык интерфейса", theme:"Тема оформления", theme_desc:"Светлая или темная", theme_light:"Светлая", theme_dark:"Темная", sounds:"Звуки", sounds_desc:"Звуки уведомлений и кликов", edit_profile_desc:"Изменить имя, фото и описание", username:"Имя пользователя", phone_visibility:"Кто видит номер", avatar_visibility:"Кто видит фото", everyone:"Все", contacts:"Контакты", nobody:"Никто", messages:"Сообщения", messages_desc:"Кто может писать первым", desktop_notif:"Уведомления на рабочем столе", message_preview:"Показывать текст сообщения", chat_wallpaper:"Фон чата", standard:"Стандартный", text_size:"Размер текста", active_sessions:"Активные сессии", data_usage:"Использование данных", data_usage_desc:"Настройки автоскачивания", proxy:"Настройки прокси", proxy_desc:"Использовать прокси-сервер", done:"Готово", create_story:"Создать историю", story_text:"Текст истории:", story_photo:"Фотография (необязательно):", choose_photo:"📷 Выбрать фото", remove_photo:"✕ Убрать фото", publish:"Опубликовать", recording:"ЗАПИСЬ", connecting:"Соединение..." },
-    uk: { title:"⚖️ Courtroom Live Messenger 2009", user:"Користувач", online:"В мережі", away:"Немає на місці", busy:"Зайнятий", my_profile:"👤 Мій профіль", edit:"✏️ Змінити", name:"Ім'я:", phone:"Телефон:", status:"Статус:", bio:"Про себе:", welcome:"Ласкаво просимо до месенджера!", change_photo:"📷 Змінити фото", save:"💾 Зберегти", add_contact:"➕ Контакт", add_group:"➕ Група", search:"Пошук по контактах...", select_chat:"Виберіть співрозмовника...", select_chat_desc:"Виберіть контакт або створіть новий...", profile:"ℹ️ Профіль", my_story:"Моя історія", role:"Роль:", members:"Учасники:", type_message:"Введіть вашу промову... (Enter - надіслати)", add_contact_title:"Додати новий контакт", add_group_title:"Створити груповий чат", group_name:"Назва групи:", select_members:"Виберіть учасників:", cancel:"Скасувати", create:"Створити", settings:"⚙️ Налаштування", general:"Загальні", account:"Акаунт", privacy:"Приватність", notifications:"Сповіщення", chat_settings:"Налаштування чату", devices:"Пристрої", advanced:"Розширені", language:"Мова", language_desc:"Виберіть мову інтерфейсу", theme:"Тема оформлення", theme_desc:"Світла або темна", theme_light:"Світла", theme_dark:"Темна", sounds:"Звуки", sounds_desc:"Звуки сповіщень та кліків", edit_profile_desc:"Змінити ім'я, фото та опис", username:"Ім'я користувача", phone_visibility:"Хто бачить номер", avatar_visibility:"Хто бачить фото", everyone:"Всі", contacts:"Контакти", nobody:"Ніхто", messages:"Повідомлення", messages_desc:"Хто може писати першим", desktop_notif:"Сповіщення на робочому столі", message_preview:"Показувати текст повідомлення", chat_wallpaper:"Фон чату", standard:"Стандартний", text_size:"Розмір тексту", active_sessions:"Активні сесії", data_usage:"Використання даних", data_usage_desc:"Налаштування автозавантаження", proxy:"Налаштування проксі", proxy_desc:"Використовувати проксі-сервер", done:"Готово", create_story:"Створити історію", story_text:"Текст історії:", story_photo:"Фотографія (необов'язково):", choose_photo:"📷 Вибрати фото", remove_photo:"✕ Прибрати фото", publish:"Опублікувати", recording:"ЗАПИС", connecting:"З'єднання..." },
-    en: { title:"⚖️ Courtroom Live Messenger 2009", user:"User", online:"Online", away:"Away", busy:"Busy", my_profile:"👤 My Profile", edit:"✏️ Edit", name:"Name:", phone:"Phone:", status:"Status:", bio:"Bio:", welcome:"Welcome to the messenger!", change_photo:"📷 Change Photo", save:"💾 Save", add_contact:"➕ Contact", add_group:"➕ Group", search:"Search contacts...", select_chat:"Select a chat...", select_chat_desc:"Select a contact or create a new one...", profile:"ℹ️ Profile", my_story:"My Story", role:"Role:", members:"Members:", type_message:"Type your message... (Enter - send)", add_contact_title:"Add New Contact", add_group_title:"Create Group Chat", group_name:"Group Name:", select_members:"Select Members:", cancel:"Cancel", create:"Create", settings:"⚙️ Settings", general:"General", account:"Account", privacy:"Privacy", notifications:"Notifications", chat_settings:"Chat Settings", devices:"Devices", advanced:"Advanced", language:"Language", language_desc:"Choose interface language", theme:"Theme", theme_desc:"Light or dark", theme_light:"Light", theme_dark:"Dark", sounds:"Sounds", sounds_desc:"Notification and click sounds", edit_profile_desc:"Change name, photo and bio", username:"Username", phone_visibility:"Who sees my phone", avatar_visibility:"Who sees my photo", everyone:"Everyone", contacts:"Contacts", nobody:"Nobody", messages:"Messages", messages_desc:"Who can message me first", desktop_notif:"Desktop Notifications", message_preview:"Show message text", chat_wallpaper:"Chat Wallpaper", standard:"Standard", text_size:"Text Size", active_sessions:"Active Sessions", data_usage:"Data Usage", data_usage_desc:"Auto-download settings", proxy:"Proxy Settings", proxy_desc:"Use proxy server", done:"Done", create_story:"Create Story", story_text:"Story Text:", story_photo:"Photo (optional):", choose_photo:"📷 Choose Photo", remove_photo:"✕ Remove Photo", publish:"Publish", recording:"REC", connecting:"Connecting..." }
+    ru: { title:"⚖️ Courtroom Live Messenger 2009", user:"Пользователь", online:"В сети", away:"Нет на месте", busy:"Занят", my_profile:"👤 Мой профиль", edit:"✏️ Изменить", name:"Имя:", phone:"Телефон:", status:"Статус:", bio:"О себе:", welcome:"Добро пожаловать в мессенджер!", change_photo:"📷 Сменить фото", save:"💾 Сохранить", add_contact:"➕ Контакт", add_group:"➕ Группа", search:"Поиск по контактам...", select_chat:"Выберите собеседника...", select_chat_desc:"Выберите контакт или создайте новый...", profile:"ℹ️ Профиль", my_story:"Моя история", role:"Роль:", members:"Участники:", type_message:"Введите вашу речь... (Enter - отправить)", add_contact_title:"Добавить новый контакт", add_group_title:"Создать групповой чат", group_name:"Название группы:", select_members:"Выберите участников:", cancel:"Отмена", create:"Создать", settings:"⚙️ Настройки", general:"Общие", account:"Аккаунт", privacy:"Приватность", notifications:"Уведомления", chat_settings:"Настройки чата", devices:"Устройства", advanced:"Продвинутые", language:"Язык", language_desc:"Выберите язык интерфейса", theme:"Тема оформления", theme_desc:"Светлая, темная или XP (для слабых ПК)", theme_light:"Светлая", theme_dark:"Темная", theme_xp:"Windows XP (для слабых ПК)", sounds:"Звуки", sounds_desc:"Звуки уведомлений и кликов", edit_profile_desc:"Изменить имя, фото и описание", username:"Имя пользователя", phone_visibility:"Кто видит номер", avatar_visibility:"Кто видит фото", everyone:"Все", contacts:"Контакты", nobody:"Никто", messages:"Сообщения", messages_desc:"Кто может писать первым", desktop_notif:"Уведомления на рабочем столе", message_preview:"Показывать текст сообщения", chat_wallpaper:"Фон чата", standard:"Стандартный", text_size:"Размер текста", active_sessions:"Активные сессии", data_usage:"Использование данных", data_usage_desc:"Настройки автоскачивания", proxy:"Настройки прокси", proxy_desc:"Использовать прокси-сервер", done:"Готово", create_story:"Создать историю", story_text:"Текст истории:", story_photo:"Фотография (необязательно):", choose_photo:"📷 Выбрать фото", remove_photo:"✕ Убрать фото", publish:"Опубликовать", recording:"ЗАПИСЬ", connecting:"Соединение..." },
+    uk: { title:"⚖️ Courtroom Live Messenger 2009", user:"Користувач", online:"В мережі", away:"Немає на місці", busy:"Зайнятий", my_profile:"👤 Мій профіль", edit:"✏️ Змінити", name:"Ім'я:", phone:"Телефон:", status:"Статус:", bio:"Про себе:", welcome:"Ласкаво просимо до месенджера!", change_photo:"📷 Змінити фото", save:"💾 Зберегти", add_contact:"➕ Контакт", add_group:"➕ Група", search:"Пошук по контактах...", select_chat:"Виберіть співрозмовника...", select_chat_desc:"Виберіть контакт або створіть новий...", profile:"ℹ️ Профіль", my_story:"Моя історія", role:"Роль:", members:"Учасники:", type_message:"Введіть вашу промову... (Enter - надіслати)", add_contact_title:"Додати новий контакт", add_group_title:"Створити груповий чат", group_name:"Назва групи:", select_members:"Виберіть учасників:", cancel:"Скасувати", create:"Створити", settings:"⚙️ Налаштування", general:"Загальні", account:"Акаунт", privacy:"Приватність", notifications:"Сповіщення", chat_settings:"Налаштування чату", devices:"Пристрої", advanced:"Розширені", language:"Мова", language_desc:"Виберіть мову інтерфейсу", theme:"Тема оформлення", theme_desc:"Світла, темна або XP (для слабких ПК)", theme_light:"Світла", theme_dark:"Темна", theme_xp:"Windows XP (для слабких ПК)", sounds:"Звуки", sounds_desc:"Звуки сповіщень та кліків", edit_profile_desc:"Змінити ім'я, фото та опис", username:"Ім'я користувача", phone_visibility:"Хто бачить номер", avatar_visibility:"Хто бачить фото", everyone:"Всі", contacts:"Контакти", nobody:"Ніхто", messages:"Повідомлення", messages_desc:"Хто може писати першим", desktop_notif:"Сповіщення на робочому столі", message_preview:"Показувати текст повідомлення", chat_wallpaper:"Фон чату", standard:"Стандартний", text_size:"Розмір тексту", active_sessions:"Активні сесії", data_usage:"Використання даних", data_usage_desc:"Налаштування автозавантаження", proxy:"Налаштування проксі", proxy_desc:"Використовувати проксі-сервер", done:"Готово", create_story:"Створити історію", story_text:"Текст історії:", story_photo:"Фотографія (необов'язково):", choose_photo:"📷 Вибрати фото", remove_photo:"✕ Прибрати фото", publish:"Опублікувати", recording:"ЗАПИС", connecting:"З'єднання..." },
+    en: { title:"⚖️ Courtroom Live Messenger 2009", user:"User", online:"Online", away:"Away", busy:"Busy", my_profile:"👤 My Profile", edit:"✏️ Edit", name:"Name:", phone:"Phone:", status:"Status:", bio:"Bio:", welcome:"Welcome to the messenger!", change_photo:"📷 Change Photo", save:"💾 Save", add_contact:"➕ Contact", add_group:"➕ Group", search:"Search contacts...", select_chat:"Select a chat...", select_chat_desc:"Select a contact or create a new one...", profile:"ℹ️ Profile", my_story:"My Story", role:"Role:", members:"Members:", type_message:"Type your message... (Enter - send)", add_contact_title:"Add New Contact", add_group_title:"Create Group Chat", group_name:"Group Name:", select_members:"Select Members:", cancel:"Cancel", create:"Create", settings:"⚙️ Settings", general:"General", account:"Account", privacy:"Privacy", notifications:"Notifications", chat_settings:"Chat Settings", devices:"Devices", advanced:"Advanced", language:"Language", language_desc:"Choose interface language", theme:"Theme", theme_desc:"Light, dark or XP (for low-end PCs)", theme_light:"Light", theme_dark:"Dark", theme_xp:"Windows XP (for low-end PCs)", sounds:"Sounds", sounds_desc:"Notification and click sounds", edit_profile_desc:"Change name, photo and bio", username:"Username", phone_visibility:"Who sees my phone", avatar_visibility:"Who sees my photo", everyone:"Everyone", contacts:"Contacts", nobody:"Nobody", messages:"Messages", messages_desc:"Who can message me first", desktop_notif:"Desktop Notifications", message_preview:"Show message text", chat_wallpaper:"Chat Wallpaper", standard:"Standard", text_size:"Text Size", active_sessions:"Active Sessions", data_usage:"Data Usage", data_usage_desc:"Auto-download settings", proxy:"Proxy Settings", proxy_desc:"Use proxy server", done:"Done", create_story:"Create Story", story_text:"Story Text:", story_photo:"Photo (optional):", choose_photo:"📷 Choose Photo", remove_photo:"✕ Remove Photo", publish:"Publish", recording:"REC", connecting:"Connecting..." }
   };
   let currentLang = 'ru';
 
@@ -1205,6 +1326,33 @@
     return translations[currentLang].online;
   }
 
+  // ===== БАЗА ДАННЫХ АККАУНТОВ =====
+  const DEFAULT_ACCOUNTS = {
+    'User1': { password: 'password', displayName: 'User1', type: 'password' },
+    'Admin': { password: 'admin', displayName: 'Admin', type: 'password' },
+    'Test':  { password: 'test',   displayName: 'Test User', type: 'password' }
+  };
+
+  function getUserDatabase() {
+    let stored = {};
+    try {
+      stored = JSON.parse(localStorage.getItem('courtroom_users_db') || '{}');
+    } catch(e) { stored = {}; }
+    return Object.assign({}, DEFAULT_ACCOUNTS, stored);
+  }
+
+  function saveUserToDatabase(username, password, displayName, type) {
+    try {
+      const stored = JSON.parse(localStorage.getItem('courtroom_users_db') || '{}');
+      stored[username] = {
+        password: password || '',
+        displayName: displayName || username,
+        type: type || 'password'
+      };
+      localStorage.setItem('courtroom_users_db', JSON.stringify(stored));
+    } catch(e) { console.warn('DB save failed', e); }
+  }
+
   const defaultAvatarUrl = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23005f8a'/><circle cx='50' cy='35' r='18' fill='%23fff'/><path d='M 15 80 C 15 50, 85 50, 85 80 Z' fill='%23fff'/></svg>";
   const defaultGroupAvatar = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><mask id='m'><rect width='100' height='100' fill='%23fff'/><circle cx='50' cy='35' r='22' fill='%23000'/><path d='M 20 85 C 20 55, 80 55, 80 85 V 100 H 20 Z' fill='%23000'/></mask></defs><g mask='url(%23m)'><circle cx='25' cy='35' r='20' fill='%2300a8ff'/><path d='M 0 80 C 0 55, 50 55, 50 80 V 100 H 0 Z' fill='%2300a8ff'/><circle cx='75' cy='35' r='20' fill='%2300a8ff'/><path d='M 50 80 C 50 55, 100 55, 100 80 V 100 H 50 Z' fill='%2300a8ff'/></g><circle cx='50' cy='35' r='22' fill='%2300a8ff'/><path d='M 20 85 C 20 55, 80 55, 80 85 V 100 H 20 Z' fill='%2300a8ff'/></svg>";
 
@@ -1224,7 +1372,9 @@
   function toggleSounds(v) { soundsEnabled = v; if (v) playClick(); }
   function changeTheme(theme) {
     document.body.className = '';
-    document.body.classList.add(theme === 'dark' ? 'theme-dark' : 'theme-light');
+    if (theme === 'dark') document.body.classList.add('theme-dark');
+    else if (theme === 'xp') document.body.classList.add('theme-xp');
+    else document.body.classList.add('theme-light');
     playClick();
   }
   function savePrivacySettings() {
@@ -1278,13 +1428,11 @@
   let cameraStream = null, cameraOn = false;
   let lastSentMsgId = null;
 
-  // Voice recording
   let voiceRecorder = null;
   let voiceChunks = [];
   let voiceTimerInterval = null;
   let voiceSeconds = 0;
 
-  // Context menu & actions state
   let contextTargetMsg = null;
   let replyToMsg = null;
   let isSelectMode = false;
@@ -1336,20 +1484,55 @@
     document.getElementById('reg-section-' + tab).classList.add('active');
   }
 
+  // ===== ВХОД С ВАЛИДАЦИЕЙ =====
   function doLogin() {
-    const username = document.getElementById('login-username').value.trim();
-    const password = document.getElementById('login-password').value;
+    const usernameInput = document.getElementById('login-username');
+    const passwordInput = document.getElementById('login-password');
     const errEl = document.getElementById('login-error');
 
-    if (!username || !password) {
-      errEl.textContent = !username ? 'Введите имя пользователя' : 'Введите пароль';
+    const username = usernameInput.value.trim();
+    const password = passwordInput.value;
+
+    // Сброс ошибок
+    usernameInput.classList.remove('input-error');
+    passwordInput.classList.remove('input-error');
+    errEl.classList.remove('show');
+
+    // Проверка пустых полей
+    let hasEmpty = false;
+    if (!username) { usernameInput.classList.add('input-error'); hasEmpty = true; }
+    if (!password) { passwordInput.classList.add('input-error'); hasEmpty = true; }
+
+    if (hasEmpty) {
+      errEl.textContent = '❌ Заполните все поля: логин и пароль';
       errEl.classList.add('show');
       return;
     }
+
+    // Проверка по базе
+    const db = getUserDatabase();
+    const account = db[username];
+
+    if (!account) {
+      usernameInput.classList.add('input-error');
+      errEl.textContent = '❌ Аккаунт «' + username + '» не найден в базе. Зарегистрируйтесь.';
+      errEl.classList.add('show');
+      return;
+    }
+
+    // Проверка пароля (для OAuth-аккаунтов пароль не проверяется)
+    if (account.type !== 'oauth' && account.password !== password) {
+      passwordInput.classList.add('input-error');
+      errEl.textContent = '❌ Неверный пароль';
+      errEl.classList.add('show');
+      return;
+    }
+
+    // Успех
     errEl.classList.remove('show');
     playClick();
 
-    myProfile.name = username;
+    myProfile.name = account.displayName || username;
     myProfile.status = selectedLoginStatus;
     document.getElementById('view-phone').textContent = myProfile.phone;
 
@@ -1402,6 +1585,9 @@
       myProfile.bio = data.bio || 'Привет! Я использую Courtroom Live Messenger.';
       myProfile.status = selectedLoginStatus;
 
+      // Сохраняем в локальную БД (OAuth-аккаунт)
+      saveUserToDatabase(username, '', myProfile.name, 'oauth');
+
       document.getElementById('login-overlay').classList.add('hidden');
       document.getElementById('main-window').classList.remove('hidden');
       isLoggedIn = true;
@@ -1449,6 +1635,9 @@
     myProfile.bio = 'Привет! Я использую Courtroom Live Messenger.';
     myProfile.status = selectedLoginStatus;
 
+    // Сохраняем в локальную БД (OAuth-аккаунт, логин = email)
+    saveUserToDatabase(email, '', myProfile.name, 'oauth');
+
     document.getElementById('login-overlay').classList.add('hidden');
     document.getElementById('main-window').classList.remove('hidden');
     isLoggedIn = true;
@@ -1484,6 +1673,10 @@
     const mw = document.getElementById('main-window');
     mw.classList.remove('maximized','minimized','hidden');
     mw.classList.add('hidden');
+    // Очистка ошибок
+    document.getElementById('login-username').classList.remove('input-error');
+    document.getElementById('login-password').classList.remove('input-error');
+    document.getElementById('login-error').classList.remove('show');
   }
 
   function renderAvatar(avatarStr) {
@@ -1718,40 +1911,24 @@
     }
   });
 
-  function triggerMediaUpload() {
-    closeAttachmentMenu();
-    playClick();
-    mediaInput.click();
-  }
-  function triggerDocUpload() {
-    closeAttachmentMenu();
-    playClick();
-    docInput.click();
-  }
+  function triggerMediaUpload() { closeAttachmentMenu(); playClick(); mediaInput.click(); }
+  function triggerDocUpload() { closeAttachmentMenu(); playClick(); docInput.click(); }
   mediaInput.addEventListener('change', function(e) {
     const file = e.target.files[0]; if (!file) return;
-    if (file.size > 5 * 1024 * 1024) {
-      alert('Файл слишком большой. Максимум 5 МБ.'); this.value = ''; return;
-    }
+    if (file.size > 5 * 1024 * 1024) { alert('Файл слишком большой. Максимум 5 МБ.'); this.value = ''; return; }
     const reader = new FileReader();
     reader.onload = ev => {
       const type = file.type.startsWith('image') ? 'image' : 'video';
       sendMedia(type, ev.target.result);
     };
-    reader.readAsDataURL(file);
-    this.value = '';
+    reader.readAsDataURL(file); this.value = '';
   });
   docInput.addEventListener('change', function(e) {
     const file = e.target.files[0]; if (!file) return;
-    if (file.size > 10 * 1024 * 1024) {
-      alert('Файл слишком большой. Максимум 10 МБ.'); this.value = ''; return;
-    }
+    if (file.size > 10 * 1024 * 1024) { alert('Файл слишком большой. Максимум 10 МБ.'); this.value = ''; return; }
     const reader = new FileReader();
-    reader.onload = ev => {
-      sendMedia('file', ev.target.result, file.name);
-    };
-    reader.readAsDataURL(file);
-    this.value = '';
+    reader.onload = ev => { sendMedia('file', ev.target.result, file.name); };
+    reader.readAsDataURL(file); this.value = '';
   });
 
   function sendMedia(type, dataUrl, filename) {
@@ -1769,15 +1946,12 @@
     renderChat();
   }
 
-  /* ===== POLLS ===== */
   function openPollModal() {
-    closeAttachmentMenu();
-    playClick();
+    closeAttachmentMenu(); playClick();
     document.getElementById('poll-question').value = '';
     const container = document.getElementById('poll-options-container');
     container.innerHTML = '';
-    addPollOptionField();
-    addPollOptionField();
+    addPollOptionField(); addPollOptionField();
     document.getElementById('modal-create-poll').classList.add('active');
   }
 
@@ -1785,13 +1959,9 @@
     playClick();
     const container = document.getElementById('poll-options-container');
     const count = container.querySelectorAll('.poll-option-input').length + 1;
-    
     const row = document.createElement('div');
     row.className = 'poll-option-row';
-    row.innerHTML = `
-      <input type="text" class="poll-option-input" placeholder="Вариант ${count}">
-      <button class="poll-remove-btn" onclick="this.parentElement.remove()">✕</button>
-    `;
+    row.innerHTML = `<input type="text" class="poll-option-input" placeholder="Вариант ${count}"><button class="poll-remove-btn" onclick="this.parentElement.remove()">✕</button>`;
     container.appendChild(row);
     row.querySelector('input').focus();
   }
@@ -1799,30 +1969,14 @@
   function createPoll() {
     const question = document.getElementById('poll-question').value.trim();
     if (!question) { alert('Введите вопрос!'); return; }
-
     const inputs = document.querySelectorAll('.poll-option-input');
     const options = [];
-    inputs.forEach(inp => {
-      const val = inp.value.trim();
-      if (val) options.push({ text: val, votes: 0 });
-    });
-
+    inputs.forEach(inp => { const val = inp.value.trim(); if (val) options.push({ text: val, votes: 0 }); });
     if (options.length < 2) { alert('Нужно минимум 2 варианта ответа!'); return; }
     if (!activeId) { alert('Выберите контакт!'); return; }
-
     playClick();
     if (!threads[activeId]) threads[activeId] = [];
-    const msgObj = {
-      who: 'me',
-      text: '',
-      time: getNowTime(),
-      id: Date.now(),
-      type: 'poll',
-      question: question,
-      options: options,
-      voted: false,
-      myVote: null
-    };
+    const msgObj = { who: 'me', text: '', time: getNowTime(), id: Date.now(), type: 'poll', question: question, options: options, voted: false, myVote: null };
     if (replyToMsg) {
       msgObj.replyTo = { name: replyToMsg.author || contacts.find(x=>x.id===activeId).name, text: replyToMsg.text || 'Опрос' };
       cancelReply();
@@ -1839,32 +1993,23 @@
     if (!thread) return;
     const msg = thread.find(m => m.id === msgId);
     if (!msg) return;
-
     playClick();
-    // Если уже голосовал, убираем старый голос
-    if (msg.voted && msg.myVote !== null) {
-      msg.options[msg.myVote].votes--;
-    }
-    // Добавляем новый голос
+    if (msg.voted && msg.myVote !== null) { msg.options[msg.myVote].votes--; }
     msg.options[optionIndex].votes++;
     msg.voted = true;
     msg.myVote = optionIndex;
     renderChat();
   }
 
-  /* ===== КОНТЕКСТНОЕ МЕНЮ И ДЕЙСТВИЯ ===== */
-  messagesEl.addEventListener('contextmenu', (e) => {
-    e.preventDefault();
+  messagesEl.addEventListener('dblclick', (e) => {
     const msgEl = e.target.closest('.msg');
     if (!msgEl) return;
-    
-    // Находим сообщение по ID
+    window.getSelection().removeAllRanges();
     const msgId = parseInt(msgEl.dataset.id);
     const c = contacts.find(x => x.id === activeId);
     if (!c) return;
     contextTargetMsg = threads[activeId].find(m => m.id === msgId);
     if (!contextTargetMsg) return;
-
     contextMenu.style.left = e.pageX + 'px';
     contextMenu.style.top = e.pageY + 'px';
     contextMenu.classList.add('active');
@@ -1897,12 +2042,7 @@
     list.innerHTML = '';
     contacts.forEach(c => {
       const div = document.createElement('div');
-      div.style.padding = '10px';
-      div.style.cursor = 'pointer';
-      div.style.borderBottom = '1px solid var(--border-dark)';
-      div.style.display = 'flex';
-      div.style.alignItems = 'center';
-      div.style.gap = '10px';
+      div.style.cssText = 'padding:10px;cursor:pointer;border-bottom:1px solid var(--border-dark);display:flex;align-items:center;gap:10px;';
       div.innerHTML = `<div class="contact-avatar-container">${renderAvatar(c.avatar)}</div><div style="font-weight:bold;">${c.name}</div>`;
       div.onclick = () => forwardTo(c.id);
       list.appendChild(div);
@@ -1931,6 +2071,7 @@
     selectedMsgs.clear();
     selectedMsgs.add(contextTargetMsg.id);
     document.getElementById('selectToolbar').classList.add('active');
+    document.getElementById('selectedCount').textContent = `Выбрано: ${selectedMsgs.size}`;
     contextMenu.classList.remove('active');
     renderChat();
   }
@@ -1966,12 +2107,7 @@
     list.innerHTML = '';
     contacts.forEach(c => {
       const div = document.createElement('div');
-      div.style.padding = '10px';
-      div.style.cursor = 'pointer';
-      div.style.borderBottom = '1px solid var(--border-dark)';
-      div.style.display = 'flex';
-      div.style.alignItems = 'center';
-      div.style.gap = '10px';
+      div.style.cssText = 'padding:10px;cursor:pointer;border-bottom:1px solid var(--border-dark);display:flex;align-items:center;gap:10px;';
       div.innerHTML = `<div class="contact-avatar-container">${renderAvatar(c.avatar)}</div><div style="font-weight:bold;">${c.name}</div>`;
       div.onclick = () => {
         if (!threads[c.id]) threads[c.id] = [];
@@ -1996,7 +2132,6 @@
   function actionDelete() {
     if (!contextTargetMsg) return;
     playClick();
-    // Проверка прав: можно удалять свои сообщения, или если ты админ группы
     const c = contacts.find(x => x.id === activeId);
     const isAdmin = c.isGroup && c.admin === myProfile.name;
     if (contextTargetMsg.who !== 'me' && !isAdmin) {
@@ -2011,14 +2146,13 @@
     contextMenu.classList.remove('active');
   }
 
-  /* ===== ГРУППЫ И АДМИНЫ ===== */
   function promoteMember(groupId, memberName) {
     playClick();
     const g = contacts.find(x => x.id === groupId);
     if (!g) return;
     g.admin = memberName;
     alert(`${memberName} теперь администратор группы.`);
-    toggleContactProfile({ stopPropagation: () => {} }); // Обновляем профиль
+    toggleContactProfile({ stopPropagation: () => {} });
   }
 
   function kickMember(groupId, memberName) {
@@ -2031,7 +2165,6 @@
     toggleContactProfile({ stopPropagation: () => {} });
   }
 
-  /* ===== ОТПРАВКА ТЕКСТА ===== */
   inputEl.addEventListener('keydown', e => { if (e.key.length === 1 && !e.ctrlKey && !e.altKey && !e.metaKey) playTypeSound(); });
   function renderContacts() {
     contactListEl.innerHTML = '';
@@ -2088,28 +2221,16 @@
     viewContactProfileBtn.style.display = 'flex';
     if (callBtn) callBtn.style.display = 'flex';
     messagesEl.innerHTML = '';
-    
     if (threads[activeId]) threads[activeId].forEach(m => {
       const div = document.createElement('div');
       div.className = `msg ${m.who === 'me' ? 'msg-me' : 'msg-them'}`;
       div.dataset.id = m.id;
       if (isSelectMode && selectedMsgs.has(m.id)) div.classList.add('selected');
-      
-      if (m.id === lastSentMsgId) {
-        div.classList.add('msg-new');
-        lastSentMsgId = null;
-      }
-      
+      if (m.id === lastSentMsgId) { div.classList.add('msg-new'); lastSentMsgId = null; }
       const an = m.who === 'me' ? myProfile.name : (m.author || c.name);
       let bubbleContent = '';
-      
-      if (m.forwardedFrom) {
-        bubbleContent += `<div style="font-size:10px; color:#888; margin-bottom:4px;">Переслано от ${m.forwardedFrom}</div>`;
-      }
-      if (m.replyTo) {
-        bubbleContent += `<div class="reply-quote"><b>${m.replyTo.name}</b>${m.replyTo.text}</div>`;
-      }
-
+      if (m.forwardedFrom) bubbleContent += `<div style="font-size:10px; color:#888; margin-bottom:4px;">Переслано от ${m.forwardedFrom}</div>`;
+      if (m.replyTo) bubbleContent += `<div class="reply-quote"><b>${m.replyTo.name}</b>${m.replyTo.text}</div>`;
       if (m.type === 'image') bubbleContent += `<img src="${m.media}" alt="image">`;
       else if (m.type === 'video') bubbleContent += `<video src="${m.media}" controls></video>`;
       else if (m.type === 'audio') bubbleContent += `<audio src="${m.media}" controls></audio>`;
@@ -2119,35 +2240,19 @@
           const totalVotes = m.options.reduce((a, b) => a + b.votes, 0);
           const percent = totalVotes === 0 ? 0 : Math.round((opt.votes / totalVotes) * 100);
           if (m.voted) {
-            return `<div class="poll-option-result ${m.myVote === idx ? 'voted' : ''}" onclick="votePoll(${m.id}, ${idx})">
-                      <div class="poll-option-bar" style="width: ${percent}%"></div>
-                      <div class="poll-option-text">${opt.text}</div>
-                      <div class="poll-option-percent">${percent}%</div>
-                    </div>`;
-          } else {
-            return `<div class="poll-option-btn" onclick="votePoll(${m.id}, ${idx})">${opt.text}</div>`;
+            return `<div class="poll-option-result ${m.myVote === idx ? 'voted' : ''}" onclick="votePoll(${m.id}, ${idx})"><div class="poll-option-bar" style="width: ${percent}%"></div><div class="poll-option-text">${opt.text}</div><div class="poll-option-percent">${percent}%</div></div>`;
           }
+          return `<div class="poll-option-btn" onclick="votePoll(${m.id}, ${idx})">${opt.text}</div>`;
         }).join('');
-        
-        bubbleContent += `<div class="poll-container">
-                            <div class="poll-question">${m.question}</div>
-                            <div class="poll-options">${optionsHtml}</div>
-                            <div class="poll-footer">${m.voted ? 'Нажмите, чтобы изменить голос' : 'Нажмите, чтобы проголосовать'}</div>
-                          </div>`;
+        bubbleContent += `<div class="poll-container"><div class="poll-question">${m.question}</div><div class="poll-options">${optionsHtml}</div><div class="poll-footer">${m.voted ? 'Нажмите, чтобы изменить голос' : 'Нажмите, чтобы проголосовать'}</div></div>`;
       }
       else bubbleContent += m.text;
-      
-      // Чекбокс для выделения
       div.innerHTML = `<div class="msg-checkbox"></div><div class="msg-meta">${an} • ${m.time}</div><div class="msg-bubble">${bubbleContent}</div>`;
-      
       if (isSelectMode) {
         div.onclick = (e) => {
-          if (e.target.tagName !== 'AUDIO' && e.target.tagName !== 'VIDEO') {
-            toggleSelectMsg(m.id);
-          }
+          if (e.target.tagName !== 'AUDIO' && e.target.tagName !== 'VIDEO') toggleSelectMsg(m.id);
         };
       }
-      
       messagesEl.appendChild(div);
     });
     messagesEl.scrollTop = messagesEl.scrollHeight;
@@ -2332,28 +2437,22 @@
     document.getElementById('contact-popup-title').innerHTML = `👤 ${c.name} <button class="edit-btn" onclick="toggleEditProfile(event, 'contact')">${translations[currentLang].edit}</button>`;
     document.getElementById('contact-view-mode').style.display = 'block';
     document.getElementById('contact-edit-mode').style.display = 'none';
-    
     if (c.isGroup) {
       document.getElementById('cp-phone').parentElement.style.display = 'none';
       document.getElementById('cp-role').textContent = 'Group Chat';
       document.getElementById('cp-status').parentElement.style.display = 'none';
       document.getElementById('cp-bio-container').style.display = 'none';
       document.getElementById('cp-members-container').style.display = 'block';
-      
       const listEl = document.getElementById('cp-members-list');
       listEl.innerHTML = '';
-      
       c.members.forEach(memberName => {
         if (!memberName) return;
         const isAdmin = c.admin === memberName;
         const amIAdmin = c.admin === myProfile.name;
-        
         let actionsHtml = '';
         if (amIAdmin && !isAdmin && memberName !== myProfile.name) {
-          actionsHtml = `<button onclick="promoteMember('${c.id}', '${memberName}')">👑</button>
-                         <button onclick="kickMember('${c.id}', '${memberName}')" style="color:red;">✕</button>`;
+          actionsHtml = `<button onclick="promoteMember('${c.id}', '${memberName}')">👑</button><button onclick="kickMember('${c.id}', '${memberName}')" style="color:red;">✕</button>`;
         }
-        
         const row = document.createElement('div');
         row.className = 'member-row';
         row.innerHTML = `<span>${memberName} ${isAdmin ? '👑' : ''}</span> <div class="actions">${actionsHtml}</div>`;
@@ -2413,22 +2512,9 @@
     const cbs = document.querySelectorAll('#group-members-list input[type="checkbox"]:checked');
     const members = Array.from(cbs).map(cb => cb.value);
     if (members.length === 0) { alert('Select at least one member!'); return; }
-    
     const nid = 'group_' + Date.now();
-    members.push(myProfile.name); // Добавляем себя
-    
-    // Создатель - админ
-    contacts.push({ 
-      id: nid, 
-      name, 
-      avatar: defaultGroupAvatar, 
-      isGroup: true, 
-      members: members, 
-      admin: myProfile.name,
-      status: 'online', 
-      phone: 'Group Chat' 
-    });
-    
+    members.push(myProfile.name);
+    contacts.push({ id: nid, name, avatar: defaultGroupAvatar, isGroup: true, members: members, admin: myProfile.name, status: 'online', phone: 'Group Chat' });
     threads[nid] = [{ who:'them', text:`Группа "${name}" создана.`, time:getNowTime(), author:'System' }];
     playClick(); closeModal('modal-add-group'); activeId = nid;
     renderContacts(); renderChat();
@@ -2440,6 +2526,7 @@
   function closeWindow() { playClick(); document.getElementById('main-window').classList.add('hidden'); }
 
   (function init() {
+    // Подставляем сохранённый логин
     try {
       const saved = localStorage.getItem('courtroom_remembered_user');
       if (saved) {
@@ -2447,6 +2534,27 @@
         document.getElementById('login-remember').checked = true;
       }
     } catch(e) {}
+
+    // Очистка красной подсветки при вводе
+    ['login-username', 'login-password'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.addEventListener('input', function() {
+          this.classList.remove('input-error');
+          const err = document.getElementById('login-error');
+          if (err) err.classList.remove('show');
+        });
+        el.addEventListener('focus', function() { this.classList.remove('input-error'); });
+      }
+    });
+
+    // Enter в поле логина/пароля = попытка входа
+    ['login-username', 'login-password'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('keydown', e => {
+        if (e.key === 'Enter') { e.preventDefault(); doLogin(); }
+      });
+    });
 
     document.getElementById('display-my-name').textContent = myProfile.name;
     document.getElementById('view-name').textContent = myProfile.name;
