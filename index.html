@@ -21,6 +21,7 @@
     --popup-bg: rgba(255,255,255,.95); --btn-bg: rgba(255,255,255,.2);
     --btn-hover: rgba(255,255,255,.6); --story-ring: #4a90e2;
     --tg-accent: #3390ec; --tg-bg: #fff; --tg-hover: #f1f1f1; --tg-border: #e6e6e6;
+    --chat-wallpaper: radial-gradient(rgba(0,0,0,.08) 1px, transparent 1px);
   }
   body.theme-dark {
     --bg-body: radial-gradient(circle at 50% 30%,#1a1a1a 0%,#0a0a0a 100%);
@@ -35,6 +36,7 @@
     --popup-bg: rgba(40,40,40,.98); --btn-bg: rgba(255,255,255,.1);
     --btn-hover: rgba(255,255,255,.3); --story-ring: #64b5f6;
     --tg-accent: #64b5f6; --tg-bg: #212121; --tg-hover: #2c2c2c; --tg-border: #333;
+    --chat-wallpaper: radial-gradient(rgba(255,255,255,.06) 1px, transparent 1px);
   }
   body {
     margin: 0; min-height: 100vh; background: var(--bg-body); background-attachment: fixed;
@@ -42,7 +44,7 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 13px;
     color: var(--text-main); padding: 20px; overflow: hidden; transition: background .3s;
   }
-  #hidden-file-input, #story-file-input { display: none; }
+  #hidden-file-input, #story-file-input, #media-input, #doc-input { display: none; }
   .aero-window {
     width: min(1000px,100%); height: min(700px,90vh); background: var(--bg-window);
     backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
@@ -199,25 +201,205 @@
   .story-name { font-size: 10px; color: var(--text-main); text-overflow: ellipsis; overflow: hidden; max-width: 100%; text-align: center; }
   .my-story .story-avatar { border-color: #4cd964; background: var(--bg-messages); }
   .my-story .story-avatar::after { content: '+'; position: absolute; bottom: -2px; right: -2px; background: #4cd964; color: #fff; width: 16px; height: 16px; border-radius: 50%; font-size: 14px; line-height: 14px; text-align: center; border: 2px solid var(--bg-sidebar); }
-  .messages { flex: 1; overflow-y: auto; padding: 15px; background: var(--bg-messages); background-image: radial-gradient(var(--border-dark) 1px, transparent 1px); background-size: 20px 20px; display: flex; flex-direction: column; gap: 12px; }
+  .messages { flex: 1; overflow-y: auto; padding: 15px; background: var(--bg-messages); background-image: var(--chat-wallpaper); background-size: 20px 20px; display: flex; flex-direction: column; gap: 12px; }
   .msg { display: flex; flex-direction: column; max-width: 80%; }
   .msg-them { align-self: flex-start; } .msg-me { align-self: flex-end; align-items: flex-end; }
   .msg-meta { font-size: 11px; color: var(--text-muted); margin-bottom: 4px; padding: 0 4px; font-weight: 600; }
   .msg-bubble { padding: 8px 14px; border-radius: 8px; font-size: 13px; line-height: 1.4; word-wrap: break-word; box-shadow: 0 2px 5px rgba(0,0,0,.1); }
   .msg-them .msg-bubble { background: var(--msg-them-bg); border: 1px solid var(--border-dark); color: var(--msg-them-text); border-bottom-left-radius: 0; }
   .msg-me .msg-bubble { background: var(--msg-me-bg); border: 1px solid var(--border-dark); color: var(--msg-me-text); border-bottom-right-radius: 0; }
-  .input-area { padding: 10px; background: var(--bg-input); border-top: 1px solid var(--border-dark); border-radius: 0 0 6px 6px; display: flex; flex-direction: column; gap: 8px; flex-shrink: 0; }
-  .toolbar { display: flex; gap: 5px; align-items: center; }
-  .toolbar button.objection-btn { flex: 1; background: rgba(255,50,50,.4); border: 1px solid rgba(255,100,100,.8); border-radius: 4px; padding: 6px 10px; cursor: pointer; font-size: 13px; font-family: inherit; color: #ffcccc; font-weight: bold; box-shadow: 0 1px 3px rgba(0,0,0,.1); transition: all .2s; display: flex; align-items: center; justify-content: center; gap: 5px; }
-  .toolbar button.objection-btn:hover { background: rgba(255,50,50,.7); color: #fff; }
-  .input-row { display: flex; gap: 8px; align-items: stretch; }
-  .input-row textarea { flex: 1; height: 58px; resize: none; border: 1px solid var(--border-dark); border-radius: 4px; padding: 8px; font-family: inherit; font-size: 13px; outline: none; box-shadow: inset 0 1px 3px rgba(0,0,0,.05); background: var(--bg-sidebar); color: var(--text-main); }
+  
+  .msg-bubble img, .msg-bubble video { max-width: 100%; max-height: 240px; border-radius: 6px; display: block; }
+  .msg-bubble audio { width: 100%; max-width: 260px; margin-top: 4px; }
+  .file-attachment {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 8px 12px; background: rgba(255,255,255,.5);
+    border-radius: 6px; color: #004080; text-decoration: none;
+    font-size: 12px; font-weight: 600; border: 1px solid rgba(0,0,0,.1);
+  }
+  .msg-me .file-attachment { background: rgba(255,255,255,.7); }
+  .file-attachment:hover { background: #fff; }
+
+  /* ===== POLL STYLES ===== */
+  .poll-container {
+    background: var(--bg-messages);
+    border: 1px solid var(--border-dark);
+    border-radius: 8px;
+    padding: 12px;
+    min-width: 260px;
+    max-width: 320px;
+    color: var(--text-main);
+    box-shadow: 0 2px 6px rgba(0,0,0,.08);
+  }
+  .msg-me .poll-container { background: #fff; }
+  .poll-question {
+    font-weight: 700;
+    font-size: 14px;
+    margin-bottom: 10px;
+    line-height: 1.3;
+  }
+  .poll-options { display: flex; flex-direction: column; gap: 6px; }
+  .poll-option-btn {
+    background: var(--bg-sidebar);
+    border: 1px solid var(--border-light);
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all .2s;
+    text-align: left;
+  }
+  .poll-option-btn:hover { background: var(--btn-hover); }
+  
+  .poll-option-result {
+    position: relative;
+    background: var(--bg-sidebar);
+    border: 1px solid var(--border-light);
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 13px;
+    overflow: hidden;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #555;
+  }
+  .poll-option-result.voted {
+    border-color: #4a90e2;
+    color: #004080;
+    font-weight: 600;
+  }
+  .poll-option-result.voted::before { content: '✓ '; color: #4a90e2; }
+  .poll-option-bar {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    background: rgba(74,144,226,.15);
+    z-index: 0;
+    transition: width 0.4s ease;
+  }
+  .poll-option-result.voted .poll-option-bar { background: rgba(74,144,226,.25); }
+  .poll-option-text { position: relative; z-index: 1; }
+  .poll-option-percent { position: relative; z-index: 1; font-weight: 700; font-size: 12px; }
+  .poll-footer {
+    margin-top: 10px;
+    font-size: 11px;
+    color: var(--text-muted);
+    text-align: center;
+  }
+
+  .input-area { padding: 10px; background: var(--bg-input); border-top: 1px solid var(--border-dark); border-radius: 0 0 6px 6px; display: flex; flex-direction: column; gap: 8px; flex-shrink: 0; position: relative; }
+  
+  .recording-banner {
+    display: none;
+    padding: 8px 12px;
+    background: linear-gradient(180deg, #ff4444, #cc0000);
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(255,50,50,.3);
+    margin-bottom: 8px;
+  }
+  .recording-banner.active { display: flex; animation: recordPulse 1.5s infinite; }
+  @keyframes recordPulse {
+    0%, 100% { box-shadow: 0 2px 8px rgba(255,50,50,.3); }
+    50% { box-shadow: 0 2px 16px rgba(255,50,50,.6); }
+  }
+  .recording-banner .rec-dot {
+    display: inline-block; width: 10px; height: 10px;
+    border-radius: 50%; background: #fff;
+    animation: blink 1s infinite; margin-right: 8px;
+  }
+  @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: .3; } }
+
+  .input-row { display: flex; gap: 6px; align-items: center; }
+  .input-row textarea {
+    flex: 1; height: 58px; resize: none;
+    border: 1px solid var(--border-dark); border-radius: 4px;
+    padding: 8px; font-family: inherit; font-size: 13px; outline: none;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,.05);
+    background: var(--bg-sidebar); color: var(--text-main);
+  }
   .input-row textarea:focus { border-color: #4a90e2; background: var(--bg-messages); box-shadow: 0 0 8px rgba(74,144,226,.3); }
-  .gavel-btn { width: 78px; height: 58px; background: transparent; border: none; cursor: pointer; transition: all .1s; display: flex; align-items: center; justify-content: center; padding: 0; flex-shrink: 0; position: relative; outline: none; }
-  .gavel-btn svg { width: 64px; height: 64px; filter: drop-shadow(0 4px 6px rgba(0,0,0,.4)); transform-origin: 50% 80%; transition: transform .15s; }
+  
+  .gavel-btn { width: 58px; height: 58px; background: transparent; border: none; cursor: pointer; transition: all .1s; display: flex; align-items: center; justify-content: center; padding: 0; flex-shrink: 0; position: relative; outline: none; }
+  .gavel-btn svg { width: 48px; height: 48px; filter: drop-shadow(0 4px 6px rgba(0,0,0,.4)); transform-origin: 50% 80%; transition: transform .15s; }
   .gavel-btn:hover svg { transform: scale(1.05) rotate(-5deg); } .gavel-btn:active svg { transform: scale(.95) rotate(0deg); }
-  .gavel-btn svg.hitting { animation: gavelSwing .45s ease-out; }
-  @keyframes gavelSwing { 0% { transform: rotate(0deg); } 35% { transform: rotate(-35deg); } 65% { transform: rotate(10deg); } 100% { transform: rotate(0deg); } }
+  
+  .tool-btn {
+    background: var(--btn-bg);
+    border: 1px solid var(--border-light);
+    border-radius: 6px;
+    width: 46px; height: 58px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all .2s;
+    flex-shrink: 0;
+    padding: 0;
+  }
+  .tool-btn:hover { background: var(--btn-hover); transform: scale(1.05); }
+  .tool-btn svg { width: 24px; height: 24px; }
+  
+  .tool-btn.recording { background: #ffcccc; animation: pulse-red 1s infinite; }
+  @keyframes pulse-red { 0% { box-shadow: 0 0 0 0 rgba(255,0,0,0.4); } 70% { box-shadow: 0 0 0 10px rgba(255,0,0,0); } 100% { box-shadow: 0 0 0 0 rgba(255,0,0,0); } }
+
+  #gavel { transform-origin: 55px 45px; transform: rotate(-35deg); }
+  #gavel.hitting { animation: gavelSwing 0.45s ease-out; }
+  @keyframes gavelSwing {
+    0% { transform: rotate(-35deg); } 30% { transform: rotate(-5deg); }
+    50% { transform: rotate(-25deg); } 70% { transform: rotate(-15deg); }
+    100% { transform: rotate(-35deg); }
+  }
+  #board { transform-origin: center; }
+  #board.hit { animation: boardShake 0.3s ease-out; }
+  @keyframes boardShake {
+    0% { transform: translate(0, 0); } 20% { transform: translate(2px, -1px); }
+    40% { transform: translate(-2px, 1px); } 60% { transform: translate(1px, -1px); }
+    80% { transform: translate(-1px, 1px); } 100% { transform: translate(0, 0); }
+  }
+  @keyframes msgPop { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+  .msg-new { animation: msgPop 0.3s ease-out; }
+
+  .attachment-menu {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    right: 80px;
+    background: var(--bg-messages);
+    border: 1px solid var(--border-dark);
+    border-radius: 10px;
+    box-shadow: 0 8px 25px rgba(0,0,0,.25);
+    padding: 6px;
+    z-index: 150;
+    display: none;
+    flex-direction: column;
+    min-width: 220px;
+    animation: menuSlideUp 0.18s ease-out;
+  }
+  .attachment-menu.active { display: flex; }
+  .attachment-menu-item {
+    padding: 10px 14px;
+    cursor: pointer;
+    border-radius: 6px;
+    font-size: 13px;
+    display: flex; align-items: center; gap: 12px;
+    color: var(--text-main);
+    transition: background .15s;
+  }
+  .attachment-menu-item:hover { background: var(--tg-hover); }
+  .attachment-menu-item .icon {
+    font-size: 18px; width: 22px; text-align: center;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .attachment-menu-item .icon svg {
+    width: 20px; height: 20px; stroke: currentColor; stroke-width: 2.5; fill: none;
+  }
+  @keyframes menuSlideUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
   .modal-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,.5); backdrop-filter: blur(5px); z-index: 200; display: none; align-items: center; justify-content: center; }
   .modal-overlay.active { display: flex; }
   .modal-window { background: var(--bg-chat); backdrop-filter: blur(25px); border: 1px solid var(--border-light); border-radius: 8px; width: 380px; box-shadow: 0 25px 50px rgba(0,0,0,.6), inset 0 0 0 1px var(--border-light); overflow: hidden; color: var(--text-main); display: flex; flex-direction: column; }
@@ -255,15 +437,10 @@
   .modal-footer button.primary:hover { filter: brightness(1.1); }
   .modal-body { padding: 15px; display: flex; flex-direction: column; gap: 12px; }
   .modal-body label { font-size: 12px; font-weight: bold; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
-  .modal-body input[type="text"] { width: 100%; padding: 6px; border: 1px solid var(--border-dark); border-radius: 4px; font-family: inherit; font-size: 12px; background: var(--bg-messages); color: var(--text-main); }
+  .modal-body input[type="text"], .modal-body input[type="email"] { width: 100%; padding: 6px; border: 1px solid var(--border-dark); border-radius: 4px; font-family: inherit; font-size: 12px; background: var(--bg-messages); color: var(--text-main); }
   .checkbox-list { max-height: 120px; overflow-y: auto; border: 1px solid var(--border-dark); border-radius: 4px; padding: 5px; background: var(--bg-messages); }
   .checkbox-list label { display: flex; align-items: center; gap: 6px; font-weight: normal; padding: 3px; cursor: pointer; }
-  .objection-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,0,0,.2); backdrop-filter: blur(3px); display: flex; align-items: center; justify-content: center; pointer-events: none; opacity: 0; z-index: 999; }
-  .objection-overlay.active { animation: flashAero .6s forwards; }
-  .objection-text { font-family: 'Impact','Arial Black',sans-serif; font-size: 100px; color: #ff0000; -webkit-text-stroke: 3px #fff; text-shadow: 0 0 20px rgba(255,0,0,.8), 5px 5px 0 rgba(0,0,0,.8); transform: rotate(-10deg) scale(.5); opacity: 0; text-align: center; line-height: 1; }
-  .objection-overlay.active .objection-text { animation: popAero .6s forwards; }
-  @keyframes flashAero { 0% { opacity: 1; background: rgba(255,255,255,.8); } 50% { opacity: 1; background: rgba(255,0,0,.4); } 100% { opacity: 0; } }
-  @keyframes popAero { 0% { transform: rotate(-10deg) scale(.5); opacity: 0; } 20% { transform: rotate(-10deg) scale(1.2); opacity: 1; } 80% { transform: rotate(-10deg) scale(1); opacity: 1; } 100% { transform: rotate(-10deg) scale(.8); opacity: 0; } }
+
   .call-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(180deg,#4a7cb1 0%,#a7a6b5 50%,#e3d1cd 100%); z-index: 500; display: none; flex-direction: column; opacity: 0; transition: opacity .3s; font-family: 'Segoe UI', Tahoma, sans-serif; }
   .call-overlay.active { display: flex; opacity: 1; }
   .call-top-bar { display: flex; justify-content: space-between; align-items: flex-start; padding: 20px 30px; color: #fff; }
@@ -289,7 +466,7 @@
   .record-indicator { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); background: rgba(255,0,0,.8); color: #fff; padding: 5px 15px; border-radius: 20px; font-size: 12px; font-weight: bold; display: none; align-items: center; gap: 8px; }
   .record-indicator.active { display: flex; }
   .record-dot { width: 10px; height: 10px; background: #fff; border-radius: 50%; animation: blink 1s infinite; }
-  @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: .3; } }
+
   .story-viewer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 600; display: none; flex-direction: column; align-items: center; justify-content: center; }
   .story-viewer.active { display: flex; }
   .story-viewer-content { width: 300px; height: 500px; background: #333; border-radius: 12px; display: flex; align-items: center; justify-content: center; padding: 20px; color: #fff; font-size: 20px; text-align: center; box-shadow: 0 0 50px rgba(255,255,255,.1); position: relative; overflow: hidden; flex-direction: column; gap: 12px; }
@@ -302,130 +479,186 @@
   ::-webkit-scrollbar-thumb { background: rgba(150,150,150,.5); border-radius: 6px; border: 2px solid transparent; background-clip: padding-box; }
   ::-webkit-scrollbar-thumb:hover { background: rgba(100,100,100,.7); background-clip: padding-box; border: 2px solid transparent; }
 
-  /* ===== SKYPE LOGIN 2009 ===== */
-  .skype-login-overlay {
+  /* ===== LOGIN ===== */
+  .login-overlay {
     position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
     background: linear-gradient(180deg,#d9eefc 0%,#b5dcf5 25%,#7fc1ea 60%,#4a9bd1 100%);
     display: flex; align-items: center; justify-content: center;
     z-index: 10000; font-family: 'Segoe UI', Tahoma, sans-serif;
   }
-  .skype-login-overlay.hidden { display: none; }
-  .skype-login-box {
+  .login-overlay.hidden { display: none; }
+  .login-box {
     width: 380px; background: #fff; border-radius: 10px;
     box-shadow: 0 15px 50px rgba(0,40,80,.4), 0 0 0 1px rgba(0,0,0,.08);
     overflow: hidden;
   }
-  .skype-login-header {
+  .login-header {
     background: linear-gradient(180deg,#f0f9ff 0%,#d9eefc 100%);
     padding: 22px 20px 18px; text-align: center;
     border-bottom: 1px solid #b8d8ec;
   }
-  .skype-logo {
+  .logo {
     font-size: 40px; font-weight: 700; color: #00aff0;
     letter-spacing: -1.5px; line-height: 1;
     text-shadow: 0 1px 2px rgba(0,0,0,.08);
     display: inline-flex; align-items: center; gap: 8px;
   }
-  .skype-logo-icon { font-size: 34px; }
-  .skype-logo sup { font-size: 11px; vertical-align: super; font-weight: 400; }
-  .skype-tagline { font-size: 11px; color: #6a8899; margin-top: 6px; }
-  .skype-login-body { padding: 20px 26px 24px; }
-  .skype-form-group { margin-bottom: 12px; }
-  .skype-form-group label { display: block; font-size: 12px; font-weight: 600; color: #4a4a4a; margin-bottom: 5px; }
-  .skype-form-group input[type="text"],
-  .skype-form-group input[type="password"] {
+  .logo-icon { font-size: 34px; }
+  .logo sup { font-size: 11px; vertical-align: super; font-weight: 400; }
+  .tagline { font-size: 11px; color: #6a8899; margin-top: 6px; }
+  .login-body { padding: 20px 26px 24px; }
+  .form-group { margin-bottom: 12px; }
+  .form-group label { display: block; font-size: 12px; font-weight: 600; color: #4a4a4a; margin-bottom: 5px; }
+  .form-group input[type="text"],
+  .form-group input[type="password"] {
     width: 100%; padding: 9px 11px; border: 1px solid #c8d8e8;
     border-radius: 4px; font-size: 13px; font-family: inherit; outline: none;
     color: #1a1a1a; background: #fafcfe;
     transition: border-color .2s, box-shadow .2s, background .2s;
   }
-  .skype-form-group input:focus {
+  .form-group input:focus {
     border-color: #00aff0; background: #fff;
     box-shadow: 0 0 0 3px rgba(0,175,240,.15);
   }
-  .skype-status-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
-  .skype-status-row > label { font-size: 12px; font-weight: 600; color: #4a4a4a; white-space: nowrap; }
-  .skype-status-options { display: flex; gap: 4px; flex: 1; }
-  .skype-status-option {
+  .status-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .status-row > label { font-size: 12px; font-weight: 600; color: #4a4a4a; white-space: nowrap; }
+  .status-options { display: flex; gap: 4px; flex: 1; }
+  .status-option {
     flex: 1; padding: 6px 6px; border: 1px solid #c8d8e8; border-radius: 4px;
     cursor: pointer; font-size: 11px; text-align: center;
     display: flex; align-items: center; justify-content: center; gap: 5px;
     transition: all .2s; background: #f6fafd; color: #4a4a4a;
   }
-  .skype-status-option:hover { background: #e8f4fc; border-color: #9cc8e0; }
-  .skype-status-option.active {
+  .status-option:hover { background: #e8f4fc; border-color: #9cc8e0; }
+  .status-option.active {
     background: #00aff0; border-color: #0090d0; color: #fff; font-weight: 600;
     box-shadow: 0 1px 3px rgba(0,160,224,.35);
   }
-  .skype-status-option.active .status-dot { border-color: #fff; }
-  .skype-remember-row { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #4a4a4a; margin-bottom: 16px; cursor: pointer; }
-  .skype-remember-row input { margin: 0; cursor: pointer; }
-  .skype-signin-btn {
+  .status-option.active .status-dot { border-color: #fff; }
+  .remember-row { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #4a4a4a; margin-bottom: 16px; cursor: pointer; }
+  .remember-row input { margin: 0; cursor: pointer; }
+  .signin-btn {
     width: 100%; padding: 11px; border: 1px solid #0090d0; border-radius: 4px;
     background: linear-gradient(180deg,#00c0ff 0%,#00a0e0 100%);
     color: #fff; font-size: 14px; font-weight: 600; cursor: pointer;
     transition: all .2s; box-shadow: 0 2px 5px rgba(0,160,224,.35);
     font-family: inherit;
   }
-  .skype-signin-btn:hover { background: linear-gradient(180deg,#00d0ff 0%,#00b0f0 100%); }
-  .skype-signin-btn:active { transform: translateY(1px); box-shadow: 0 1px 2px rgba(0,160,224,.35); }
-  .skype-footer-links { text-align: center; font-size: 11px; margin-top: 14px; color: #8a9aa5; }
-  .skype-footer-links a { color: #00aff0; text-decoration: none; cursor: pointer; }
-  .skype-footer-links a:hover { text-decoration: underline; }
-  .skype-error {
+  .signin-btn:hover { background: linear-gradient(180deg,#00d0ff 0%,#00b0f0 100%); }
+  .signin-btn:active { transform: translateY(1px); box-shadow: 0 1px 2px rgba(0,160,224,.35); }
+  .footer-links { text-align: center; font-size: 11px; margin-top: 14px; color: #8a9aa5; }
+  .footer-links a { color: #00aff0; text-decoration: none; cursor: pointer; }
+  .footer-links a:hover { text-decoration: underline; }
+  .login-error {
     background: #fff0f0; border: 1px solid #ffb0b0; color: #c00;
     padding: 6px 10px; border-radius: 4px; font-size: 11px;
     margin-bottom: 10px; display: none;
   }
-  .skype-error.show { display: block; }
+  .login-error.show { display: block; }
+
+  .gh-btn, .gg-btn {
+    width: 100%; padding: 10px; border: 1px solid #333; border-radius: 4px;
+    background: #24292e; color: #fff; font-size: 13px; font-weight: 600; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    transition: background .2s; margin-top: 10px;
+  }
+  .gh-btn:hover { background: #1a1e22; }
+  .gh-btn svg { width: 20px; height: 20px; fill: #fff; }
+  
+  .gg-btn { background: #fff; color: #333; border-color: #ccc; }
+  .gg-btn:hover { background: #f5f5f5; }
+  .gg-btn svg { width: 20px; height: 20px; }
+
+  .register-tabs { display: flex; border-bottom: 1px solid #e0e0e0; margin-bottom: 15px; }
+  .register-tab { flex: 1; text-align: center; padding: 10px; cursor: pointer; font-weight: bold; font-size: 13px; color: #888; border-bottom: 2px solid transparent; }
+  .register-tab.active { color: #00aff0; border-bottom-color: #00aff0; }
+  .register-section { display: none; flex-direction: column; gap: 12px; }
+  .register-section.active { display: flex; }
 </style>
 </head>
 <body>
 
 <input type="file" id="hidden-file-input" accept="image/*">
 <input type="file" id="story-file-input" accept="image/*">
+<input type="file" id="media-input" accept="image/*,video/*" style="display:none">
+<input type="file" id="doc-input" accept="*" style="display:none">
 
-<!-- ===== SKYPE LOGIN ===== -->
-<div class="skype-login-overlay" id="skype-login-overlay">
-  <div class="skype-login-box">
-    <div class="skype-login-header">
-      <div class="skype-logo">
-        <span class="skype-logo-icon">☁️</span>Courtroom Live<sup>™</sup>
+<!-- ===== LOGIN ===== -->
+<div class="login-overlay" id="login-overlay">
+  <div class="login-box">
+    <div class="login-header">
+      <div class="logo">
+        <span class="logo-icon">☁️</span>Courtroom Live<sup>™</sup>
       </div>
-      <div class="skype-tagline">Вход в аккаунт · Sign in</div>
+      <div class="tagline" id="login-tagline">Вход в аккаунт · Sign in</div>
     </div>
-    <div class="skype-login-body">
-      <div class="skype-error" id="login-error">Введите имя пользователя и пароль</div>
-      <div class="skype-form-group">
-        <label>Имя пользователя · Skype Name</label>
+    
+    <div class="login-body" id="login-view">
+      <div class="login-error" id="login-error">Введите имя пользователя и пароль</div>
+      <div class="form-group">
+        <label>Имя пользователя / Логин</label>
         <input type="text" id="login-username" placeholder="user.name" autocomplete="username" value="User1">
       </div>
-      <div class="skype-form-group">
-        <label>Пароль · Password</label>
+      <div class="form-group">
+        <label>Пароль</label>
         <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password" value="password">
       </div>
-      <div class="skype-status-row">
+      <div class="status-row">
         <label>Статус:</label>
-        <div class="skype-status-options">
-          <div class="skype-status-option active" data-status="online" onclick="selectLoginStatus('online', this)">
+        <div class="status-options">
+          <div class="status-option active" data-status="online" onclick="selectLoginStatus('online', this)">
             <span class="status-dot online"></span>В сети
           </div>
-          <div class="skype-status-option" data-status="away" onclick="selectLoginStatus('away', this)">
+          <div class="status-option" data-status="away" onclick="selectLoginStatus('away', this)">
             <span class="status-dot away"></span>Нет на месте
           </div>
-          <div class="skype-status-option" data-status="busy" onclick="selectLoginStatus('busy', this)">
+          <div class="status-option" data-status="busy" onclick="selectLoginStatus('busy', this)">
             <span class="status-dot busy"></span>Занят
           </div>
         </div>
       </div>
-      <label class="skype-remember-row">
+      <label class="remember-row">
         <input type="checkbox" id="login-remember" checked>Запомнить меня
       </label>
-      <button class="skype-signin-btn" onclick="doSkypeLogin()">Вход</button>
-      <div class="skype-footer-links">
-        <a>Забыли пароль?</a> · <a>Создать аккаунт</a>
+      <button class="signin-btn" onclick="doLogin()">Вход</button>
+      <div class="footer-links">
+        <a onclick="showRegisterView()">Регистрация</a> · <a onclick="alert('Сброс пароля недоступен в демо')">Забыли пароль?</a>
       </div>
     </div>
+
+    <div class="login-body" id="register-view" style="display:none;">
+      <div class="register-tabs">
+        <div class="register-tab active" onclick="switchRegTab('gh', this)">🐙 GitHub</div>
+        <div class="register-tab" onclick="switchRegTab('gg', this)">🌐 Google</div>
+      </div>
+      
+      <div class="register-section active" id="reg-section-gh">
+        <p style="font-size:12px;color:#666;margin:0 0 5px;">Введите ваш GitHub username. Мы подтянем аватар и имя из профиля.</p>
+        <label style="font-size:12px;font-weight:600;color:#4a4a4a;">GitHub Username:</label>
+        <input type="text" id="gh-username" placeholder="torvalds или octocat" style="width:100%;padding:9px 11px;border:1px solid #c8d8e8;border-radius:4px;font-size:13px;font-family:inherit;outline:none;color:#1a1a1a;background:#fafcfe;margin-bottom:8px;">
+        <div class="login-error" id="gh-error"></div>
+        <button class="gh-btn" onclick="registerWithGitHub()">
+          <svg viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          Войти через GitHub
+        </button>
+      </div>
+
+      <div class="register-section" id="reg-section-gg">
+        <p style="font-size:12px;color:#666;margin:0 0 5px;">Введите ваш Google Email. Мы создадим профиль на основе вашей почты.</p>
+        <label style="font-size:12px;font-weight:600;color:#4a4a4a;">Google Email:</label>
+        <input type="email" id="gg-email" placeholder="example@gmail.com" style="width:100%;padding:9px 11px;border:1px solid #c8d8e8;border-radius:4px;font-size:13px;font-family:inherit;outline:none;color:#1a1a1a;background:#fafcfe;margin-bottom:8px;">
+        <div class="login-error" id="gg-error"></div>
+        <button class="gg-btn" onclick="registerWithGoogle()">
+          <svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+          Войти через Google
+        </button>
+      </div>
+
+      <div class="footer-links" style="margin-top: 16px;">
+        <a onclick="showLoginView()">← Назад к входу</a>
+      </div>
+    </div>
+    
   </div>
 </div>
 
@@ -487,7 +720,6 @@
     </div>
 
     <div class="chat-area">
-      <div class="objection-overlay" id="objection-overlay"><div class="objection-text" data-i18n="objection">ПРОТЕСТУЮ!</div></div>
       <div class="chat-header">
         <div class="chat-title" id="chat-title" data-i18n="select_chat">Выберите собеседника...</div>
         <div style="display:flex; gap:10px; align-items:center; z-index:2;">
@@ -525,17 +757,27 @@
       <div class="messages" id="messages">
         <div style="text-align:center; color:var(--text-muted); margin-top:50px;" data-i18n="select_chat_desc">Выберите контакт или создайте новый...</div>
       </div>
+
       <div class="input-area">
-        <div class="toolbar">
-          <button class="objection-btn" onclick="triggerObjection()" data-i18n="objection_btn">🚨 ПРОТЕСТУЮ!</button>
+        <div class="recording-banner" id="recordingBanner">
+          <span><span class="rec-dot"></span>Запись: <span id="recordingTimer">00:00</span></span>
+          <div style="display:flex; gap:8px;">
+            <button onclick="cancelVoice()" style="background:#fff;color:#333;border:none;border-radius:4px;padding:5px 12px;font-size:11px;font-weight:bold;cursor:pointer;">✕ Отмена</button>
+            <button onclick="stopAndSendVoice()" style="background:#fff;color:#cc0000;border:none;border-radius:4px;padding:5px 12px;font-size:11px;font-weight:bold;cursor:pointer;">Отправить ➤</button>
+          </div>
         </div>
+        
         <div class="input-row">
           <textarea id="message-input" placeholder="Введите вашу речь... (Enter - отправить)" data-i18n-placeholder="type_message"></textarea>
+          
+          <!-- GAVEL -->
           <button id="send-btn" class="gavel-btn" title="Send">
             <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-              <rect x="15" y="75" width="40" height="12" rx="4" fill="#6b412b" stroke="#3d1f15" stroke-width="4"/>
-              <rect x="22" y="65" width="26" height="12" rx="4" fill="#d9a07d" stroke="#3d1f15" stroke-width="4"/>
-              <g transform="rotate(-35 55 45)">
+              <g id="board">
+                <rect x="15" y="75" width="40" height="12" rx="4" fill="#6b412b" stroke="#3d1f15" stroke-width="4"/>
+                <rect x="22" y="65" width="26" height="12" rx="4" fill="#d9a07d" stroke="#3d1f15" stroke-width="4"/>
+              </g>
+              <g id="gavel">
                 <rect x="49" y="35" width="12" height="55" rx="4" fill="#8c5a3c" stroke="#3d1f15" stroke-width="4"/>
                 <rect x="32" y="20" width="46" height="22" rx="5" fill="#c8825a" stroke="#3d1f15" stroke-width="4"/>
                 <rect x="28" y="15" width="16" height="32" rx="5" fill="#d9a07d" stroke="#3d1f15" stroke-width="4"/>
@@ -543,7 +785,62 @@
               </g>
             </svg>
           </button>
+
+          <!-- PAPERCLIP -->
+          <button class="tool-btn" id="paperclipBtn" onclick="toggleAttachmentMenu(event)" title="Прикрепить">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#b0c4de" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path>
+            </svg>
+          </button>
+
+          <!-- MICROPHONE -->
+          <button class="tool-btn" id="voiceBtn" onclick="startVoiceRecording()" title="Голосовое сообщение">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #4a90e2;">
+              <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+              <line x1="12" y1="19" x2="12" y2="22"/>
+            </svg>
+          </button>
         </div>
+
+        <div class="attachment-menu" id="attachmentMenu">
+          <div class="attachment-menu-item" onclick="triggerMediaUpload()">
+            <span class="icon">
+              <svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+            </span> Мультимедиа
+          </div>
+          <div class="attachment-menu-item" onclick="triggerDocUpload()">
+            <span class="icon">
+              <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="21" x2="8" y2="21"/></svg>
+            </span> Документ
+          </div>
+          <div class="attachment-menu-item" onclick="openPollModal()">
+            <span class="icon">
+              <svg viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><line x1="9" y1="12" x2="9.01" y2="12"/><line x1="12" y1="12" x2="16" y2="12"/><line x1="9" y1="16" x2="9.01" y2="16"/><line x1="12" y1="16" x2="16" y2="16"/></svg>
+            </span> Опрос
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Poll Modal -->
+  <div class="modal-overlay" id="modal-create-poll">
+    <div class="modal-window">
+      <div class="modal-header">Создать опрос</div>
+      <div class="modal-body">
+        <label>Вопрос:</label>
+        <input type="text" id="poll-question" placeholder="О чем спросить?">
+        <label style="margin-top: 5px;">Варианты ответа:</label>
+        <div id="poll-options-container" style="display: flex; flex-direction: column; gap: 8px;">
+          <input type="text" class="poll-option-input" placeholder="Вариант 1">
+          <input type="text" class="poll-option-input" placeholder="Вариант 2">
+        </div>
+        <button class="edit-btn" style="align-self: flex-start; margin-top: 5px;" onclick="addPollOptionField()">+ Добавить вариант</button>
+      </div>
+      <div class="modal-footer">
+        <button onclick="closeModal('modal-create-poll')">Отмена</button>
+        <button class="primary" onclick="createPoll()">Создать</button>
       </div>
     </div>
   </div>
@@ -645,24 +942,28 @@
               </select>
             </div>
           </div>
-          <div class="tg-section">
-            <div class="tg-row">
-              <div class="tg-row-info"><div class="tg-row-title" data-i18n="messages">Сообщения</div><div class="tg-row-desc" data-i18n="messages_desc">Кто может писать первым</div></div>
-              <select class="tg-select"><option data-i18n="everyone">Все</option><option data-i18n="contacts">Контакты</option></select>
-            </div>
-          </div>
         </div>
         <div class="settings-main" id="tab-notifications">
           <div class="tg-section">
-            <div class="tg-row"><div class="tg-row-info"><div class="tg-row-title" data-i18n="desktop_notif">Уведомления на рабочем столе</div></div><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
-            <div class="tg-row"><div class="tg-row-info"><div class="tg-row-title" data-i18n="message_preview">Показывать текст сообщения</div></div><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+            <div class="tg-row"><div class="tg-row-info"><div class="tg-row-title" data-i18n="desktop_notif">Уведомления на рабочем столе</div></div><label class="toggle-switch"><input type="checkbox" id="notif-desktop" checked onchange="saveNotificationSettings()"><span class="toggle-slider"></span></label></div>
+            <div class="tg-row"><div class="tg-row-info"><div class="tg-row-title" data-i18n="message_preview">Показывать текст сообщения</div></div><label class="toggle-switch"><input type="checkbox" id="notif-preview" checked onchange="saveNotificationSettings()"><span class="toggle-slider"></span></label></div>
           </div>
         </div>
         <div class="settings-main" id="tab-chat">
           <div class="tg-section">
-            <div class="tg-row"><div class="tg-row-info"><div class="tg-row-title" data-i18n="chat_wallpaper">Фон чата</div></div><div class="tg-row-value" data-i18n="standard">Стандартный</div></div>
+            <div class="tg-row"><div class="tg-row-info"><div class="tg-row-title" data-i18n="chat_wallpaper">Фон чата</div></div>
+              <select class="tg-select" id="chat-wallpaper" onchange="changeWallpaper(this.value)">
+                <option value="dots">Сетка</option>
+                <option value="plain">Однотонный</option>
+                <option value="dark">Темный</option>
+              </select>
+            </div>
             <div class="tg-row"><div class="tg-row-info"><div class="tg-row-title" data-i18n="text_size">Размер текста</div></div>
-              <select class="tg-select"><option>12px</option><option selected>14px</option><option>16px</option></select>
+              <select class="tg-select" id="chat-text-size" onchange="changeTextSize(this.value)">
+                <option value="12px">12px</option>
+                <option value="14px" selected>14px</option>
+                <option value="16px">16px</option>
+              </select>
             </div>
           </div>
         </div>
@@ -671,12 +972,12 @@
             <div class="tg-row"><div class="tg-row-info"><div class="tg-row-title" data-i18n="active_sessions">Активные сессии</div><div class="tg-row-desc">1</div></div></div>
             <div class="tg-row"><div class="tg-row-info"><div class="tg-row-title">💻 Windows • Chrome</div><div class="tg-row-desc">Текущая сессия</div></div></div>
           </div>
-          <button class="tg-btn danger" style="align-self:flex-start;">Terminate All Other Sessions</button>
+          <button class="tg-btn danger" style="align-self:flex-start;" onclick="terminateSessions()">Завершить другие сессии</button>
         </div>
         <div class="settings-main" id="tab-advanced">
           <div class="tg-section">
-            <div class="tg-row"><div class="tg-row-info"><div class="tg-row-title" data-i18n="data_usage">Использование данных</div><div class="tg-row-desc" data-i18n="data_usage_desc">Настройки автоскачивания</div></div><div class="tg-row-value">›</div></div>
-            <div class="tg-row"><div class="tg-row-info"><div class="tg-row-title" data-i18n="proxy">Настройки прокси</div><div class="tg-row-desc" data-i18n="proxy_desc">Использовать прокси-сервер</div></div><div class="tg-row-value">›</div></div>
+            <div class="tg-row" onclick="alert('Настройки автоскачивания: фото (вкл), видео (выкл)')"><div class="tg-row-info"><div class="tg-row-title" data-i18n="data_usage">Использование данных</div><div class="tg-row-desc" data-i18n="data_usage_desc">Настройки автоскачивания</div></div><div class="tg-row-value">›</div></div>
+            <div class="tg-row" onclick="alert('Прокси-сервер не используется.')"><div class="tg-row-info"><div class="tg-row-title" data-i18n="proxy">Настройки прокси</div><div class="tg-row-desc" data-i18n="proxy_desc">Использовать прокси-сервер</div></div><div class="tg-row-value">›</div></div>
           </div>
         </div>
       </div>
@@ -746,11 +1047,10 @@
 </div>
 
 <script>
-  /* ===== ЛОКАЛИЗАЦИЯ ===== */
   const translations = {
-    ru: { title:"⚖️ Courtroom Live Messenger 2009", user:"Пользователь", online:"В сети", away:"Нет на месте", busy:"Занят", my_profile:"👤 Мой профиль", edit:"✏️ Изменить", name:"Имя:", phone:"Телефон:", status:"Статус:", bio:"О себе:", welcome:"Добро пожаловать в мессенджер!", change_photo:"📷 Сменить фото", save:"💾 Сохранить", add_contact:"➕ Контакт", add_group:"➕ Группа", search:"Поиск по контактам...", objection:"ПРОТЕСТУЮ!", objection_btn:"🚨 ПРОТЕСТУЮ!", select_chat:"Выберите собеседника...", select_chat_desc:"Выберите контакт или создайте новый...", profile:"ℹ️ Профиль", my_story:"Моя история", role:"Роль:", members:"Участники:", type_message:"Введите вашу речь... (Enter - отправить)", add_contact_title:"Добавить новый контакт", add_group_title:"Создать групповой чат", group_name:"Название группы:", select_members:"Выберите участников:", cancel:"Отмена", create:"Создать", settings:"⚙️ Настройки", general:"Общие", account:"Аккаунт", privacy:"Приватность", notifications:"Уведомления", chat_settings:"Настройки чата", devices:"Устройства", advanced:"Продвинутые", language:"Язык", language_desc:"Выберите язык интерфейса", theme:"Тема оформления", theme_desc:"Светлая или темная", theme_light:"Светлая", theme_dark:"Темная", sounds:"Звуки", sounds_desc:"Звуки уведомлений и кликов", edit_profile_desc:"Изменить имя, фото и описание", username:"Имя пользователя", phone_visibility:"Кто видит номер", avatar_visibility:"Кто видит фото", everyone:"Все", contacts:"Контакты", nobody:"Никто", messages:"Сообщения", messages_desc:"Кто может писать первым", desktop_notif:"Уведомления на рабочем столе", message_preview:"Показывать текст сообщения", chat_wallpaper:"Фон чата", standard:"Стандартный", text_size:"Размер текста", active_sessions:"Активные сессии", data_usage:"Использование данных", data_usage_desc:"Настройки автоскачивания", proxy:"Настройки прокси", proxy_desc:"Использовать прокси-сервер", done:"Готово", create_story:"Создать историю", story_text:"Текст истории:", story_photo:"Фотография (необязательно):", choose_photo:"📷 Выбрать фото", remove_photo:"✕ Убрать фото", publish:"Опубликовать", recording:"ЗАПИСЬ", connecting:"Соединение..." },
-    uk: { title:"⚖️ Courtroom Live Messenger 2009", user:"Користувач", online:"В мережі", away:"Немає на місці", busy:"Зайнятий", my_profile:"👤 Мій профіль", edit:"✏️ Змінити", name:"Ім'я:", phone:"Телефон:", status:"Статус:", bio:"Про себе:", welcome:"Ласкаво просимо до месенджера!", change_photo:"📷 Змінити фото", save:"💾 Зберегти", add_contact:"➕ Контакт", add_group:"➕ Група", search:"Пошук по контактах...", objection:"ПРОТЕСТУЮ!", objection_btn:"🚨 ПРОТЕСТУЮ!", select_chat:"Виберіть співрозмовника...", select_chat_desc:"Виберіть контакт або створіть новий...", profile:"ℹ️ Профіль", my_story:"Моя історія", role:"Роль:", members:"Учасники:", type_message:"Введіть вашу промову... (Enter - надіслати)", add_contact_title:"Додати новий контакт", add_group_title:"Створити груповий чат", group_name:"Назва групи:", select_members:"Виберіть учасників:", cancel:"Скасувати", create:"Створити", settings:"⚙️ Налаштування", general:"Загальні", account:"Акаунт", privacy:"Приватність", notifications:"Сповіщення", chat_settings:"Налаштування чату", devices:"Пристрої", advanced:"Розширені", language:"Мова", language_desc:"Виберіть мову інтерфейсу", theme:"Тема оформлення", theme_desc:"Світла або темна", theme_light:"Світла", theme_dark:"Темна", sounds:"Звуки", sounds_desc:"Звуки сповіщень та кліків", edit_profile_desc:"Змінити ім'я, фото та опис", username:"Ім'я користувача", phone_visibility:"Хто бачить номер", avatar_visibility:"Хто бачить фото", everyone:"Всі", contacts:"Контакти", nobody:"Ніхто", messages:"Повідомлення", messages_desc:"Хто може писати першим", desktop_notif:"Сповіщення на робочому столі", message_preview:"Показувати текст повідомлення", chat_wallpaper:"Фон чату", standard:"Стандартний", text_size:"Розмір тексту", active_sessions:"Активні сесії", data_usage:"Використання даних", data_usage_desc:"Налаштування автозавантаження", proxy:"Налаштування проксі", proxy_desc:"Використовувати проксі-сервер", done:"Готово", create_story:"Створити історію", story_text:"Текст історії:", story_photo:"Фотографія (необов'язково):", choose_photo:"📷 Вибрати фото", remove_photo:"✕ Прибрати фото", publish:"Опублікувати", recording:"ЗАПИС", connecting:"З'єднання..." },
-    en: { title:"⚖️ Courtroom Live Messenger 2009", user:"User", online:"Online", away:"Away", busy:"Busy", my_profile:"👤 My Profile", edit:"✏️ Edit", name:"Name:", phone:"Phone:", status:"Status:", bio:"Bio:", welcome:"Welcome to the messenger!", change_photo:"📷 Change Photo", save:"💾 Save", add_contact:"➕ Contact", add_group:"➕ Group", search:"Search contacts...", objection:"OBJECTION!", objection_btn:"🚨 OBJECTION!", select_chat:"Select a chat...", select_chat_desc:"Select a contact or create a new one...", profile:"ℹ️ Profile", my_story:"My Story", role:"Role:", members:"Members:", type_message:"Type your message... (Enter - send)", add_contact_title:"Add New Contact", add_group_title:"Create Group Chat", group_name:"Group Name:", select_members:"Select Members:", cancel:"Cancel", create:"Create", settings:"⚙️ Settings", general:"General", account:"Account", privacy:"Privacy", notifications:"Notifications", chat_settings:"Chat Settings", devices:"Devices", advanced:"Advanced", language:"Language", language_desc:"Choose interface language", theme:"Theme", theme_desc:"Light or dark", theme_light:"Light", theme_dark:"Dark", sounds:"Sounds", sounds_desc:"Notification and click sounds", edit_profile_desc:"Change name, photo and bio", username:"Username", phone_visibility:"Who sees my phone", avatar_visibility:"Who sees my photo", everyone:"Everyone", contacts:"Contacts", nobody:"Nobody", messages:"Messages", messages_desc:"Who can message me first", desktop_notif:"Desktop Notifications", message_preview:"Show message text", chat_wallpaper:"Chat Wallpaper", standard:"Standard", text_size:"Text Size", active_sessions:"Active Sessions", data_usage:"Data Usage", data_usage_desc:"Auto-download settings", proxy:"Proxy Settings", proxy_desc:"Use proxy server", done:"Done", create_story:"Create Story", story_text:"Story Text:", story_photo:"Photo (optional):", choose_photo:"📷 Choose Photo", remove_photo:"✕ Remove Photo", publish:"Publish", recording:"REC", connecting:"Connecting..." }
+    ru: { title:"⚖️ Courtroom Live Messenger 2009", user:"Пользователь", online:"В сети", away:"Нет на месте", busy:"Занят", my_profile:"👤 Мой профиль", edit:"✏️ Изменить", name:"Имя:", phone:"Телефон:", status:"Статус:", bio:"О себе:", welcome:"Добро пожаловать в мессенджер!", change_photo:"📷 Сменить фото", save:"💾 Сохранить", add_contact:"➕ Контакт", add_group:"➕ Группа", search:"Поиск по контактам...", select_chat:"Выберите собеседника...", select_chat_desc:"Выберите контакт или создайте новый...", profile:"ℹ️ Профиль", my_story:"Моя история", role:"Роль:", members:"Участники:", type_message:"Введите вашу речь... (Enter - отправить)", add_contact_title:"Добавить новый контакт", add_group_title:"Создать групповой чат", group_name:"Название группы:", select_members:"Выберите участников:", cancel:"Отмена", create:"Создать", settings:"⚙️ Настройки", general:"Общие", account:"Аккаунт", privacy:"Приватность", notifications:"Уведомления", chat_settings:"Настройки чата", devices:"Устройства", advanced:"Продвинутые", language:"Язык", language_desc:"Выберите язык интерфейса", theme:"Тема оформления", theme_desc:"Светлая или темная", theme_light:"Светлая", theme_dark:"Темная", sounds:"Звуки", sounds_desc:"Звуки уведомлений и кликов", edit_profile_desc:"Изменить имя, фото и описание", username:"Имя пользователя", phone_visibility:"Кто видит номер", avatar_visibility:"Кто видит фото", everyone:"Все", contacts:"Контакты", nobody:"Никто", messages:"Сообщения", messages_desc:"Кто может писать первым", desktop_notif:"Уведомления на рабочем столе", message_preview:"Показывать текст сообщения", chat_wallpaper:"Фон чата", standard:"Стандартный", text_size:"Размер текста", active_sessions:"Активные сессии", data_usage:"Использование данных", data_usage_desc:"Настройки автоскачивания", proxy:"Настройки прокси", proxy_desc:"Использовать прокси-сервер", done:"Готово", create_story:"Создать историю", story_text:"Текст истории:", story_photo:"Фотография (необязательно):", choose_photo:"📷 Выбрать фото", remove_photo:"✕ Убрать фото", publish:"Опубликовать", recording:"ЗАПИСЬ", connecting:"Соединение..." },
+    uk: { title:"⚖️ Courtroom Live Messenger 2009", user:"Користувач", online:"В мережі", away:"Немає на місці", busy:"Зайнятий", my_profile:"👤 Мій профіль", edit:"✏️ Змінити", name:"Ім'я:", phone:"Телефон:", status:"Статус:", bio:"Про себе:", welcome:"Ласкаво просимо до месенджера!", change_photo:"📷 Змінити фото", save:"💾 Зберегти", add_contact:"➕ Контакт", add_group:"➕ Група", search:"Пошук по контактах...", select_chat:"Виберіть співрозмовника...", select_chat_desc:"Виберіть контакт або створіть новий...", profile:"ℹ️ Профіль", my_story:"Моя історія", role:"Роль:", members:"Учасники:", type_message:"Введіть вашу промову... (Enter - надіслати)", add_contact_title:"Додати новий контакт", add_group_title:"Створити груповий чат", group_name:"Назва групи:", select_members:"Виберіть учасників:", cancel:"Скасувати", create:"Створити", settings:"⚙️ Налаштування", general:"Загальні", account:"Акаунт", privacy:"Приватність", notifications:"Сповіщення", chat_settings:"Налаштування чату", devices:"Пристрої", advanced:"Розширені", language:"Мова", language_desc:"Виберіть мову інтерфейсу", theme:"Тема оформлення", theme_desc:"Світла або темна", theme_light:"Світла", theme_dark:"Темна", sounds:"Звуки", sounds_desc:"Звуки сповіщень та кліків", edit_profile_desc:"Змінити ім'я, фото та опис", username:"Ім'я користувача", phone_visibility:"Хто бачить номер", avatar_visibility:"Хто бачить фото", everyone:"Всі", contacts:"Контакти", nobody:"Ніхто", messages:"Повідомлення", messages_desc:"Хто може писати першим", desktop_notif:"Сповіщення на робочому столі", message_preview:"Показувати текст повідомлення", chat_wallpaper:"Фон чату", standard:"Стандартний", text_size:"Розмір тексту", active_sessions:"Активні сесії", data_usage:"Використання даних", data_usage_desc:"Налаштування автозавантаження", proxy:"Налаштування проксі", proxy_desc:"Використовувати проксі-сервер", done:"Готово", create_story:"Створити історію", story_text:"Текст історії:", story_photo:"Фотографія (необов'язково):", choose_photo:"📷 Вибрати фото", remove_photo:"✕ Прибрати фото", publish:"Опублікувати", recording:"ЗАПИС", connecting:"З'єднання..." },
+    en: { title:"⚖️ Courtroom Live Messenger 2009", user:"User", online:"Online", away:"Away", busy:"Busy", my_profile:"👤 My Profile", edit:"✏️ Edit", name:"Name:", phone:"Phone:", status:"Status:", bio:"Bio:", welcome:"Welcome to the messenger!", change_photo:"📷 Change Photo", save:"💾 Save", add_contact:"➕ Contact", add_group:"➕ Group", search:"Search contacts...", select_chat:"Select a chat...", select_chat_desc:"Select a contact or create a new one...", profile:"ℹ️ Profile", my_story:"My Story", role:"Role:", members:"Members:", type_message:"Type your message... (Enter - send)", add_contact_title:"Add New Contact", add_group_title:"Create Group Chat", group_name:"Group Name:", select_members:"Select Members:", cancel:"Cancel", create:"Create", settings:"⚙️ Settings", general:"General", account:"Account", privacy:"Privacy", notifications:"Notifications", chat_settings:"Chat Settings", devices:"Devices", advanced:"Advanced", language:"Language", language_desc:"Choose interface language", theme:"Theme", theme_desc:"Light or dark", theme_light:"Light", theme_dark:"Dark", sounds:"Sounds", sounds_desc:"Notification and click sounds", edit_profile_desc:"Change name, photo and bio", username:"Username", phone_visibility:"Who sees my phone", avatar_visibility:"Who sees my photo", everyone:"Everyone", contacts:"Contacts", nobody:"Nobody", messages:"Messages", messages_desc:"Who can message me first", desktop_notif:"Desktop Notifications", message_preview:"Show message text", chat_wallpaper:"Chat Wallpaper", standard:"Standard", text_size:"Text Size", active_sessions:"Active Sessions", data_usage:"Data Usage", data_usage_desc:"Auto-download settings", proxy:"Proxy Settings", proxy_desc:"Use proxy server", done:"Done", create_story:"Create Story", story_text:"Story Text:", story_photo:"Photo (optional):", choose_photo:"📷 Choose Photo", remove_photo:"✕ Remove Photo", publish:"Publish", recording:"REC", connecting:"Connecting..." }
   };
   let currentLang = 'ru';
 
@@ -777,13 +1077,12 @@
     return translations[currentLang].online;
   }
 
-  /* ===== ИКОНКИ ===== */
   const defaultAvatarUrl = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23005f8a'/><circle cx='50' cy='35' r='18' fill='%23fff'/><path d='M 15 80 C 15 50, 85 50, 85 80 Z' fill='%23fff'/></svg>";
   const defaultGroupAvatar = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><mask id='m'><rect width='100' height='100' fill='%23fff'/><circle cx='50' cy='35' r='22' fill='%23000'/><path d='M 20 85 C 20 55, 80 55, 80 85 V 100 H 20 Z' fill='%23000'/></mask></defs><g mask='url(%23m)'><circle cx='25' cy='35' r='20' fill='%2300a8ff'/><path d='M 0 80 C 0 55, 50 55, 50 80 V 100 H 0 Z' fill='%2300a8ff'/><circle cx='75' cy='35' r='20' fill='%2300a8ff'/><path d='M 50 80 C 50 55, 100 55, 100 80 V 100 H 50 Z' fill='%2300a8ff'/></g><circle cx='50' cy='35' r='22' fill='%2300a8ff'/><path d='M 20 85 C 20 55, 80 55, 80 85 V 100 H 20 Z' fill='%2300a8ff'/></svg>";
 
-  /* ===== НАСТРОЙКИ ===== */
   let soundsEnabled = true;
   let privacySettings = { phone: 'all', avatar: 'all' };
+  let notificationSettings = { desktop: true, preview: true };
   let isLoggedIn = false;
   let selectedLoginStatus = 'online';
 
@@ -805,8 +1104,37 @@
     privacySettings.avatar = document.getElementById('privacy-avatar').value;
     playClick(); updateProfileDisplay(); renderContacts();
   }
+  function saveNotificationSettings() {
+    notificationSettings.desktop = document.getElementById('notif-desktop').checked;
+    notificationSettings.preview = document.getElementById('notif-preview').checked;
+    playClick();
+  }
+  function changeWallpaper(value) {
+    const messagesEl = document.getElementById('messages');
+    if (value === 'plain') {
+      messagesEl.style.backgroundImage = 'none';
+      messagesEl.style.background = 'var(--bg-messages)';
+    } else if (value === 'dark') {
+      messagesEl.style.backgroundImage = 'none';
+      messagesEl.style.background = '#2a2a2a';
+    } else {
+      messagesEl.style.background = '';
+      messagesEl.style.backgroundImage = 'var(--chat-wallpaper)';
+      messagesEl.style.backgroundSize = '20px 20px';
+    }
+    playClick();
+  }
+  function changeTextSize(size) {
+    document.querySelectorAll('.msg-bubble').forEach(b => b.style.fontSize = size);
+    playClick();
+  }
+  function terminateSessions() {
+    if (confirm('Завершить все другие сессии? Это действие нельзя отменить.')) {
+      playClick();
+      alert('Все другие сессии завершены (имитация).');
+    }
+  }
 
-  /* ===== ДАННЫЕ ===== */
   let userCounter = 2;
   function getNextUserName() { return 'User' + userCounter++; }
   let myProfile = { name:'User1', phone:'+7 (000) 000-00-00', role:'User', bio:'Welcome to the messenger!', avatar:defaultAvatarUrl, status:'online' };
@@ -816,10 +1144,16 @@
   let activeId = null;
   let avatarTarget = 'me';
   let currentEditContactId = null;
-  let isHolding = false, isRecording = false, isScreenSharing = false, isMicMuted = false;
+  let isHolding = false, isScreenSharing = false, isMicMuted = false;
   let pendingStoryImage = null;
   let callState = { active:false, contactId:null, seconds:0, connectTimeout:null, timerInterval:null, ringInterval:null };
   let cameraStream = null, cameraOn = false;
+  let lastSentMsgId = null;
+
+  let voiceRecorder = null;
+  let voiceChunks = [];
+  let voiceTimerInterval = null;
+  let voiceSeconds = 0;
 
   const messagesEl = document.getElementById('messages');
   const inputEl = document.getElementById('message-input');
@@ -831,17 +1165,42 @@
   const callBtn = document.getElementById('call-btn');
   const hiddenFileInput = document.getElementById('hidden-file-input');
   const storyFileInput = document.getElementById('story-file-input');
+  const mediaInput = document.getElementById('media-input');
+  const docInput = document.getElementById('doc-input');
   const statusMenu = document.getElementById('status-menu');
+  const attachmentMenu = document.getElementById('attachmentMenu');
 
-  /* ===== SKYPE LOGIN ===== */
   function selectLoginStatus(status, el) {
     selectedLoginStatus = status;
-    document.querySelectorAll('.skype-status-option').forEach(o => o.classList.remove('active'));
+    document.querySelectorAll('.status-option').forEach(o => o.classList.remove('active'));
     el.classList.add('active');
     playClick();
   }
 
-  function doSkypeLogin() {
+  function showRegisterView() {
+    playClick();
+    document.getElementById('login-view').style.display = 'none';
+    document.getElementById('register-view').style.display = 'block';
+    document.getElementById('login-tagline').textContent = 'Создать аккаунт · Sign up';
+    document.getElementById('gh-error').classList.remove('show');
+    document.getElementById('gg-error').classList.remove('show');
+  }
+  function showLoginView() {
+    playClick();
+    document.getElementById('login-view').style.display = 'block';
+    document.getElementById('register-view').style.display = 'none';
+    document.getElementById('login-tagline').textContent = 'Вход в аккаунт · Sign in';
+  }
+
+  function switchRegTab(tab, el) {
+    playClick();
+    document.querySelectorAll('.register-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.register-section').forEach(s => s.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('reg-section-' + tab).classList.add('active');
+  }
+
+  function doLogin() {
     const username = document.getElementById('login-username').value.trim();
     const password = document.getElementById('login-password').value;
     const errEl = document.getElementById('login-error');
@@ -864,7 +1223,7 @@
       try { localStorage.removeItem('courtroom_remembered_user'); } catch(e) {}
     }
 
-    document.getElementById('skype-login-overlay').classList.add('hidden');
+    document.getElementById('login-overlay').classList.add('hidden');
     document.getElementById('main-window').classList.remove('hidden');
     isLoggedIn = true;
 
@@ -881,23 +1240,116 @@
     if (dot) { dot.classList.add('pop'); setTimeout(() => dot.classList.remove('pop'), 500); }
   }
 
+  async function registerWithGitHub() {
+    const username = document.getElementById('gh-username').value.trim();
+    const errEl = document.getElementById('gh-error');
+    if (!username) {
+      errEl.textContent = 'Введите GitHub username';
+      errEl.classList.add('show');
+      return;
+    }
+    errEl.classList.remove('show');
+    playClick();
+
+    try {
+      const res = await fetch(`https://api.github.com/users/${encodeURIComponent(username)}`);
+      if (!res.ok) {
+        if (res.status === 404) throw new Error('Пользователь GitHub не найден');
+        throw new Error('Ошибка запроса к GitHub');
+      }
+      const data = await res.json();
+
+      myProfile.name = data.name || data.login;
+      myProfile.avatar = data.avatar_url;
+      myProfile.phone = '+7 (000) 000-00-00';
+      myProfile.role = 'GitHub User';
+      myProfile.bio = data.bio || 'Привет! Я использую Courtroom Live Messenger.';
+      myProfile.status = selectedLoginStatus;
+
+      document.getElementById('login-overlay').classList.add('hidden');
+      document.getElementById('main-window').classList.remove('hidden');
+      isLoggedIn = true;
+
+      document.getElementById('display-my-name').textContent = myProfile.name;
+      document.getElementById('view-name').textContent = myProfile.name;
+      document.getElementById('view-phone').textContent = myProfile.phone;
+      document.getElementById('view-role').textContent = myProfile.role;
+      document.getElementById('view-bio').textContent = myProfile.bio;
+      document.getElementById('display-my-mood').textContent = getStatusText(myProfile.status);
+
+      updateProfileDisplay();
+      renderStories();
+      renderContacts();
+      renderChat();
+
+      const dot = document.getElementById('my-status-dot');
+      if (dot) { dot.classList.add('pop'); setTimeout(() => dot.classList.remove('pop'), 500); }
+
+      playConnectSound();
+    } catch (err) {
+      errEl.textContent = err.message;
+      errEl.classList.add('show');
+    }
+  }
+
+  function registerWithGoogle() {
+    const email = document.getElementById('gg-email').value.trim();
+    const errEl = document.getElementById('gg-error');
+    if (!email || !email.includes('@')) {
+      errEl.textContent = 'Введите корректный Google Email';
+      errEl.classList.add('show');
+      return;
+    }
+    errEl.classList.remove('show');
+    playClick();
+
+    const name = email.split('@')[0];
+    const capitalizedName = name.charAt(0).toUpperCase() + name.slice(1);
+
+    myProfile.name = capitalizedName;
+    myProfile.avatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(capitalizedName)}&background=4285F4&color=fff&size=128&bold=true`;
+    myProfile.phone = '+7 (000) 000-00-00';
+    myProfile.role = 'Google User';
+    myProfile.bio = 'Привет! Я использую Courtroom Live Messenger.';
+    myProfile.status = selectedLoginStatus;
+
+    document.getElementById('login-overlay').classList.add('hidden');
+    document.getElementById('main-window').classList.remove('hidden');
+    isLoggedIn = true;
+
+    document.getElementById('display-my-name').textContent = myProfile.name;
+    document.getElementById('view-name').textContent = myProfile.name;
+    document.getElementById('view-phone').textContent = myProfile.phone;
+    document.getElementById('view-role').textContent = myProfile.role;
+    document.getElementById('view-bio').textContent = myProfile.bio;
+    document.getElementById('display-my-mood').textContent = getStatusText(myProfile.status);
+
+    updateProfileDisplay();
+    renderStories();
+    renderContacts();
+    renderChat();
+
+    const dot = document.getElementById('my-status-dot');
+    if (dot) { dot.classList.add('pop'); setTimeout(() => dot.classList.remove('pop'), 500); }
+
+    playConnectSound();
+  }
+
   function logout() {
     if (!confirm('Выйти из аккаунта?')) return;
     playClick();
     isLoggedIn = false;
     closeModal('modal-settings');
     document.getElementById('main-window').classList.add('hidden');
-    document.getElementById('skype-login-overlay').classList.remove('hidden');
+    document.getElementById('login-overlay').classList.remove('hidden');
     document.getElementById('login-password').value = '';
     document.getElementById('login-password').focus();
-    // Сброс окна
+    showLoginView();
     const mw = document.getElementById('main-window');
     mw.classList.remove('maximized','minimized','hidden');
-    // Пересоздадим скрытие
     mw.classList.add('hidden');
   }
 
-  /* ===== УТИЛИТЫ ===== */
   function renderAvatar(avatarStr) {
     if (avatarStr && (avatarStr.startsWith('data:image') || avatarStr.startsWith('http'))) {
       return `<img src="${avatarStr}" alt="avatar" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
@@ -920,7 +1372,6 @@
     document.getElementById('my-story-avatar').innerHTML = renderAvatar(myProfile.avatar);
   }
 
-  /* ===== ЗВУКИ ===== */
   const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   function playClick() {
     if (!soundsEnabled) return;
@@ -986,7 +1437,6 @@
     o.connect(g); g.connect(audioCtx.destination); o.start(t); o.stop(t + .35);
   }
 
-  /* ===== СТАТУС ===== */
   function toggleStatusMenu(event) {
     event.stopPropagation(); playClick();
     const isActive = statusMenu.classList.toggle('active');
@@ -1010,7 +1460,6 @@
     if (dot) dot.classList.remove('menu-open');
   }
 
-  /* ===== ИСТОРИИ ===== */
   function renderStories() {
     const bar = document.getElementById('stories-bar');
     bar.innerHTML = `<div class="story-item my-story" onclick="openAddStoryModal()"><div class="story-avatar" id="my-story-avatar">${renderAvatar(myProfile.avatar)}</div><div class="story-name" data-i18n="my_story">${translations[currentLang].my_story}</div></div>`;
@@ -1087,7 +1536,6 @@
   }
   function closeStoryViewer() { playClick(); document.getElementById('story-viewer').classList.remove('active'); }
 
-  /* ===== ЗАГРУЗКА ФОТО ===== */
   function triggerFileUpload(target) {
     playClick(); avatarTarget = target;
     if (target === 'contact') currentEditContactId = activeId;
@@ -1117,7 +1565,219 @@
     r.readAsDataURL(file); hiddenFileInput.value = '';
   });
 
-  /* ===== КОНТАКТЫ ===== */
+  function toggleAttachmentMenu(event) {
+    event.stopPropagation();
+    playClick();
+    attachmentMenu.classList.toggle('active');
+  }
+  function closeAttachmentMenu() {
+    attachmentMenu.classList.remove('active');
+  }
+  document.addEventListener('click', (e) => {
+    if (!attachmentMenu.contains(e.target) && !e.target.closest('#paperclipBtn')) {
+      closeAttachmentMenu();
+    }
+  });
+
+  function triggerMediaUpload() {
+    closeAttachmentMenu();
+    playClick();
+    mediaInput.click();
+  }
+  function triggerDocUpload() {
+    closeAttachmentMenu();
+    playClick();
+    docInput.click();
+  }
+  mediaInput.addEventListener('change', function(e) {
+    const file = e.target.files[0]; if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      alert('Файл слишком большой. Максимум 5 МБ.'); this.value = ''; return;
+    }
+    const reader = new FileReader();
+    reader.onload = ev => {
+      const type = file.type.startsWith('image') ? 'image' : 'video';
+      sendMedia(type, ev.target.result);
+    };
+    reader.readAsDataURL(file);
+    this.value = '';
+  });
+  docInput.addEventListener('change', function(e) {
+    const file = e.target.files[0]; if (!file) return;
+    if (file.size > 10 * 1024 * 1024) {
+      alert('Файл слишком большой. Максимум 10 МБ.'); this.value = ''; return;
+    }
+    const reader = new FileReader();
+    reader.onload = ev => {
+      sendMedia('file', ev.target.result, file.name);
+    };
+    reader.readAsDataURL(file);
+    this.value = '';
+  });
+
+  function sendMedia(type, dataUrl, filename) {
+    if (!activeId) { alert('Выберите контакт!'); return; }
+    playClick();
+    if (!threads[activeId]) threads[activeId] = [];
+    const msgObj = { who: 'me', text: '', time: getNowTime(), id: Date.now(), type: type, media: dataUrl };
+    if (filename) msgObj.filename = filename;
+    threads[activeId].push(msgObj);
+    lastSentMsgId = msgObj.id;
+    renderChat();
+  }
+
+  /* ===== POLLS ===== */
+  function openPollModal() {
+    closeAttachmentMenu();
+    playClick();
+    document.getElementById('poll-question').value = '';
+    const container = document.getElementById('poll-options-container');
+    container.innerHTML = `
+      <input type="text" class="poll-option-input" placeholder="Вариант 1">
+      <input type="text" class="poll-option-input" placeholder="Вариант 2">
+    `;
+    document.getElementById('modal-create-poll').classList.add('active');
+  }
+
+  function addPollOptionField() {
+    playClick();
+    const container = document.getElementById('poll-options-container');
+    const count = container.querySelectorAll('.poll-option-input').length + 1;
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.className = 'poll-option-input';
+    input.placeholder = 'Вариант ' + count;
+    container.appendChild(input);
+    input.focus();
+  }
+
+  function createPoll() {
+    const question = document.getElementById('poll-question').value.trim();
+    if (!question) { alert('Введите вопрос!'); return; }
+
+    const inputs = document.querySelectorAll('.poll-option-input');
+    const options = [];
+    inputs.forEach(inp => {
+      const val = inp.value.trim();
+      if (val) options.push({ text: val, votes: 0 });
+    });
+
+    if (options.length < 2) { alert('Нужно минимум 2 варианта ответа!'); return; }
+    if (!activeId) { alert('Выберите контакт!'); return; }
+
+    playClick();
+    if (!threads[activeId]) threads[activeId] = [];
+    const msgObj = {
+      who: 'me',
+      text: '',
+      time: getNowTime(),
+      id: Date.now(),
+      type: 'poll',
+      question: question,
+      options: options,
+      voted: false,
+      myVote: null
+    };
+    threads[activeId].push(msgObj);
+    lastSentMsgId = msgObj.id;
+    closeModal('modal-create-poll');
+    renderChat();
+  }
+
+  function votePoll(msgId, optionIndex) {
+    if (!activeId) return;
+    const thread = threads[activeId];
+    if (!thread) return;
+    const msg = thread.find(m => m.id === msgId);
+    if (!msg || msg.voted) return;
+
+    playClick();
+    msg.options[optionIndex].votes++;
+    msg.voted = true;
+    msg.myVote = optionIndex;
+    renderChat();
+  }
+
+  /* ===== VOICE RECORDING ===== */
+  async function startVoiceRecording() {
+    playClick();
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      voiceRecorder = new MediaRecorder(stream);
+      voiceChunks = [];
+      voiceSeconds = 0;
+      
+      voiceRecorder.ondataavailable = e => { if (e.data.size > 0) voiceChunks.push(e.data); };
+      voiceRecorder.onstop = () => {
+        const blob = new Blob(voiceChunks, { type: 'audio/webm' });
+        const reader = new FileReader();
+        reader.onload = ev => {
+          if (ev.target.result && ev.target.result.length > 100) {
+            sendMedia('audio', ev.target.result);
+          }
+        };
+        reader.readAsDataURL(blob);
+        stream.getTracks().forEach(t => t.stop());
+      };
+      
+      voiceRecorder.start();
+      
+      document.getElementById('recordingBanner').classList.add('active');
+      document.getElementById('recordingTimer').textContent = '00:00';
+      const btn = document.getElementById('voiceBtn');
+      btn.style.background = '#ffcccc';
+      btn.style.animation = 'pulse-red 1s infinite';
+      
+      voiceTimerInterval = setInterval(() => {
+        voiceSeconds++;
+        const m = String(Math.floor(voiceSeconds / 60)).padStart(2, '0');
+        const s = String(voiceSeconds % 60).padStart(2, '0');
+        document.getElementById('recordingTimer').textContent = `${m}:${s}`;
+      }, 1000);
+      
+    } catch (err) {
+      alert('Микрофон недоступен. Выберите аудиофайл.');
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = 'audio/*';
+      input.onchange = e => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = ev => sendMedia('audio', ev.target.result);
+        reader.readAsDataURL(file);
+      };
+      input.click();
+    }
+  }
+
+  function stopAndSendVoice() {
+    if (voiceRecorder && voiceRecorder.state !== 'inactive') {
+      voiceRecorder.stop();
+    }
+    clearInterval(voiceTimerInterval);
+    document.getElementById('recordingBanner').classList.remove('active');
+    const btn = document.getElementById('voiceBtn');
+    btn.style.background = '';
+    btn.style.animation = '';
+  }
+
+  function cancelVoice() {
+    if (voiceRecorder && voiceRecorder.state !== 'inactive') {
+      voiceRecorder.ondataavailable = null;
+      voiceRecorder.onstop = null;
+      voiceRecorder.stop();
+      voiceRecorder.stream?.getTracks().forEach(t => t.stop());
+    }
+    clearInterval(voiceTimerInterval);
+    document.getElementById('recordingBanner').classList.remove('active');
+    const btn = document.getElementById('voiceBtn');
+    btn.style.background = '';
+    btn.style.animation = '';
+    playClick();
+  }
+
+  /* ===== CONTACTS ===== */
   inputEl.addEventListener('keydown', e => { if (e.key.length === 1 && !e.ctrlKey && !e.altKey && !e.metaKey) playTypeSound(); });
   function renderContacts() {
     contactListEl.innerHTML = '';
@@ -1177,29 +1837,69 @@
     if (threads[activeId]) threads[activeId].forEach(m => {
       const div = document.createElement('div');
       div.className = `msg ${m.who === 'me' ? 'msg-me' : 'msg-them'}`;
+      if (m.id === lastSentMsgId) {
+        div.classList.add('msg-new');
+        lastSentMsgId = null;
+      }
       const an = m.who === 'me' ? myProfile.name : (m.author || c.name);
-      div.innerHTML = `<div class="msg-meta">${an} • ${m.time}</div><div class="msg-bubble">${m.text}</div>`;
+      let bubbleContent = '';
+      
+      if (m.type === 'image') bubbleContent = `<img src="${m.media}" alt="image">`;
+      else if (m.type === 'video') bubbleContent = `<video src="${m.media}" controls></video>`;
+      else if (m.type === 'audio') bubbleContent = `<audio src="${m.media}" controls></audio>`;
+      else if (m.type === 'file') bubbleContent = `<a href="${m.media}" download="${m.filename || 'file'}" class="file-attachment">📄 ${m.filename || 'Файл'}</a>`;
+      else if (m.type === 'poll') {
+        let optionsHtml = m.options.map((opt, idx) => {
+          const totalVotes = m.options.reduce((a, b) => a + b.votes, 0);
+          const percent = totalVotes === 0 ? 0 : Math.round((opt.votes / totalVotes) * 100);
+          if (m.voted) {
+            return `<div class="poll-option-result ${m.myVote === idx ? 'voted' : ''}">
+                      <div class="poll-option-bar" style="width: ${percent}%"></div>
+                      <div class="poll-option-text">${opt.text}</div>
+                      <div class="poll-option-percent">${percent}%</div>
+                    </div>`;
+          } else {
+            return `<div class="poll-option-btn" onclick="votePoll(${m.id}, ${idx})">${opt.text}</div>`;
+          }
+        }).join('');
+        
+        bubbleContent = `<div class="poll-container">
+                            <div class="poll-question">${m.question}</div>
+                            <div class="poll-options">${optionsHtml}</div>
+                            <div class="poll-footer">${m.voted ? 'Вы проголосовали' : 'Нажмите, чтобы проголосовать'}</div>
+                          </div>`;
+      }
+      else bubbleContent = m.text;
+      
+      div.innerHTML = `<div class="msg-meta">${an} • ${m.time}</div><div class="msg-bubble">${bubbleContent}</div>`;
       messagesEl.appendChild(div);
     });
     messagesEl.scrollTop = messagesEl.scrollHeight;
+    const savedSize = document.getElementById('chat-text-size').value;
+    if (savedSize) document.querySelectorAll('.msg-bubble').forEach(b => b.style.fontSize = savedSize);
   }
   function animateGavel() {
-    const svg = document.querySelector('#send-btn svg'); if (!svg) return;
-    svg.classList.remove('hitting'); void svg.offsetWidth; svg.classList.add('hitting');
-    setTimeout(() => svg.classList.remove('hitting'), 500);
+    const gavel = document.querySelector('#send-btn #gavel');
+    const board = document.querySelector('#send-btn #board');
+    if (!gavel || !board) return;
+    gavel.classList.remove('hitting'); board.classList.remove('hit');
+    void gavel.offsetWidth;
+    gavel.classList.add('hitting'); board.classList.add('hit');
+    setTimeout(() => { gavel.classList.remove('hitting'); board.classList.remove('hit'); }, 500);
   }
   function sendMessage() {
     const text = inputEl.value.trim(); if (!text || !activeId) return;
     playClick(); animateGavel();
     if (!threads[activeId]) threads[activeId] = [];
-    threads[activeId].push({ who:'me', text, time:getNowTime() });
+    const msgObj = { who:'me', text, time:getNowTime(), id: Date.now() };
+    threads[activeId].push(msgObj);
+    lastSentMsgId = msgObj.id;
     inputEl.value = ''; renderChat();
   }
   document.getElementById('send-btn').onclick = sendMessage;
   inputEl.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } });
   document.getElementById('search-input').addEventListener('input', renderContacts);
 
-  /* ===== ЗВОНОК ===== */
   function toggleMic() {
     isMicMuted = !isMicMuted;
     const btn = document.getElementById('mic-btn');
@@ -1229,7 +1929,7 @@
     const c = contacts.find(x => x.id === activeId);
     if (!c || callState.active) return;
     callState.active = true; callState.contactId = activeId; callState.seconds = 0;
-    isHolding = false; isRecording = false; isScreenSharing = false; isMicMuted = false;
+    isHolding = false; isScreenSharing = false; isMicMuted = false;
     document.getElementById('call-name').textContent = c.name;
     document.getElementById('call-status').textContent = translations[currentLang].connecting;
     document.getElementById('call-top-avatar').innerHTML = renderAvatar(c.avatar);
@@ -1281,7 +1981,6 @@
     }
   }
 
-  /* ===== МОДАЛКИ ===== */
   function openModal(id) { playClick(); document.getElementById(id).classList.add('active'); if (id === 'modal-add-group') renderGroupCheckboxes(); }
   function closeModal(id) { playClick(); document.getElementById(id).classList.remove('active'); }
   function toggleCloud(event) {
@@ -1384,7 +2083,6 @@
     }
   });
 
-  /* ===== ДОБАВЛЕНИЕ КОНТАКТОВ ===== */
   function addNewContact() {
     let name = document.getElementById('new-contact-name').value.trim();
     if (!name) name = getNextUserName();
@@ -1423,24 +2121,11 @@
     document.getElementById('new-group-name').value = '';
   }
 
-  /* ===== ПРОТЕСТ ===== */
-  function triggerObjection() {
-    playClick(); if (!activeId) return;
-    const ov = document.getElementById('objection-overlay');
-    ov.classList.remove('active'); void ov.offsetWidth; ov.classList.add('active');
-    if (!threads[activeId]) threads[activeId] = [];
-    threads[activeId].push({ who:'me', text:`🚨 <b style="color:red;">${translations[currentLang].objection}</b> 🚨`, time:getNowTime(), author:myProfile.name });
-    renderChat();
-  }
-
-  /* ===== ОКНА ===== */
   function minimizeWindow() { playClick(); document.getElementById('main-window').classList.toggle('minimized'); }
   function maximizeWindow() { playClick(); document.getElementById('main-window').classList.toggle('maximized'); }
   function closeWindow() { playClick(); document.getElementById('main-window').classList.add('hidden'); }
 
-  /* ===== ИНИЦИАЛИЗАЦИЯ ===== */
   (function init() {
-    // Заполняем имя из localStorage
     try {
       const saved = localStorage.getItem('courtroom_remembered_user');
       if (saved) {
@@ -1457,7 +2142,6 @@
     renderChat();
     renderStories();
 
-    // Автофокус на поле ввода
     setTimeout(() => document.getElementById('login-username').focus(), 100);
   })();
 </script>
