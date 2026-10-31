@@ -2626,35 +2626,45 @@
   }
   function saveProfile(event, targetType) {
     event.stopPropagation(); playClick();
+    
     if (targetType === 'me') {
-    if (targetType === 'me') {
-      const newUsername = document.getElementById('edit-username').value.trim();
+      const _euEl = document.getElementById('edit-username');
+      const newUsername = _euEl ? _euEl.value.trim() : myProfile.username;
+      
       if (newUsername !== myProfile.username) {
         if (!isValidUsername(newUsername)) { alert('Username: только буквы, цифры, _ и -'); return; }
         if (isUsernameTaken(newUsername, myProfile.loginKey, myProfile.phone)) { alert('Этот username уже занят'); return; }
+        
         myProfile.username = newUsername;
         const udb = JSON.parse(localStorage.getItem('courtroom_users_db') || '{}');
         const fullAccount = getUserDatabase()[myProfile.loginKey] || {};
         udb[myProfile.loginKey] = { ...fullAccount, username: newUsername };
         localStorage.setItem('courtroom_users_db', JSON.stringify(udb));
+        
         const mdb = JSON.parse(localStorage.getItem('courtroom_messenger_db') || '{}');
         if (myProfile.phone && mdb[myProfile.phone]) {
           mdb[myProfile.phone].username = newUsername;
           localStorage.setItem('courtroom_messenger_db', JSON.stringify(mdb));
         }
       }
+      
       myProfile.name = document.getElementById('edit-name').value || myProfile.name;
       myProfile.phone = document.getElementById('edit-phone').value;
       myProfile.role = document.getElementById('edit-role').value;
       myProfile.bio = document.getElementById('edit-bio').value;
+      
       updateProfileDisplay(); renderStories();
+      
       document.getElementById('view-name').textContent = myProfile.name;
-      document.getElementById('view-username').textContent = '@' + myProfile.username;
+      
+      const _vu = document.getElementById('view-username'); 
+      if (_vu) _vu.textContent = '@' + myProfile.username;
+      
       document.getElementById('view-role').textContent = myProfile.role;
       document.getElementById('view-bio').textContent = myProfile.bio;
-      document.getElementById('display-my-name').textContent = myProfile.name;
       document.getElementById('profile-view-mode').style.display = 'block';
       document.getElementById('profile-edit-mode').style.display = 'none';
+      
     } else {
       const c = contacts.find(x => x.id === activeId); if (!c) return;
       c.name = document.getElementById('edit-c-name').value || c.name;
