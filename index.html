@@ -565,29 +565,28 @@
       animation: bounceIn 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
-    .contact {
+    /* .contact {
       animation: contactIn 0.2s ease-out;
-    }
+    } */
 
-    button:active,
+    button:active, 
     .tool-btn:active,
     .header-btn:active,
     .edit-btn:active,
     .tg-btn:active,
-    .signin-btn:active,
+    .signin-btn:active, 
     .gh-btn:active,
     .gg-btn:active,
     .cloud-btn:active,
     .action-bar button:active,
-    .contact:active,
     .settings-tab:active,
-    .status-option:active,
+    .status-option:active, 
     .emoji-btn:active,
     .attachment-menu-item:active,
     .context-menu-item:active,
     .reaction-pill:active,
-    .story-item:active .story-avatar {
-      animation: buttonPressAnim 0.18s ease-out;
+    .story-item:active .story-avatar { 
+      animation: buttonPressAnim 0.18s ease-out; 
     }
 
     .contact {
@@ -1863,6 +1862,31 @@
       font-size: 11px;
       color: var(--text-muted);
       text-align: center;
+    }
+        /* NEW: Poll Animations & Voters */
+    @keyframes voteAnim {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.02); background: rgba(74,144,226,0.25); }
+      100% { transform: scale(1); }
+    }
+    .poll-option-result.voted, .poll-option-btn.vote-anim { 
+      animation: voteAnim 0.3s ease-out; 
+    }
+
+    .poll-voters {
+      display: flex; align-items: center; margin-top: 10px; padding-left: 6px;
+      animation: fadeInUp 0.3s ease-out;
+    }
+    .poll-voter-avatar {
+      width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--bg-messages);
+      margin-left: -8px; background: #ccc; object-fit: cover; z-index: 1; position: relative;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+    .poll-voter-avatar:first-child { margin-left: 0; z-index: 5; }
+    .poll-voter-avatar:nth-child(2) { z-index: 4; }
+    .poll-voter-avatar:nth-child(3) { z-index: 3; }
+    .poll-voter-more {
+      font-size: 11px; color: var(--text-muted); margin-left: 6px; font-weight: 600; z-index: 2;
     }
 
     .input-area {
@@ -3997,6 +4021,10 @@
         <div class="modal-body">
           <label>Вопрос:</label>
           <input type="text" id="poll-question" placeholder="О чем спросить?">
+          <label style="display:flex; align-items:center; gap:8px; margin-top:5px; cursor:pointer; color:var(--text-main); font-weight:bold;">
+            <input type="checkbox" id="poll-anonymous" style="width:16px; height:16px; cursor:pointer; margin:0;"> 
+            Анонимный опрос (скрыть авторов)
+          </label>
           <label style="margin-top: 5px;">Варианты ответа:</label>
           <div id="poll-options-container" style="display: flex; flex-direction: column;"></div>
           <button class="edit-btn" style="align-self: flex-start; margin-top: 5px;" onclick="addPollOptionField()">+
@@ -4849,7 +4877,7 @@
         ac.innerHTML = `${renderAvatar(myProfile.avatar)}<div class="my-status-dot ${myProfile.status}" id="my-status-dot" onclick="toggleStatusMenu(event)" title="Change status"></div>`;
       }
       document.getElementById('tg-acc-phone').textContent = privacySettings.phone === 'nobody' ? 'Hidden' : myProfile.phone;
-      document.getElementById('tg-acc-username').textContent = '@' + myProfile.name.toLowerCase();
+      document.getElementById('tg-acc-username').textContent = '@' + myProfile.username;
       document.getElementById('my-story-avatar').innerHTML = renderAvatar(myProfile.avatar);
     }
 
@@ -4920,7 +4948,7 @@
       const text = document.getElementById('new-story-text').value.trim();
       if (!text && !pendingStoryImage) return;
       const dayAgo = Date.now() - 24 * 60 * 60 * 1000;
-      const myRecentStories = stories.filter(s => s.username === myProfile.name && s.timestamp > dayAgo);
+      const myRecentStories = stories.filter(s => s.author === myProfile.name && s.timestamp > dayAgo);
       if (myRecentStories.length >= 15) { alert('❌ Вы не можете опубликовать больше 15 историй за 24 часа!'); return; }
       playClick();
       stories.unshift({id: 's_' + Date.now(), username: myProfile.name, author: myProfile.name, avatar: myProfile.avatar, content: text, image: pendingStoryImage, timestamp: Date.now()});
@@ -5052,6 +5080,7 @@
 
     function openPollModal() {
       closeAttachmentMenu(); playClick(); document.getElementById('poll-question').value = '';
+      document.getElementById('poll-anonymous').checked = false;
       const container = document.getElementById('poll-options-container'); container.innerHTML = '';
       addPollOptionField(); addPollOptionField(); document.getElementById('modal-create-poll').classList.add('active');
     }
@@ -5064,21 +5093,54 @@
     }
     function createPoll() {
       const question = document.getElementById('poll-question').value.trim(); if (!question) {alert('Введите вопрос!'); return;}
+      const isAnon = document.getElementById('poll-anonymous').checked;
       const inputs = document.querySelectorAll('.poll-option-input'); const options = [];
-      inputs.forEach(inp => {const val = inp.value.trim(); if (val) options.push({text: val, votes: 0});});
+      
+      inputs.forEach(inp => {
+        const val = inp.value.trim(); 
+        if (val) options.push({text: val, votes: 0, voters: []}); // Добавили массив voters
+      });
+      
       if (options.length < 2) {alert('Нужно минимум 2 варианта ответа!'); return;}
       if (!activeId) {alert('Выберите контакт!'); return;}
       if (blockedContacts.has(activeId)) {alert('Вы заблокировали пользователя!'); return;}
+      
       playClick(); if (!threads[activeId]) threads[activeId] = [];
-      const msgObj = {who: 'me', text: '', time: getNowTime(), id: Date.now(), type: 'poll', question: question, options: options, voted: false, myVote: null, read: false};
+      const msgObj = {who: 'me', text: '', time: getNowTime(), id: Date.now(), type: 'poll', question: question, options: options, voted: false, myVote: null, read: false, isAnonymous: isAnon};
       if (replyToMsg) {msgObj.replyTo = {name: replyToMsg.author || contacts.find(x => x.id === activeId).name, text: replyToMsg.text || 'Опрос'}; cancelReply();}
+      
       threads[activeId].push(msgObj); lastSentMsgId = msgObj.id; closeModal('modal-create-poll'); renderChat();
     }
     function votePoll(msgId, optionIndex) {
+    function votePoll(msgId, optionIndex) {
       if (!activeId) return; const thread = threads[activeId]; if (!thread) return;
       const msg = thread.find(m => m.id === msgId); if (!msg) return;
-      playClick(); if (msg.voted && msg.myVote !== null) {msg.options[msg.myVote].votes--;}
-      msg.options[optionIndex].votes++; msg.voted = true; msg.myVote = optionIndex; renderChat();
+      
+      playClick();
+      
+      // Если меняем голос — убираем старый
+      if (msg.voted && msg.myVote !== null) {
+        msg.options[msg.myVote].votes--;
+        if (!msg.isAnonymous && msg.options[msg.myVote].voters) {
+          msg.options[msg.myVote].voters = msg.options[msg.myVote].voters.filter(v => v.name !== myProfile.name);
+        }
+      }
+      
+      // Записываем новый голос
+      msg.options[optionIndex].votes++; 
+      if (!msg.isAnonymous) {
+        if (!msg.options[optionIndex].voters) msg.options[optionIndex].voters = [];
+        msg.options[optionIndex].voters = msg.options[optionIndex].voters.filter(v => v.name !== myProfile.name);
+        msg.options[optionIndex].voters.push({ name: myProfile.name, avatar: myProfile.avatar });
+      }
+      
+      msg.voted = true; msg.myVote = optionIndex; 
+      
+      // Триггер анимации выбора
+      const pillEl = document.querySelector(`.msg[data-id="${msgId}"] .poll-option-result[data-index="${optionIndex}"]`);
+      if (pillEl) { pillEl.classList.add('vote-anim'); setTimeout(() => pillEl.classList.remove('vote-anim'), 300); }
+      
+      renderChat();
     }
 
     // === КОНТЕКСТНОЕ МЕНЮ ===
@@ -5471,13 +5533,35 @@
         `;
         }
         else if (m.type === 'poll') {
+        else if (m.type === 'poll') {
           let optionsHtml = m.options.map((opt, idx) => {
             const totalVotes = m.options.reduce((a, b) => a + b.votes, 0);
             const percent = totalVotes === 0 ? 0 : Math.round((opt.votes / totalVotes) * 100);
-            if (m.voted) return `<div class="poll-option-result ${m.myVote === idx ? 'voted' : ''}" onclick="votePoll(${m.id}, ${idx})"><div class="poll-option-bar" style="width: ${percent}%"></div><div class="poll-option-text">${opt.text}</div><div class="poll-option-percent">${percent}%</div></div>`;
-            return `<div class="poll-option-btn" onclick="votePoll(${m.id}, ${idx})">${opt.text}</div>`;
+            if (m.voted) return `<div class="poll-option-result ${m.myVote === idx ? 'voted' : ''}" data-index="${idx}" onclick="votePoll(${m.id}, ${idx})"><div class="poll-option-bar" style="width: ${percent}%"></div><div class="poll-option-text">${opt.text}</div><div class="poll-option-percent">${percent}%</div></div>`;
+            return `<div class="poll-option-btn" data-index="${idx}" onclick="votePoll(${m.id}, ${idx})">${opt.text}</div>`;
           }).join('');
-          bubbleContent += `<div class="poll-container"><div class="poll-question">${m.question}</div><div class="poll-options">${optionsHtml}</div><div class="poll-footer">${m.voted ? 'Нажмите, чтобы изменить голос' : 'Нажмите, чтобы проголосовать'}</div></div>`;
+
+          // Собираем аватарки (если опрос не анонимный)
+          let votersHtml = '';
+          if (!m.isAnonymous) {
+            let allVoters = [];
+            m.options.forEach(opt => { if (opt.voters) allVoters.push(...opt.voters); });
+            // Убираем дубликаты
+            const uniqueVoters = Array.from(new Set(allVoters.map(v => v.name))).map(name => allVoters.find(v => v.name === name));
+            
+            if (uniqueVoters.length > 0) {
+              let avatarsHtml = '';
+              const displayCount = Math.min(uniqueVoters.length, 3);
+              for (let i = 0; i < displayCount; i++) {
+                avatarsHtml += `<img src="${uniqueVoters[i].avatar}" class="poll-voter-avatar" title="${uniqueVoters[i].name}">`;
+              }
+              let moreCount = uniqueVoters.length - 3;
+              let moreHtml = moreCount > 0 ? `<span class="poll-voter-more">+${moreCount}</span>` : '';
+              votersHtml = `<div class="poll-voters">${avatarsHtml}${moreHtml}</div>`;
+            }
+          }
+
+          bubbleContent += `<div class="poll-container"><div class="poll-question">${m.question}</div><div class="poll-options">${optionsHtml}</div>${votersHtml}<div class="poll-footer">${m.voted ? 'Нажмите, чтобы изменить голос' : 'Нажмите, чтобы проголосовать'}${m.isAnonymous ? ' • Анонимный' : ''}</div></div>`;
         }
         else bubbleContent += m.text;
 
