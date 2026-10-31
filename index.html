@@ -349,6 +349,12 @@
   .reaction-count { font-size: 10px; font-weight: 600; color: var(--text-main); }
 
   .msg.selected { background: var(--msg-selected); border-radius: 8px; }
+  @keyframes highlightMsg {
+    0% { background: rgba(74,144,226,0.5); }
+    70% { background: rgba(74,144,226,0.2); }
+    100% { background: transparent; }
+  }
+  .msg.highlight-flash { animation: highlightMsg 1.2s ease-out; border-radius: 8px; }
   .msg.selected .msg-bubble { border-color: var(--tg-accent); }
   .msg-checkbox { position: absolute; left: -25px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; border-radius: 50%; border: 2px solid #ccc; display: none; align-items: center; justify-content: center; background: #fff; }
   .msg.selected .msg-checkbox { display: flex; border-color: var(--tg-accent); background: var(--tg-accent); color: #fff; }
@@ -680,6 +686,8 @@
         <input type="text" id="phone-reg-number" placeholder="+7 (999) 123-45-67">
         <label>Ваше имя:</label>
         <input type="text" id="phone-reg-name" placeholder="Иван Иванов">
+        <label>Username (a-z, 0-9, _, -):</label>
+        <input type="text" id="phone-reg-username" placeholder="ivan_ivanov">
         <label>Пароль (мин. 4 символа):</label>
         <input type="password" id="phone-reg-password" placeholder="••••••••">
         <div class="login-error" id="phone-error"></div>
@@ -690,6 +698,8 @@
         <p style="font-size:12px;color:#666;margin:0 0 5px;">Введите GitHub username и пароль для будущего входа.</p>
         <label>GitHub Username:</label>
         <input type="text" id="gh-username" placeholder="torvalds или octocat">
+        <label>Ваш Username в мессенджере (a-z, 0-9, _, -):</label>
+        <input type="text" id="gh-display-username" placeholder="linus_t">
         <label>Пароль (мин. 4 символа):</label>
         <input type="password" id="gh-password" placeholder="••••••••">
         <div class="login-error" id="gh-error"></div>
@@ -703,6 +713,8 @@
         <p style="font-size:12px;color:#666;margin:0 0 5px;">Введите Google Email и пароль для будущего входа.</p>
         <label>Google Email:</label>
         <input type="email" id="gg-email" placeholder="example@gmail.com">
+        <label>Username (a-z, 0-9, _, -):</label>
+        <input type="text" id="gg-username" placeholder="john_doe">
         <label>Пароль (мин. 4 символа):</label>
         <input type="password" id="gg-password" placeholder="••••••••">
         <div class="login-error" id="gg-error"></div>
@@ -773,6 +785,7 @@
           <h3><span data-i18n="my_profile">👤 Мой профиль</span> <button class="edit-btn" onclick="toggleEditProfile(event, 'me')" data-i18n="edit">✏️ Изменить</button></h3>
           <div id="profile-view-mode">
             <p><b data-i18n="name">Имя:</b> <span id="view-name">User1</span></p>
+            <p><b>Username:</b> <span id="view-username">@user1</span></p>
             <p><b data-i18n="phone">Телефон:</b> <span id="view-phone">+7 (000) 000-00-00</span></p>
             <p><b data-i18n="status">Статус:</b> <span id="view-role">Пользователь</span></p>
             <p><b data-i18n="bio">О себе:</b> <span id="view-bio" data-i18n="welcome">Добро пожаловать в мессенджер!</span></p>
@@ -780,6 +793,7 @@
           <div id="profile-edit-mode" style="display:none;">
             <div class="avatar-edit-area"><button class="edit-btn" onclick="triggerFileUpload('me')" data-i18n="change_photo">📷 Сменить фото</button></div>
             <p><b data-i18n="name">Имя:</b><br><input type="text" class="edit-input" id="edit-name"></p>
+            <p><b>Username:</b><br><input type="text" class="edit-input" id="edit-username"></p>
             <p><b data-i18n="phone">Телефон:</b><br><input type="text" class="edit-input" id="edit-phone"></p>
             <p><b data-i18n="status">Статус:</b><br><input type="text" class="edit-input" id="edit-role"></p>
             <p><b data-i18n="bio">О себе:</b><br><textarea class="edit-input" id="edit-bio" rows="2"></textarea></p>
@@ -825,6 +839,7 @@
         <h3 id="contact-popup-title">Профиль <button class="edit-btn" onclick="toggleEditProfile(event, 'contact')" data-i18n="edit">✏️ Изменить</button></h3>
         <div id="contact-view-mode">
           <p><b data-i18n="phone">Телефон:</b> <span id="cp-phone">-</span></p>
+          <p><b>Username:</b> <span id="cp-username">-</span></p>
           <p><b data-i18n="role">Роль:</b> <span id="cp-role">-</span></p>
           <p><b data-i18n="status">Статус:</b> <span id="cp-status">-</span></p>
           <p id="cp-bio-container"><b data-i18n="bio">О себе:</b> <span id="cp-bio">-</span></p>
@@ -1286,14 +1301,14 @@
   }
 
   const DEFAULT_ACCOUNTS = {
-    'User1': { password: 'password', displayName: 'User1', type: 'password' },
-    'Admin': { password: 'admin', displayName: 'Admin', type: 'password' },
-    'Test':  { password: 'test',   displayName: 'Test User', type: 'password' }
+    'User1': { password: 'password', displayName: 'User1', type: 'password', username: 'user1' },
+    'Admin': { password: 'admin', displayName: 'Admin', type: 'password', username: 'admin' },
+    'Test':  { password: 'test',   displayName: 'Test User', type: 'password', username: 'test' }
   };
 
   const MESSENGER_DB = {
-    '+7 (999) 111-22-33': { name: 'Алексей', avatar: 'https://ui-avatars.com/api/?name=Alex&background=0D8ABC&color=fff&size=128' },
-    '+7 (999) 222-33-44': { name: 'Мария', avatar: 'https://ui-avatars.com/api/?name=Maria&background=E91E63&color=fff&size=128' }
+    '+7 (999) 111-22-33': { name: 'Алексей', avatar: 'https://ui-avatars.com/api/?name=Alex&background=0D8ABC&color=fff&size=128', username: 'alexey' },
+    '+7 (999) 222-33-44': { name: 'Мария', avatar: 'https://ui-avatars.com/api/?name=Maria&background=E91E63&color=fff&size=128', username: 'maria' }
   };
 
   function getUserDatabase() {
@@ -1302,10 +1317,10 @@
     return Object.assign({}, DEFAULT_ACCOUNTS, stored);
   }
 
-  function saveUserToDatabase(username, password, displayName, type) {
+  function saveUserToDatabase(loginKey, password, displayName, type, username) {
     try {
       const stored = JSON.parse(localStorage.getItem('courtroom_users_db') || '{}');
-      stored[username] = { password: password || '', displayName: displayName || username, type: type || 'password' };
+      stored[loginKey] = { password: password || '', displayName: displayName || loginKey, type: type || 'password', username: username || '' };
       localStorage.setItem('courtroom_users_db', JSON.stringify(stored));
     } catch(e) { console.warn('DB save failed', e); }
   }
@@ -1316,10 +1331,10 @@
     return Object.assign({}, MESSENGER_DB, stored);
   }
 
-  function saveMessengerContact(phone, name, avatar) {
+  function saveMessengerContact(phone, name, avatar, username) {
     try {
       const stored = JSON.parse(localStorage.getItem('courtroom_messenger_db') || '{}');
-      stored[phone] = { name: name, avatar: avatar };
+      stored[phone] = { name: name, avatar: avatar, username: username || '' };
       localStorage.setItem('courtroom_messenger_db', JSON.stringify(stored));
     } catch(e) {}
   }
@@ -1385,7 +1400,7 @@
 
   let userCounter = 2;
   function getNextUserName() { return 'User' + userCounter++; }
-  let myProfile = { name:'User1', phone:'+7 (000) 000-00-00', role:'User', bio:'Welcome to the messenger!', avatar:defaultAvatarUrl, status:'online' };
+  let myProfile = { name:'User1', phone:'+7 (000) 000-00-00', username:'user1', loginKey:'User1', role:'User', bio:'Welcome to the messenger!', avatar:defaultAvatarUrl, status:'online' };
   let contacts = [];
   let threads = {};
   let stories = [];
@@ -1435,7 +1450,8 @@
         status: 'online',
         avatar: botAvatar,
         role: 'Bot',
-        bio: 'Ваш личный помощник и тестировщик.'
+        bio: 'Ваш личный помощник и тестировщик.',
+        username: 'courtroom_bot'
       });
       threads[botId] = [
         { who: 'them', author: 'Courtroom Bot', text: 'Привет! Я бот для тестирования. Напиши мне сообщение или позвони!', time: getNowTime(), id: Date.now() }
@@ -1462,6 +1478,25 @@
     document.getElementById('login-view').style.display = 'block';
     document.getElementById('register-view').style.display = 'none';
     document.getElementById('login-tagline').textContent = 'Вход в аккаунт · Sign in';
+  }
+   function isValidUsername(u) {
+    return /^[a-zA-Z0-9_-]+$/.test(u);
+  }
+
+  function isUsernameTaken(username, excludeLoginKey, excludePhone) {
+    const lower = username.toLowerCase();
+    const udb = getUserDatabase();
+    for (const key in udb) {
+      if (key === excludeLoginKey) continue;
+      const stored = (udb[key].username || key).toLowerCase();
+      if (stored === lower) return true;
+    }
+    const mdb = getMessengerDB();
+    for (const phone in mdb) {
+      if (excludePhone && phone === excludePhone) continue;
+      if (mdb[phone].username && mdb[phone].username.toLowerCase() === lower) return true;
+    }
+    return false;
   }
 
   function switchRegTab(tab, el) {
@@ -1517,7 +1552,10 @@
 
     myProfile.name = account.displayName || username;
     myProfile.status = selectedLoginStatus;
+    myProfile.loginKey = username;
+    myProfile.username = account.username || username.toLowerCase().replace(/[^a-z0-9_-]/g, '') || 'user';
     document.getElementById('view-phone').textContent = myProfile.phone;
+    document.getElementById('view-username').textContent = '@' + myProfile.username;
 
     if (document.getElementById('login-remember').checked) {
       try { localStorage.setItem('courtroom_remembered_user', username); } catch(e) {}
@@ -1547,12 +1585,16 @@
   function registerWithPhone() {
     const phone = document.getElementById('phone-reg-number').value.trim();
     const name = document.getElementById('phone-reg-name').value.trim();
+    const username = document.getElementById('phone-reg-username').value.trim();
     const password = document.getElementById('phone-reg-password').value;
     const errEl = document.getElementById('phone-error');
     errEl.classList.remove('show');
 
     if (!phone) { errEl.textContent = 'Введите номер телефона'; errEl.classList.add('show'); return; }
     if (!name) { errEl.textContent = 'Введите имя'; errEl.classList.add('show'); return; }
+    if (!username) { errEl.textContent = 'Введите username'; errEl.classList.add('show'); return; }
+    if (!isValidUsername(username)) { errEl.textContent = 'Username: только буквы, цифры, _ и -'; errEl.classList.add('show'); return; }
+    if (isUsernameTaken(username)) { errEl.textContent = 'Этот username уже занят'; errEl.classList.add('show'); return; }
     if (!password || password.length < 4) { errEl.textContent = 'Пароль должен быть не менее 4 символов'; errEl.classList.add('show'); return; }
 
     const db = getUserDatabase();
@@ -1560,11 +1602,13 @@
 
     const avatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=00aff0&color=fff&size=128&bold=true`;
 
-    saveUserToDatabase(phone, password, name, 'phone');
-    saveMessengerContact(phone, name, avatar);
+    saveUserToDatabase(phone, password, name, 'phone', username);
+    saveMessengerContact(phone, name, avatar, username);
 
     myProfile.name = name;
     myProfile.phone = phone;
+    myProfile.username = username;
+    myProfile.loginKey = phone;
     myProfile.avatar = avatar;
     myProfile.role = 'User';
     myProfile.bio = 'Привет! Я использую Courtroom Live Messenger.';
@@ -1576,6 +1620,7 @@
 
     document.getElementById('display-my-name').textContent = myProfile.name;
     document.getElementById('view-name').textContent = myProfile.name;
+    document.getElementById('view-username').textContent = '@' + myProfile.username;
     document.getElementById('view-phone').textContent = myProfile.phone;
     document.getElementById('view-role').textContent = myProfile.role;
     document.getElementById('view-bio').textContent = myProfile.bio;
@@ -1588,31 +1633,37 @@
   }
 
   async function registerWithGitHub() {
-    const username = document.getElementById('gh-username').value.trim();
+    const ghLogin = document.getElementById('gh-username').value.trim();
+    const dispUsername = document.getElementById('gh-display-username').value.trim();
     const password = document.getElementById('gh-password').value;
     const errEl = document.getElementById('gh-error');
     errEl.classList.remove('show');
 
-    if (!username) { errEl.textContent = 'Введите GitHub username'; errEl.classList.add('show'); return; }
+    if (!ghLogin) { errEl.textContent = 'Введите GitHub username'; errEl.classList.add('show'); return; }
+    if (!dispUsername) { errEl.textContent = 'Введите username в мессенджере'; errEl.classList.add('show'); return; }
+    if (!isValidUsername(dispUsername)) { errEl.textContent = 'Username: только буквы, цифры, _ и -'; errEl.classList.add('show'); return; }
+    if (isUsernameTaken(dispUsername)) { errEl.textContent = 'Этот username уже занят'; errEl.classList.add('show'); return; }
     if (!password || password.length < 4) { errEl.textContent = 'Пароль должен быть не менее 4 символов'; errEl.classList.add('show'); return; }
 
     const db = getUserDatabase();
-    if (db[username]) { errEl.textContent = 'Аккаунт уже существует. Войдите.'; errEl.classList.add('show'); return; }
+    if (db[ghLogin]) { errEl.textContent = 'Аккаунт уже существует. Войдите.'; errEl.classList.add('show'); return; }
 
     playClick();
     try {
-      const res = await fetch(`https://api.github.com/users/${encodeURIComponent(username)}`);
+      const res = await fetch(`https://api.github.com/users/${encodeURIComponent(ghLogin)}`);
       if (!res.ok) { if (res.status === 404) throw new Error('Пользователь GitHub не найден'); throw new Error('Ошибка запроса к GitHub'); }
       const data = await res.json();
 
       myProfile.name = data.name || data.login;
+      myProfile.username = dispUsername;
+      myProfile.loginKey = ghLogin;
       myProfile.avatar = data.avatar_url;
       myProfile.phone = '+7 (000) 000-00-00';
       myProfile.role = 'GitHub User';
       myProfile.bio = data.bio || 'Привет! Я использую Courtroom Live Messenger.';
       myProfile.status = selectedLoginStatus;
 
-      saveUserToDatabase(username, password, myProfile.name, 'oauth');
+      saveUserToDatabase(ghLogin, password, myProfile.name, 'oauth', dispUsername);
 
       document.getElementById('login-overlay').classList.add('hidden');
       document.getElementById('main-window').classList.remove('hidden');
@@ -1620,6 +1671,7 @@
 
       document.getElementById('display-my-name').textContent = myProfile.name;
       document.getElementById('view-name').textContent = myProfile.name;
+      document.getElementById('view-username').textContent = '@' + myProfile.username;
       document.getElementById('view-phone').textContent = myProfile.phone;
       document.getElementById('view-role').textContent = myProfile.role;
       document.getElementById('view-bio').textContent = myProfile.bio;
@@ -1636,11 +1688,15 @@
 
   function registerWithGoogle() {
     const email = document.getElementById('gg-email').value.trim();
+    const username = document.getElementById('gg-username').value.trim();
     const password = document.getElementById('gg-password').value;
     const errEl = document.getElementById('gg-error');
     errEl.classList.remove('show');
 
     if (!email || !email.includes('@')) { errEl.textContent = 'Введите корректный Google Email'; errEl.classList.add('show'); return; }
+    if (!username) { errEl.textContent = 'Введите username'; errEl.classList.add('show'); return; }
+    if (!isValidUsername(username)) { errEl.textContent = 'Username: только буквы, цифры, _ и -'; errEl.classList.add('show'); return; }
+    if (isUsernameTaken(username)) { errEl.textContent = 'Этот username уже занят'; errEl.classList.add('show'); return; }
     if (!password || password.length < 4) { errEl.textContent = 'Пароль должен быть не менее 4 символов'; errEl.classList.add('show'); return; }
 
     const db = getUserDatabase();
@@ -1651,13 +1707,15 @@
     const capitalizedName = name.charAt(0).toUpperCase() + name.slice(1);
 
     myProfile.name = capitalizedName;
+    myProfile.username = username;
+    myProfile.loginKey = email;
     myProfile.avatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(capitalizedName)}&background=4285F4&color=fff&size=128&bold=true`;
     myProfile.phone = '+7 (000) 000-00-00';
     myProfile.role = 'Google User';
     myProfile.bio = 'Привет! Я использую Courtroom Live Messenger.';
     myProfile.status = selectedLoginStatus;
 
-    saveUserToDatabase(email, password, myProfile.name, 'oauth');
+    saveUserToDatabase(email, password, myProfile.name, 'oauth', username);
 
     document.getElementById('login-overlay').classList.add('hidden');
     document.getElementById('main-window').classList.remove('hidden');
@@ -1665,6 +1723,7 @@
 
     document.getElementById('display-my-name').textContent = myProfile.name;
     document.getElementById('view-name').textContent = myProfile.name;
+    document.getElementById('view-username').textContent = '@' + myProfile.username;
     document.getElementById('view-phone').textContent = myProfile.phone;
     document.getElementById('view-role').textContent = myProfile.role;
     document.getElementById('view-bio').textContent = myProfile.bio;
@@ -1999,7 +2058,16 @@
     delete pinnedMessages[activeId];
     renderChat();
   }
-
+  function scrollToMessage(msgId) {
+    playClick();
+    const msgEl = messagesEl.querySelector(`.msg[data-id="${msgId}"]`);
+    if (!msgEl) return;
+    msgEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    msgEl.classList.remove('highlight-flash');
+    void msgEl.offsetWidth; // перезапуск анимации
+    msgEl.classList.add('highlight-flash');
+    setTimeout(() => msgEl.classList.remove('highlight-flash'), 1300);
+  }
   function renderPinnedBanner() {
     if (pinnedMessages[activeId]) {
       const msg = threads[activeId].find(m => m.id === pinnedMessages[activeId]);
@@ -2008,6 +2076,8 @@
         if (msg.type === 'poll') text = 'Опрос';
         if (msg.type === 'location') text = 'Геолокация';
         pinnedContent.innerHTML = `<b>${msg.author || contacts.find(x=>x.id===activeId).name}:</b> ${text}`;
+        pinnedContent.onclick = () => scrollToMessage(msg.id);
+        pinnedContent.style.cursor = 'pointer';
         pinnedBanner.classList.add('active');
         return;
       }
@@ -2134,26 +2204,29 @@
   // === NEW: RENDER CONTACTS WITH UNREAD BADGE ===
   function renderContacts() {
     contactListEl.innerHTML = ''; 
-    const q = document.getElementById('search-input').value.toLowerCase().trim();
+    const rawQ = document.getElementById('search-input').value.toLowerCase().trim();
+    const q = rawQ.startsWith('@') ? rawQ.slice(1) : rawQ;
     
     contacts.filter(c => {
       if (!q) return true;
       const matchName = c.name.toLowerCase().includes(q);
       const matchPhone = c.phone && c.phone.toLowerCase().includes(q);
-      return matchName || matchPhone;
+      const matchUsername = c.username && c.username.toLowerCase().includes(q);
+      return matchName || matchPhone || matchUsername;
     }).forEach(c => {
       const div = document.createElement('div'); div.className = 'contact' + (c.id === activeId ? ' active' : '');
       let sc = ''; if (c.status === 'online') sc = 'status-online'; if (c.status === 'court') sc = 'status-court'; if (c.status === 'away') sc = 'status-away';
       let pt = c.phone || 'Hidden';
       let ah = renderAvatar(c.avatar); if (privacySettings.avatar === 'nobody') ah = `<div style="font-size:16px;color:#ccc;">👤</div>`;
       
-      // Unread badge
       let badgeHtml = '';
       if (unreadCounts[c.id] > 0) {
         badgeHtml = `<span class="unread-badge">${unreadCounts[c.id]}</span>`;
       }
 
-      div.innerHTML = `<div class="contact-avatar-container" onclick="event.stopPropagation(); openDetailedProfile('${c.id}')">${ah}</div><div class="contact-info" onclick="event.stopPropagation(); selectContact('${c.id}')"><div class="contact-name">${c.name} ${badgeHtml}</div><div class="contact-phone">📞 ${pt}</div></div><div class="contact-status ${sc}"></div><div class="contact-actions"><div class="edit-contact-btn" title="Edit">✏️</div><div class="delete-btn" title="Delete">🗑️</div></div>`;
+      const subline = c.username ? `@${c.username} · ${pt}` : `📞 ${pt}`;
+
+      div.innerHTML = `<div class="contact-avatar-container" onclick="event.stopPropagation(); openDetailedProfile('${c.id}')">${ah}</div><div class="contact-info" onclick="event.stopPropagation(); selectContact('${c.id}')"><div class="contact-name">${c.name} ${badgeHtml}</div><div class="contact-phone">${subline}</div></div><div class="contact-status ${sc}"></div><div class="contact-actions"><div class="edit-contact-btn" title="Edit">✏️</div><div class="delete-btn" title="Delete">🗑️</div></div>`;
       
       if (c.id !== botId) {
         div.querySelector('.edit-contact-btn').onclick = e => { e.stopPropagation(); editContactFromList(c.id); };
@@ -2534,6 +2607,7 @@
       if (vm.style.display !== 'none') {
         vm.style.display = 'none'; em.style.display = 'block';
         document.getElementById('edit-name').value = myProfile.name;
+        document.getElementById('edit-username').value = myProfile.username;
         document.getElementById('edit-phone').value = myProfile.phone;
         document.getElementById('edit-role').value = myProfile.role;
         document.getElementById('edit-bio').value = myProfile.bio;
@@ -2553,12 +2627,29 @@
   function saveProfile(event, targetType) {
     event.stopPropagation(); playClick();
     if (targetType === 'me') {
+    if (targetType === 'me') {
+      const newUsername = document.getElementById('edit-username').value.trim();
+      if (newUsername !== myProfile.username) {
+        if (!isValidUsername(newUsername)) { alert('Username: только буквы, цифры, _ и -'); return; }
+        if (isUsernameTaken(newUsername, myProfile.loginKey, myProfile.phone)) { alert('Этот username уже занят'); return; }
+        myProfile.username = newUsername;
+        const udb = JSON.parse(localStorage.getItem('courtroom_users_db') || '{}');
+        const fullAccount = getUserDatabase()[myProfile.loginKey] || {};
+        udb[myProfile.loginKey] = { ...fullAccount, username: newUsername };
+        localStorage.setItem('courtroom_users_db', JSON.stringify(udb));
+        const mdb = JSON.parse(localStorage.getItem('courtroom_messenger_db') || '{}');
+        if (myProfile.phone && mdb[myProfile.phone]) {
+          mdb[myProfile.phone].username = newUsername;
+          localStorage.setItem('courtroom_messenger_db', JSON.stringify(mdb));
+        }
+      }
       myProfile.name = document.getElementById('edit-name').value || myProfile.name;
       myProfile.phone = document.getElementById('edit-phone').value;
       myProfile.role = document.getElementById('edit-role').value;
       myProfile.bio = document.getElementById('edit-bio').value;
       updateProfileDisplay(); renderStories();
       document.getElementById('view-name').textContent = myProfile.name;
+      document.getElementById('view-username').textContent = '@' + myProfile.username;
       document.getElementById('view-role').textContent = myProfile.role;
       document.getElementById('view-bio').textContent = myProfile.bio;
       document.getElementById('display-my-name').textContent = myProfile.name;
@@ -2601,6 +2692,7 @@
     } else {
       let pt = c.phone || 'Not specified'; if (privacySettings.phone === 'nobody') pt = 'Hidden';
       document.getElementById('cp-phone').textContent = pt;
+      document.getElementById('cp-username').textContent = c.username ? '@' + c.username : 'не указан';
       document.getElementById('cp-phone').parentElement.style.display = 'block';
       document.getElementById('cp-role').textContent = c.role || 'Not specified';
       document.getElementById('cp-status').textContent = c.mood || translations[currentLang].online;
@@ -2631,7 +2723,7 @@
     if (!db[phone]) { errEl.textContent = '❌ Пользователь с таким номером не найден в мессенджере!'; errEl.classList.add('show'); return; }
     const userData = db[phone];
     const nid = 'contact_' + Date.now();
-    contacts.push({ id:nid, name: userData.name, phone: phone, status:'online', mood:'User', avatar:userData.avatar, role:'User', bio:'Привет!' });
+    contacts.push({ id:nid, name: userData.name, phone: phone, status:'online', mood:'User', avatar:userData.avatar, username: userData.username || '', role:'User', bio:'Привет!' });
     playClick(); closeModal('modal-add-contact'); activeId = nid; renderContacts(); renderChat();
     document.getElementById('new-contact-phone').value = '';
   }
