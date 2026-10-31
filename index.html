@@ -5519,7 +5519,7 @@
         if (m.forwardedFrom) bubbleContent += `<div style="font-size:10px; color:#888; margin-bottom:4px;">Переслано от ${m.forwardedFrom}</div>`;
         if (m.replyTo) bubbleContent += `<div class="reply-quote"><b>${m.replyTo.name}</b>${m.replyTo.text}</div>`;
 
-        if (m.type === 'image') bubbleContent += `<img src="${m.media}" alt="image">`;
+        if (m.type === 'image') bubbleContent += `<img src="${m.media}" alt="image" onclick="openImageViewer(this.src)">`;
         else if (m.type === 'video') bubbleContent += `<video src="${m.media}" controls></video>`;
         else if (m.type === 'audio') bubbleContent += `<audio src="${m.media}" controls></audio>`;
         else if (m.type === 'file') bubbleContent += `<a href="${m.media}" download="${m.filename || 'file'}" class="file-attachment">📄 ${m.filename || 'Файл'}</a>`;
@@ -5533,7 +5533,6 @@
         `;
         }
         else if (m.type === 'poll') {
-        else if (m.type === 'poll') {
           let optionsHtml = m.options.map((opt, idx) => {
             const totalVotes = m.options.reduce((a, b) => a + b.votes, 0);
             const percent = totalVotes === 0 ? 0 : Math.round((opt.votes / totalVotes) * 100);
@@ -5541,12 +5540,10 @@
             return `<div class="poll-option-btn" data-index="${idx}" onclick="votePoll(${m.id}, ${idx})">${opt.text}</div>`;
           }).join('');
 
-          // Собираем аватарки (если опрос не анонимный)
           let votersHtml = '';
           if (!m.isAnonymous) {
             let allVoters = [];
             m.options.forEach(opt => { if (opt.voters) allVoters.push(...opt.voters); });
-            // Убираем дубликаты
             const uniqueVoters = Array.from(new Set(allVoters.map(v => v.name))).map(name => allVoters.find(v => v.name === name));
             
             if (uniqueVoters.length > 0) {
