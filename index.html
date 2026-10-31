@@ -5112,7 +5112,6 @@
       threads[activeId].push(msgObj); lastSentMsgId = msgObj.id; closeModal('modal-create-poll'); renderChat();
     }
     function votePoll(msgId, optionIndex) {
-    function votePoll(msgId, optionIndex) {
       if (!activeId) return; const thread = threads[activeId]; if (!thread) return;
       const msg = thread.find(m => m.id === msgId); if (!msg) return;
       
