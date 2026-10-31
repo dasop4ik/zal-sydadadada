@@ -3409,7 +3409,30 @@
       border-radius: 4px;
       line-height: 1.4;
     }
-
+    /* Fullscreen Image Viewer */
+    .image-viewer-overlay {
+      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(0,0,0,0.85); z-index: 9999;
+      display: none; align-items: center; justify-content: center;
+      backdrop-filter: blur(5px); opacity: 0; transition: opacity 0.2s;
+    }
+    .image-viewer-overlay.active { display: flex; opacity: 1; }
+    .image-viewer-overlay img {
+      max-width: 95vw; max-height: 95vh; object-fit: contain;
+      border-radius: 4px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      user-select: none; -webkit-user-drag: none; cursor: default;
+    }
+    .image-viewer-close {
+      position: absolute; top: 20px; right: 20px;
+      background: rgba(255,255,255,0.2); border: none;
+      color: white; font-size: 24px; width: 44px; height: 44px;
+      border-radius: 50%; cursor: pointer; display: flex;
+      align-items: center; justify-content: center;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .image-viewer-close:hover { background: rgba(255,0,0,0.8); transform: scale(1.1); }
+    .msg-bubble img { cursor: pointer; transition: opacity 0.2s; }
+    .msg-bubble img:hover { opacity: 0.85; }
     ::-webkit-scrollbar {
       width: 12px;
     }
@@ -4246,7 +4269,10 @@
         </div>
       </div>
     </div>
-
+  <div class="image-viewer-overlay" id="image-viewer" onclick="closeImageViewer()">
+    <button class="image-viewer-close" onclick="closeImageViewer()">✕</button>
+    <img id="image-viewer-img" src="" alt="Fullscreen" onclick="event.stopPropagation()">
+  </div>
     <div class="story-viewer" id="story-viewer">
       <div class="story-viewer-content" id="story-content">Текст истории</div>
       <div class="story-viewer-header">
@@ -4895,13 +4921,23 @@
       if (!text && !pendingStoryImage) return;
       const dayAgo = Date.now() - 24 * 60 * 60 * 1000;
       const myRecentStories = stories.filter(s => s.username === myProfile.name && s.timestamp > dayAgo);
-      if (myRecentStories.length >= 5) {alert('❌ Вы не можете опубликовать больше 5 историй за 24 часа!'); return;}
+      if (myRecentStories.length >= 15) { alert('❌ Вы не можете опубликовать больше 15 историй за 24 часа!'); return; }
       playClick();
       stories.unshift({id: 's_' + Date.now(), username: myProfile.name, author: myProfile.name, avatar: myProfile.avatar, content: text, image: pendingStoryImage, timestamp: Date.now()});
       pendingStoryImage = null; document.getElementById('story-preview-img').src = '';
       document.getElementById('story-image-preview').style.display = 'none';
       closeModal('modal-add-story'); renderStories();
     }
+    function openImageViewer(src) {
+      playClick();
+      document.getElementById('image-viewer-img').src = src;
+      document.getElementById('image-viewer').classList.add('active');
+    }
+    
+    function closeImageViewer() {
+      document.getElementById('image-viewer').classList.remove('active');
+    }
+
     function openStoryViewer(story) {
       playClick(); const contentEl = document.getElementById('story-content'); contentEl.innerHTML = '';
       if (story.image) {const img = document.createElement('img'); img.src = story.image; img.style.maxWidth = '100%'; img.style.maxHeight = '340px'; img.style.borderRadius = '8px'; img.style.objectFit = 'contain'; contentEl.appendChild(img);}
@@ -4953,20 +4989,21 @@
 
     function triggerMediaUpload() {closeAttachmentMenu(); playClick(); mediaInput.click();}
     function triggerDocUpload() {closeAttachmentMenu(); playClick(); docInput.click();}
-    mediaInput.addEventListener('change', function (e) {
-      const file = e.target.files[0]; if (!file) return;
-      if (file.size > 5 * 1024 * 1024) {alert('Файл слишком большой. Максимум 5 МБ.'); this.value = ''; return;}
-      const reader = new FileReader();
-      reader.onload = ev => {const type = file.type.startsWith('image') ? 'image' : 'video'; sendMedia(type, ev.target.result);};
-      reader.readAsDataURL(file); this.value = '';
-    });
-    docInput.addEventListener('change', function (e) {
-      const file = e.target.files[0]; if (!file) return;
-      if (file.size > 10 * 1024 * 1024) {alert('Файл слишком большой. Максимум 10 МБ.'); this.value = ''; return;}
-      const reader = new FileReader();
-      reader.onload = ev => {sendMedia('file', ev.target.result, file.name);};
-      reader.readAsDataURL(file); this.value = '';
-    });
+  mediaInput.addEventListener('change', function(e) {
+    const file = e.target.files[0]; if (!file) return;
+    if (file.size > 100 * 1024 * 1024) { alert('Файл слишком большой. Максимум 100 МБ.'); this.value = ''; return; }
+    const url = URL.createObjectURL(file);
+    const type = file.type.startsWith('image') ? 'image' : 'video';
+    sendMedia(type, url);
+    this.value = '';
+  });
+  docInput.addEventListener('change', function(e) {
+    const file = e.target.files[0]; if (!file) return;
+    if (file.size > 100 * 1024 * 1024) { alert('Файл слишком большой. Максимум 100 МБ.'); this.value = ''; return; }
+    const url = URL.createObjectURL(file);
+    sendMedia('file', url, file.name);
+    this.value = '';
+  });
 
     function sendMedia(type, dataUrl, filename) {
       if (!activeId) {alert('Выберите контакт!'); return;}
