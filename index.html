@@ -3674,6 +3674,13 @@
                   </path>
                 </svg>
               </button>
+              <button class="cloud-btn" onclick="toggleArchive(event)" title="Архив">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#4a90e2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="21 8 21 21 3 21 3 8"></polyline>
+                  <rect x="1" y="3" width="22" height="5"></rect>
+                  <line x1="10" y1="12" x2="14" y2="12"></line>
+                </svg>
+              </button>
             </div>
             <div class="my-mood" id="display-my-mood" data-i18n="user">Пользователь</div>
           </div>
@@ -3684,6 +3691,10 @@
                 месте</span></div>
             <div onclick="setMyStatus('busy')"><span class="status-dot busy"></span> <span data-i18n="busy">Занят</span>
             </div>
+          </div>
+          <div class="info-cloud-popup popup" id="archive-popup" style="top: 70px; left: 15px; width: 300px; max-height: 400px; flex-direction: column;">
+            <h3 style="margin-bottom: 10px;">📁 Архив <button class="edit-btn" onclick="toggleArchive(event)">✕</button></h3>
+            <div id="archive-list" style="overflow-y: auto; max-height: 320px; display: flex; flex-direction: column; gap: 5px;"></div>
           </div>
           <div class="info-cloud-popup popup" id="info-cloud">
             <h3><span data-i18n="my_profile">👤 Мой профиль</span> <button class="edit-btn"
@@ -3771,6 +3782,7 @@
                 style="flex:1; padding:6px; font-size:11px; background:rgba(255,0,0,.1); border-color:rgba(255,0,0,.3); color:#c00;">🚫
                 Заблокировать</button>
             </div>
+          <button class="edit-btn" id="archive-contact-btn" onclick="toggleArchiveContact()" style="width:100%; margin-top:5px; padding:6px; font-size:11px; background:rgba(74,144,226,.1); border-color:rgba(74,144,226,.3); color:#4a90e2;">📁 В архив</button>
           </div>
           <div id="contact-edit-mode" style="display:none;">
             <div class="avatar-edit-area"><button class="edit-btn" onclick="triggerFileUpload('contact')"
@@ -4417,11 +4429,10 @@
       try {stored = JSON.parse(localStorage.getItem('courtroom_users_db') || '{}');} catch (e) {stored = {};}
       return Object.assign({}, DEFAULT_ACCOUNTS, stored);
     }
-
-    function saveUserToDatabase(loginKey, password, displayName, type, username) {
+    function saveUserToDatabase(loginKey, password, displayName, type, username, lastUsernameChange) {
       try {
         const stored = JSON.parse(localStorage.getItem('courtroom_users_db') || '{}');
-        stored[loginKey] = {password: password || '', displayName: displayName || loginKey, type: type || 'password', username: username || ''};
+        stored[loginKey] = {password: password || '', displayName: displayName || loginKey, type: type || 'password', username: username || '', lastUsernameChange: lastUsernameChange || 0};
         localStorage.setItem('courtroom_users_db', JSON.stringify(stored));
       } catch (e) {console.warn('DB save failed', e);}
     }
@@ -4457,6 +4468,7 @@
     let mutedContacts = new Set();
     let blockedContacts = new Set();
     let unreadCounts = {}; // { [contactId]: number }
+    let archivedContacts = new Set();
 
     function switchSettingsTab(tabId, el) {
       document.querySelectorAll('.settings-main').forEach(t => t.classList.remove('active'));
@@ -4501,7 +4513,7 @@
 
     let userCounter = 2;
     function getNextUserName() {return 'User' + userCounter++;}
-    let myProfile = {name: 'User1', phone: '+7 (000) 000-00-00', username: 'user1', loginKey: 'User1', role: 'User', bio: 'Welcome to the messenger!', avatar: defaultAvatarUrl, status: 'online'};
+    let myProfile = {name: 'User1', phone: '+7 (000) 000-00-00', username: 'user1', loginKey: 'User1', role: 'User', bio: 'Welcome to the messenger!', avatar: defaultAvatarUrl, status: 'online', lastUsernameChange: 0};
     let contacts = [];
     let threads = {};
     let stories = [];
@@ -4655,6 +4667,7 @@
       myProfile.status = selectedLoginStatus;
       myProfile.loginKey = username;
       myProfile.username = account.username || username.toLowerCase().replace(/[^a-z0-9_-]/g, '') || 'user';
+      myProfile.lastUsernameChange = account.lastUsernameChange || 0;
       document.getElementById('view-phone').textContent = myProfile.phone;
       document.getElementById('view-username').textContent = '@' + myProfile.username;
 
@@ -4703,7 +4716,9 @@
 
       const avatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=00aff0&color=fff&size=128&bold=true`;
 
-      saveUserToDatabase(phone, password, name, 'phone', username);
+            // В registerWithPhone:
+      myProfile.lastUsernameChange = Date.now();
+      saveUserToDatabase(phone, password, name, 'phone', username, myProfile.lastUsernameChange);
       saveMessengerContact(phone, name, avatar, username);
 
       myProfile.name = name;
@@ -4764,7 +4779,9 @@
         myProfile.bio = data.bio || 'Привет! Я использую Courtroom Live Messenger.';
         myProfile.status = selectedLoginStatus;
 
-        saveUserToDatabase(ghLogin, password, myProfile.name, 'oauth', dispUsername);
+         // В registerWithGitHub:
+       myProfile.lastUsernameChange = Date.now();
+       saveUserToDatabase(ghLogin, password, myProfile.name, 'oauth', dispUsername, myProfile.lastUsernameChange);
 
         document.getElementById('login-overlay').classList.add('hidden');
         document.getElementById('main-window').classList.remove('hidden');
@@ -4815,9 +4832,9 @@
       myProfile.role = 'Google User';
       myProfile.bio = 'Привет! Я использую Courtroom Live Messenger.';
       myProfile.status = selectedLoginStatus;
-
-      saveUserToDatabase(email, password, myProfile.name, 'oauth', username);
-
+      // В registerWithGoogle:
+      myProfile.lastUsernameChange = Date.now();
+      saveUserToDatabase(email, password, myProfile.name, 'oauth', username, myProfile.lastUsernameChange);
       document.getElementById('login-overlay').classList.add('hidden');
       document.getElementById('main-window').classList.remove('hidden');
       isLoggedIn = true;
@@ -4909,13 +4926,49 @@
       const bar = document.getElementById('stories-bar');
       const dayAgo = Date.now() - 24 * 60 * 60 * 1000;
       stories = stories.filter(s => s.timestamp > dayAgo);
+      
       bar.innerHTML = `<div class="story-item my-story" onclick="openAddStoryModal()"><div class="story-avatar" id="my-story-avatar">${renderAvatar(myProfile.avatar)}</div><div class="story-name" data-i18n="my_story">${translations[currentLang].my_story}</div></div>`;
+      
+      const grouped = {};
       stories.forEach(s => {
-        const el = document.createElement('div');
-        el.className = 'story-item'; el.onclick = () => openStoryViewer(s);
-        el.innerHTML = `<div class="story-avatar">${renderAvatar(s.avatar)}</div><div class="story-name">${s.author.split(' ')[0]}</div>`;
-        bar.appendChild(el);
+        const key = s.username || s.author;
+        if (!grouped[key]) grouped[key] = [];
+        grouped[key].push(s);
       });
+
+      for (const key in grouped) {
+        const userStories = grouped[key];
+        const firstStory = userStories[0];
+        const num = userStories.length;
+        
+        let ringStyle = '';
+        
+        if (num > 1) {
+          const segments = [];
+          const gap = 10; 
+          for (let i = 0; i < num; i++) {
+            const start = (i * 360) / num;
+            const end = ((i + 1) * 360) / num - gap;
+            segments.push(`var(--story-ring) ${start}deg ${end}deg, transparent ${end}deg ${((i + 1) * 360) / num}deg`);
+          }
+          ringStyle = `background: conic-gradient(from 0deg, ${segments.join(', ')}); border: none; padding: 3px;`;
+        } else {
+          ringStyle = `background: transparent; border: 2px solid var(--story-ring); padding: 0;`;
+        }
+
+        const el = document.createElement('div');
+        el.className = 'story-item'; 
+        el.onclick = () => openStoryViewer(firstStory);
+        el.innerHTML = `
+          <div class="story-avatar" style="${ringStyle}">
+            <div style="width:100%; height:100%; border-radius:50%; overflow:hidden; border: 2px solid var(--bg-sidebar); background: #333;">
+              ${renderAvatar(firstStory.avatar)}
+            </div>
+          </div>
+          <div class="story-name">${firstStory.author.split(' ')[0]}</div>
+        `;
+        bar.appendChild(el);
+      }
     }
     function openAddStoryModal() {
       playClick(); document.getElementById('new-story-text').value = '';
@@ -5352,6 +5405,7 @@
       const q = rawQ.startsWith('@') ? rawQ.slice(1) : rawQ;
 
       contacts.filter(c => {
+        if (archivedContacts.has(c.id)) return false;
         if (!q) return true;
         const matchName = c.name.toLowerCase().includes(q);
         const matchPhone = c.phone && c.phone.toLowerCase().includes(q);
@@ -5407,6 +5461,7 @@
     function deleteContact(id) {
       if (!confirm('Delete this contact?')) return; playTrashSound(); contactProfilePopup.classList.remove('active');
       if (callState.active && callState.contactId === id) endCall();
+      archivedContacts.delete(id);
       contacts = contacts.filter(c => c.id !== id); delete threads[id];
       if (activeId === id) activeId = contacts.length > 0 ? contacts[0].id : null;
       renderContacts(); renderChat();
@@ -5757,6 +5812,62 @@
 
     function openModal(id) {playClick(); document.getElementById(id).classList.add('active'); if (id === 'modal-add-group') renderGroupCheckboxes();}
     function closeModal(id) {playClick(); document.getElementById(id).classList.remove('active'); if (id === 'modal-add-contact') document.getElementById('add-contact-error').classList.remove('show');}
+        function toggleArchive(event) {
+      if (event) event.stopPropagation();
+      playClick();
+      const popup = document.getElementById('archive-popup');
+      const isActive = popup.classList.toggle('active');
+      if (isActive) {
+        renderArchive();
+        infoCloud.classList.remove('active');
+        contactProfilePopup.classList.remove('active');
+        statusMenu.classList.remove('active');
+      }
+    }
+
+    function renderArchive() {
+      const list = document.getElementById('archive-list');
+      list.innerHTML = '';
+      const archived = contacts.filter(c => archivedContacts.has(c.id));
+      
+      if (archived.length === 0) {
+        list.innerHTML = '<div style="text-align:center; color:var(--text-muted); padding:20px 0; font-size:12px;">Архив пуст</div>';
+        return;
+      }
+      
+      archived.forEach(c => {
+        const div = document.createElement('div');
+        div.className = 'contact';
+        div.style.margin = '0';
+        div.style.padding = '6px 10px';
+        div.innerHTML = `<div class="contact-avatar-container" style="width:28px;height:28px;">${renderAvatar(c.avatar)}</div><div class="contact-info"><div class="contact-name" style="font-size:12px;">${c.name}</div></div>`;
+        div.onclick = () => {
+          toggleArchive();
+          selectContact(c.id);
+        };
+        list.appendChild(div);
+      });
+    }
+
+   function toggleArchiveContact() {
+      if (!activeId) return;
+      playClick();
+      if (archivedContacts.has(activeId)) {
+        archivedContacts.delete(activeId);
+        document.getElementById('archive-contact-btn').innerHTML = '📁 В архив';
+        document.getElementById('archive-contact-btn').style.background = 'rgba(74,144,226,.1)';
+        document.getElementById('archive-contact-btn').style.color = '#4a90e2';
+      } else {
+        archivedContacts.add(activeId);
+        document.getElementById('archive-contact-btn').innerHTML = '📂 Из архива';
+        document.getElementById('archive-contact-btn').style.background = 'rgba(255,150,0,.1)';
+        document.getElementById('archive-contact-btn').style.color = '#ff9800';
+      }
+      renderContacts();
+      if (document.getElementById('archive-popup').classList.contains('active')) {
+        renderArchive();
+      }
+    }
     function toggleCloud(event) {
       event.stopPropagation(); playClick(); infoCloud.classList.toggle('active');
       contactProfilePopup.classList.remove('active'); statusMenu.classList.remove('active');
@@ -5798,9 +5909,19 @@
           if (!isValidUsername(newUsername)) {alert('Username: только буквы, цифры, _ и -'); return;}
           if (isUsernameTaken(newUsername, myProfile.loginKey, myProfile.phone)) {alert('Этот username уже занят'); return;}
 
+          const lastChange = myProfile.lastUsernameChange || 0;
+          const weekMs = 7 * 24 * 60 * 60 * 1000;
+          if (Date.now() - lastChange < weekMs) {
+            const daysLeft = Math.ceil((weekMs - (Date.now() - lastChange)) / (24 * 60 * 60 * 1000));
+            alert(`❌ Вы можете менять username только раз в неделю.\nСледующая попытка через ${daysLeft} дн.`);
+            return;
+          }
+
           myProfile.username = newUsername;
+          myProfile.lastUsernameChange = Date.now();
           const udb = JSON.parse(localStorage.getItem('courtroom_users_db') || '{}');
           const fullAccount = getUserDatabase()[myProfile.loginKey] || {};
+          fullAccount.lastUsernameChange = myProfile.lastUsernameChange;
           fullAccount.username = newUsername;
           udb[myProfile.loginKey] = fullAccount;
           localStorage.setItem('courtroom_users_db', JSON.stringify(udb));
@@ -5874,6 +5995,15 @@
         document.getElementById('cp-bio-container').style.display = 'block';
         document.getElementById('cp-bio').textContent = c.bio || 'Hidden.';
         document.getElementById('cp-members-container').style.display = 'none';
+        if (archivedContacts.has(activeId)) {
+          document.getElementById('archive-contact-btn').innerHTML = '📂 Из архива';
+          document.getElementById('archive-contact-btn').style.background = 'rgba(255,150,0,.1)';
+          document.getElementById('archive-contact-btn').style.color = '#ff9800';
+        } else {
+          document.getElementById('archive-contact-btn').innerHTML = '📁 В архив';
+          document.getElementById('archive-contact-btn').style.background = 'rgba(74,144,226,.1)';
+          document.getElementById('archive-contact-btn').style.color = '#4a90e2';
+        }
       }
       contactProfilePopup.classList.add('active');
       infoCloud.classList.remove('active'); statusMenu.classList.remove('active');
