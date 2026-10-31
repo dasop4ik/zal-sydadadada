@@ -5098,7 +5098,7 @@
       
       inputs.forEach(inp => {
         const val = inp.value.trim(); 
-        if (val) options.push({text: val, votes: 0, voters: []}); // Добавили массив voters
+        if (val) options.push({text: val, votes: 0, voters: []});
       });
       
       if (options.length < 2) {alert('Нужно минимум 2 варианта ответа!'); return;}
@@ -5111,13 +5111,13 @@
       
       threads[activeId].push(msgObj); lastSentMsgId = msgObj.id; closeModal('modal-create-poll'); renderChat();
     }
+
     function votePoll(msgId, optionIndex) {
       if (!activeId) return; const thread = threads[activeId]; if (!thread) return;
       const msg = thread.find(m => m.id === msgId); if (!msg) return;
       
       playClick();
       
-      // Если меняем голос — убираем старый
       if (msg.voted && msg.myVote !== null) {
         msg.options[msg.myVote].votes--;
         if (!msg.isAnonymous && msg.options[msg.myVote].voters) {
@@ -5125,7 +5125,6 @@
         }
       }
       
-      // Записываем новый голос
       msg.options[optionIndex].votes++; 
       if (!msg.isAnonymous) {
         if (!msg.options[optionIndex].voters) msg.options[optionIndex].voters = [];
@@ -5135,13 +5134,13 @@
       
       msg.voted = true; msg.myVote = optionIndex; 
       
-      // Триггер анимации выбора
       const pillEl = document.querySelector(`.msg[data-id="${msgId}"] .poll-option-result[data-index="${optionIndex}"]`);
       if (pillEl) { pillEl.classList.add('vote-anim'); setTimeout(() => pillEl.classList.remove('vote-anim'), 300); }
       
       renderChat();
     }
 
+    // === КОНТЕКСТНОЕ МЕНЮ ===
     // === КОНТЕКСТНОЕ МЕНЮ ===
     messagesEl.addEventListener('dblclick', (e) => {
       const msgEl = e.target.closest('.msg'); if (!msgEl) return;
