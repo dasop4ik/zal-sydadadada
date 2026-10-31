@@ -5685,7 +5685,8 @@
           myProfile.username = newUsername;
           const udb = JSON.parse(localStorage.getItem('courtroom_users_db') || '{}');
           const fullAccount = getUserDatabase()[myProfile.loginKey] || {};
-          udb[myProfile.loginKey] = {...fullAccount, username: newUsername};
+          fullAccount.username = newUsername;
+          udb[myProfile.loginKey] = fullAccount;
           localStorage.setItem('courtroom_users_db', JSON.stringify(udb));
 
           const mdb = JSON.parse(localStorage.getItem('courtroom_messenger_db') || '{}');
