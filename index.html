@@ -3027,7 +3027,69 @@
       overflow: hidden;
       flex-direction: column;
       gap: 12px;
+      transition: transform 0.3s ease, opacity 0.3s ease; /* Для плавной смены */
     }
+
+    /* НОВЫЕ СТИЛИ ДЛЯ НАВИГАЦИИ И АНИМАЦИЙ */
+    .story-progress-container {
+      position: absolute;
+      top: 15px;
+      left: 10px;
+      right: 10px;
+      display: flex;
+      gap: 4px;
+      z-index: 3;
+    }
+    .story-progress-bar {
+      flex: 1;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .story-progress-fill {
+      height: 100%;
+      background: #fff;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+    .story-progress-fill.active {
+      width: 100%;
+    }
+
+    .story-nav-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0, 0, 0, 0.3);
+      border: none;
+      color: white;
+      font-size: 30px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 10;
+      transition: background 0.2s, transform 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .story-nav-btn:hover { background: rgba(255, 255, 255, 0.2); transform: translateY(-50%) scale(1.1); }
+    .story-nav-btn.left { left: 15px; }
+    .story-nav-btn.right { right: 15px; }
+
+    /* Анимации перелистывания */
+    @keyframes slideInRight {
+      from { opacity: 0; transform: translateX(50px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes slideInLeft {
+      from { opacity: 0; transform: translateX(-50px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    .story-content.slide-right { animation: slideInRight 0.3s ease-out; }
+    .story-content.slide-left { animation: slideInLeft 0.3s ease-out; }
 
     .story-viewer-header {
       position: absolute;
@@ -4310,8 +4372,24 @@
     <button class="image-viewer-close" onclick="closeImageViewer()">✕</button>
     <img id="image-viewer-img" src="" alt="Fullscreen" onclick="event.stopPropagation()">
   </div>
-    <div class="story-viewer" id="story-viewer">
+  <div class="story-viewer" id="story-viewer">
+    <!-- Полоски прогресса (сколько историй, столько и полосок) -->
+    <div class="story-progress-container" id="story-progress-container"></div>
+      
+      <!-- Кнопки навигации для ПК -->
+      <button class="story-nav-btn left" onclick="navigateStory(-1)">❮</button>
+      
       <div class="story-viewer-content" id="story-content">Текст истории</div>
+      
+      <button class="story-nav-btn right" onclick="navigateStory(1)">❯</button>
+
+      <!-- Остальная часть остается без изменений -->
+      <div class="story-viewer-header">
+        <div class="story-viewer-avatar" id="story-viewer-avatar"></div>
+        <span id="story-viewer-name">Имя</span>
+      </div>
+      <button class="story-viewer-close" onclick="closeStoryViewer()">✕</button>
+    </div>
       <div class="story-viewer-header">
         <div class="story-viewer-avatar" id="story-viewer-avatar"></div>
         <span id="story-viewer-name">Имя</span>
@@ -4955,7 +5033,7 @@
 
         const el = document.createElement('div');
         el.className = 'story-item'; 
-        el.onclick = () => openStoryViewer(firstStory);
+        el.onclick = () => openStoryViewer(userStories, 0);
         el.innerHTML = `
           <div class="story-avatar" style="${ringStyle}">
             <div style="width:100%; height:100%; border-radius:50%; overflow:hidden; border: 2px solid var(--bg-sidebar); background: #333;">
@@ -5016,14 +5094,116 @@
       document.getElementById('image-viewer').classList.remove('active');
     }
 
-    function openStoryViewer(story) {
-      playClick(); const contentEl = document.getElementById('story-content'); contentEl.innerHTML = '';
-      if (story.image) {const img = document.createElement('img'); img.src = story.image; img.style.maxWidth = '100%'; img.style.maxHeight = '340px'; img.style.borderRadius = '8px'; img.style.objectFit = 'contain'; contentEl.appendChild(img);}
-      if (story.content) {const td = document.createElement('div'); td.textContent = story.content; td.style.fontSize = '17px'; td.style.lineHeight = '1.4'; contentEl.appendChild(td);}
+    // --- НОВАЯ СИСТЕМА ПРОСМОТРА ИСТОРИЙ ---
+    let currentStoriesArray = [];
+    let currentStoryIndex = 0;
+
+    function openStoryViewer(storiesArray, index) {
+      playClick();
+      currentStoriesArray = storiesArray;
+      currentStoryIndex = index;
+      
+      document.getElementById('story-viewer').classList.add('active');
+      renderStoryContent('none'); // 'none' означает без анимации при первом открытии
+      initStoryTouchEvents();
+    }
+
+    function renderStoryContent(animationDirection) {
+      const story = currentStoriesArray[currentStoryIndex];
+      if (!story) return;
+
+      // 1. Отрисовка полосок прогресса
+      const progressContainer = document.getElementById('story-progress-container');
+      progressContainer.innerHTML = '';
+      currentStoriesArray.forEach((s, i) => {
+        const bar = document.createElement('div');
+        bar.className = 'story-progress-bar';
+        const fill = document.createElement('div');
+        fill.className = 'story-progress-fill' + (i <= currentStoryIndex ? ' active' : '');
+        bar.appendChild(fill);
+        progressContainer.appendChild(bar);
+      });
+
+      // 2. Отрисовка контента
+      const contentEl = document.getElementById('story-content');
+      contentEl.innerHTML = '';
+      
+      if (story.image) {
+        const img = document.createElement('img');
+        img.src = story.image;
+        img.style.maxWidth = '100%'; img.style.maxHeight = '340px'; 
+        img.style.borderRadius = '8px'; img.style.objectFit = 'contain';
+        contentEl.appendChild(img);
+      }
+      if (story.content) {
+        const td = document.createElement('div');
+        td.textContent = story.content; td.style.fontSize = '17px'; td.style.lineHeight = '1.4';
+        contentEl.appendChild(td);
+      }
+
       document.getElementById('story-viewer-avatar').innerHTML = renderAvatar(story.avatar);
       document.getElementById('story-viewer-name').textContent = story.author;
-      document.getElementById('story-viewer').classList.add('active');
+
+      // 3. Применяем анимацию
+      if (animationDirection === 'right') {
+        contentEl.classList.remove('slide-left', 'slide-right');
+        void contentEl.offsetWidth; // сброс анимации
+        contentEl.classList.add('slide-right');
+      } else if (animationDirection === 'left') {
+        contentEl.classList.remove('slide-left', 'slide-right');
+        void contentEl.offsetWidth;
+        contentEl.classList.add('slide-left');
+      }
     }
+
+    function navigateStory(direction) {
+      // -1 = назад, 1 = вперед
+      const newIndex = currentStoryIndex + direction;
+      
+      if (newIndex >= 0 && newIndex < currentStoriesArray.length) {
+        playClick();
+        currentStoryIndex = newIndex;
+        renderStoryContent(direction === 1 ? 'right' : 'left');
+      } else if (newIndex >= currentStoriesArray.length) {
+        closeStoryViewer(); // Закрываем, если листаем вперед с последней
+      }
+    }
+
+    // --- ОБРАБОТКА СВАЙПОВ И СТРЕЛОК ---
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    function initStoryTouchEvents() {
+      const viewer = document.getElementById('story-viewer');
+      
+      viewer.ontouchstart = (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+      };
+      
+      viewer.ontouchend = (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+      };
+    }
+
+    function handleSwipe() {
+      const swipeThreshold = 50; // Минимальная длина свайпа
+      if (touchEndX < touchStartX - swipeThreshold) {
+        navigateStory(1); // Свайп влево = следующая история
+      }
+      if (touchEndX > touchStartX + swipeThreshold) {
+        navigateStory(-1); // Свайп вправо = предыдущая история
+      }
+    }
+
+    // Слушаем стрелки на клавиатуре
+    document.addEventListener('keydown', (e) => {
+      if (document.getElementById('story-viewer').classList.contains('active')) {
+        if (e.key === 'ArrowRight') navigateStory(1);
+        if (e.key === 'ArrowLeft') navigateStory(-1);
+        if (e.key === 'Escape') closeStoryViewer();
+      }
+    });
     function closeStoryViewer() {playClick(); document.getElementById('story-viewer').classList.remove('active');}
 
     function triggerFileUpload(target) {playClick(); avatarTarget = target; if (target === 'contact') currentEditContactId = activeId; hiddenFileInput.click();}
