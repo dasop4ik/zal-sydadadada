@@ -3986,14 +3986,7 @@
                 <line x1="12" y1="19" x2="12" y2="22" />
               </svg>
             </button>
-          </div>
-
-          <div id="blockedNotice"
-             style="display:none; text-align:center; padding:14px; color:#e53935; font-weight:bold;
-             background:var(--bg-input); border-top:1px solid var(--border-dark);">
-            🚫 Вы заблокировали этого пользователя. Разблокируйте в профиле, чтобы писать.
-          </div>
-
+        </div>
           <div class="attachment-menu" id="attachmentMenu">
             <div class="attachment-menu-item" onclick="triggerMediaUpload()">
               <span class="icon">
@@ -4059,8 +4052,13 @@
             <div class="emoji-btn" onclick="insertEmoji('😴')">😴</div>
           </div>
         </div>
-      </div>
-    </div>
+      <div id="blockedNotice"
+        style="display:none; text-align:center; padding:14px; color:#e53935; font-weight:bold;
+              background:var(--bg-input); border-top:1px solid var(--border-dark);">
+        🚫 Вы заблокировали этого пользователя. Разблокируйте в профиле, чтобы писать.
+        </div>
+
+      </div>       <!-- chat-area -->
 
     <div class="context-menu" id="contextMenu">
       <div class="reaction-picker-row" id="reactionPickerRow">
@@ -5501,30 +5499,42 @@ function stopAndSendVoice() {
       row.innerHTML = `<input type="text" class="poll-option-input" placeholder="Вариант ${count}"><button class="poll-remove-btn" onclick="this.parentElement.remove()">✕</button>`;
       container.appendChild(row); row.querySelector('input').focus();
     }
-    function createPoll() {
-      const options = [];
-      const inputs = document.querySelectorAll('#poll-options-container .poll-option-input');
-      const isAnon = document.getElementById('poll-anonymous').checked;
-      const question = document.getElementById('poll-question').value.trim(); 
-      if (!question) { showToast('Введите вопрос для опроса', 'error'); return; }
-      // ...
-      if (options.length < 2) { showToast('Нужно минимум 2 варианта ответа!', 'error'); return; }
-      if (!activeId) { showToast('Сначала выберите контакт', 'error'); return; }
-      inputs.forEach(inp => {
-        const val = inp.value.trim(); 
-        if (val) options.push({text: val, votes: 0, voters: []});
-      });
-      
-      if (options.length < 2) {alert('Нужно минимум 2 варианта ответа!'); return;}
-      if (!activeId) {alert('Выберите контакт!'); return;}
-      if (blockedContacts.has(activeId)) {alert('Вы заблокировали пользователя!'); return;}
-      
-      playClick(); if (!threads[activeId]) threads[activeId] = [];
-      const msgObj = {who: 'me', text: '', time: getNowTime(), id: Date.now(), type: 'poll', question: question, options: options, voted: false, myVote: null, read: false, isAnonymous: isAnon};
-      if (replyToMsg) {msgObj.replyTo = {name: replyToMsg.author || contacts.find(x => x.id === activeId).name, text: replyToMsg.text || 'Опрос'}; cancelReply();}
-      
-      threads[activeId].push(msgObj); lastSentMsgId = msgObj.id; closeModal('modal-create-poll'); renderChat();
-    }
+function createPoll() {
+  const options = [];
+  const inputs = document.querySelectorAll('#poll-options-container .poll-option-input');
+  const isAnon = document.getElementById('poll-anonymous').checked;
+  const question = document.getElementById('poll-question').value.trim();
+
+  if (!question) { showToast('Введите вопрос для опроса', 'error'); return; }
+  if (!activeId) { showToast('Сначала выберите контакт', 'error'); return; }
+  if (blockedContacts.has(activeId)) { showToast('Вы заблокировали пользователя!', 'error'); return; }
+
+  inputs.forEach(inp => {
+    const val = inp.value.trim();
+    if (val) options.push({text: val, votes: 0, voters: []});
+  });
+
+  if (options.length < 2) { showToast('Нужно минимум 2 варианта ответа!', 'error'); return; }
+
+  playClick();
+  if (!threads[activeId]) threads[activeId] = [];
+  const msgObj = {
+    who: 'me', text: '', time: getNowTime(), id: Date.now(),
+    type: 'poll', question, options, voted: false, myVote: null,
+    read: false, isAnonymous: isAnon
+  };
+  if (replyToMsg) {
+    msgObj.replyTo = {
+      name: replyToMsg.author || contacts.find(x => x.id === activeId).name,
+      text: replyToMsg.text || 'Опрос'
+    };
+    cancelReply();
+  }
+  threads[activeId].push(msgObj);
+  lastSentMsgId = msgObj.id;
+  closeModal('modal-create-poll');
+  renderChat();
+}
 
     function votePoll(msgId, optionIndex) {
       if (!activeId) return; const thread = threads[activeId]; if (!thread) return;
@@ -5727,7 +5737,7 @@ function stopAndSendVoice() {
       const list = document.getElementById('forward-contact-list'); list.innerHTML = '';
       contacts.forEach(c => {
         const div = document.createElement('div'); div.style.cssText = 'padding:10px;cursor:pointer;border-bottom:1px solid var(--border-dark);display:flex;align-items:center;gap:10px;';
-        div.innerHTML = `<div class="contact-avatar-container">${renderAvatar(c.avatar)}</div><div style="font-weight:bold;">${escapeHtml(c.name)}div>`;
+        div.innerHTML = `<div class="contact-avatar-container">${renderAvatar(c.avatar)}</div><div style="font-weight:bold;">${escapeHtml(c.name)}</div>`;
         div.onclick = () => {
           if (!threads[c.id]) threads[c.id] = [];
           selectedMsgs.forEach(id => {
@@ -5804,8 +5814,7 @@ function stopAndSendVoice() {
 
         const subline = c.username ? `@${c.username} · ${pt}` : `📞 ${pt}`;
 
-        div.innerHTML = `<div class="contact-avatar-container" onclick="event.stopPropagation(); openDetailedProfile('${c.id}')">${ah}</div><div class="contact-info" onclick="event.stopPropagation(); selectContact('${c.id}')"><div class="contact-name">${subline} ${badgeHtml}</div><div class="contact-phone">${subline}</div></div><div class="contact-status ${sc}"></div><div class="contact-actions"><div class="edit-contact-btn" title="Edit">✏️</div><div class="delete-btn" title="Delete">🗑️</div></div>`;
-
+        div.innerHTML = `<div class="contact-avatar-container" onclick="event.stopPropagation(); openDetailedProfile('${c.id}')">${ah}</div><div class="contact-info" onclick="event.stopPropagation(); selectContact('${c.id}')"><div class="contact-name">${escapeHtml(c.name)} ${badgeHtml}</div><div class="contact-phone">${escapeHtml(subline)}</div></div><div class="contact-status ${sc}"></div><div class="contact-actions"><div class="edit-contact-btn" title="Edit">✏️</div><div class="delete-btn" title="Delete">🗑️</div></div>`;
         if (c.id !== botId) {
           div.querySelector('.edit-contact-btn').onclick = e => {e.stopPropagation(); editContactFromList(c.id);};
         } else {
@@ -6374,13 +6383,7 @@ function stopAndSendVoice() {
           else if (isThisMemberAdmin) roleBadge = ' <span style="color:#4a90e2; font-size:10px;">🛡️ Админ</span>';
           else roleBadge = ' <span style="color:#888; font-size:10px;">Участник</span>';
 
-          let actionsHtml = '';
-          
-          // Действия не применяются к Владельцу и к самому себе
-          if (memberName !== c.owner && memberName !== myProfile.name) {
-            if (amIOwner) {
-              // Владелец может назначать/снимать админов и кикать
-              let actionsHtml = '';
+let actionsHtml = '';
 const safeMemberName = String(memberName).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
 
 if (memberName !== c.owner && memberName !== myProfile.name) {
@@ -6397,24 +6400,10 @@ if (memberName !== c.owner && memberName !== myProfile.name) {
     }
   }
 }
-              if (isThisMemberAdmin) {
-                const safeMemberName = String(memberName).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
-                actionsHtml += `<button onclick="demoteMember('${c.id}', '${safeMemberName}')" title="Снять админа">⬇️</button>`;
-              } else {
-                actionsHtml += `<button onclick="promoteMember('${c.id}', '${safeMemberName}')" title="Сделать админом">⬆️</button>`;
-              }
-              actionsHtml += `<button onclick="kickMember('${c.id}', '${safeMemberName}')" style="color:red;" title="Исключить">✕</button>`;
-            } else if (amIAdmin) {
-              // Админ может кикать только обычных участников
-              if (!isThisMemberAdmin) {
-                actionsHtml += `<button onclick="kickMember('${c.id}', '${memberName}')" style="color:red;" title="Исключить">✕</button>`;
-              }
-            }
-          }
 
-          const row = document.createElement('div'); row.className = 'member-row';
-          row.innerHTML = `<span>${escapeHtml(memberName)}${roleBadge}</span> <div class="actions">${actionsHtml}</div>`;
-          listEl.appendChild(row);
+const row = document.createElement('div'); row.className = 'member-row';
+row.innerHTML = `<span>${escapeHtml(memberName)}${roleBadge}</span> <div class="actions">${actionsHtml}</div>`;
+listEl.appendChild(row);
         });
       } else {
         let pt = c.phone || 'Not specified'; if (privacySettings.phone === 'nobody') pt = 'Hidden';
@@ -6468,6 +6457,7 @@ if (memberName !== c.owner && memberName !== myProfile.name) {
       const container = document.getElementById('group-members-list'); container.innerHTML = '';
       contacts.filter(c => !c.isGroup && c.id !== botId).forEach(c => {
         const label = document.createElement('label'); label.innerHTML = `<input type="checkbox" value="${escapeHtml(c.name)}"> ${escapeHtml(c.name)}`;
+        container.appendChild(label);  // ← добавить
       });
     }
     function createGroup() {
@@ -6514,7 +6504,6 @@ if (memberName !== c.owner && memberName !== myProfile.name) {
       setTimeout(() => document.getElementById('login-username').focus(), 100);
     })();
   </script>
+  <div id="toast-container" class="toast-container"></div>
 </body>
-    <div id="toast-container" class="toast-container"></div>
-
 </html>
