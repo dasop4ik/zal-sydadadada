@@ -3550,6 +3550,42 @@
       background-clip: padding-box;
       border: 2px solid transparent;
     }
+        /* ===== CUSTOM TOAST NOTIFICATIONS ===== */
+    .toast-container {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      z-index: 20000;
+      pointer-events: none;
+    }
+    .toast {
+      background: rgba(30, 30, 30, 0.95);
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 500;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      pointer-events: auto;
+      animation: toastSlideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transition: opacity 0.3s, transform 0.3s;
+      text-align: center;
+      max-width: 80vw;
+    }
+    .toast.error { background: rgba(229, 57, 53, 0.95); }
+    .toast.success { background: rgba(76, 217, 100, 0.95); }
+    
+    @keyframes toastSlideUp {
+      from { opacity: 0; transform: translateY(20px) scale(0.9); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
   </style>
 </head>
 
@@ -3952,9 +3988,9 @@
             </button>
           </div>
 
-          <!-- Blocked Notice -->
           <div id="blockedNotice"
-            style="display:none; text-align:center; padding:10px; color:#e53935; font-weight:bold;">
+             style="display:none; text-align:center; padding:14px; color:#e53935; font-weight:bold;
+             background:var(--bg-input); border-top:1px solid var(--border-dark);">
             🚫 Вы заблокировали этого пользователя. Разблокируйте в профиле, чтобы писать.
           </div>
 
@@ -4460,6 +4496,29 @@
   </div>
 
   <script>
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      if (!container) return;
+      toast.className = 'toast ' + type;
+      toast.textContent = message;
+      container.appendChild(toast);
+      
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(10px)';
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+   function escapeHtml(str) {
+      if (str === null || str === undefined) return '';
+      return String(str)
+      .replaceAll('&', '&amp;')
+      .replaceAll('<', '&lt;')
+      .replaceAll('>', '&gt;')
+      .replaceAll('"', '&quot;')
+      .replaceAll("'", '&#039;');
+}
     const translations = {
       ru: {title: "⚖️ Live Messenger", user: "Пользователь", online: "В сети", away: "Нет на месте", busy: "Занят", my_profile: "👤 Мой профиль", edit: "✏️ Изменить", name: "Имя:", phone: "Телефон:", status: "Статус:", bio: "О себе:", welcome: "Добро пожаловать в мессенджер!", change_photo: "📷 Сменить фото", save: "💾 Сохранить", add_contact: "➕ Контакт", add_group: "➕ Группа", search: "Глобальный поиск (имя, номер)...", select_chat: "Выберите собеседника...", select_chat_desc: "Выберите контакт или создайте новый...", profile: "ℹ️ Профиль", my_story: "Моя история", role: "Роль:", members: "Участники:", type_message: "Сообщение", add_contact_title: "Добавить новый контакт", add_group_title: "Создать групповой чат", group_name: "Название группы:", select_members: "Выберите участников:", cancel: "Отмена", create: "Создать", settings: "⚙️ Настройки", general: "Общие", account: "Аккаунт", privacy: "Приватность", notifications: "Уведомления", chat_settings: "Настройки чата", devices: "Устройства", advanced: "Продвинутые", language: "Язык", language_desc: "Выберите язык интерфейса", theme: "Тема оформления", theme_desc: "Светлая, темная или XP (для слабых ПК)", theme_light: "Светлая", theme_dark: "Темная", theme_xp: "Windows XP (для слабых ПК)", sounds: "Звуки", sounds_desc: "Звуки уведомлений и кликов", edit_profile_desc: "Изменить имя, фото и описание", username: "Имя пользователя", phone_visibility: "Кто видит номер", avatar_visibility: "Кто видит фото", everyone: "Все", contacts: "Контакты", nobody: "Никто", messages: "Сообщения", messages_desc: "Кто может писать первым", desktop_notif: "Уведомления на рабочем столе", message_preview: "Показывать текст сообщения", chat_wallpaper: "Фон чата", standard: "Стандартный", text_size: "Размер текста", active_sessions: "Активные сессии", data_usage: "Использование данных", data_usage_desc: "Настройки автоскачивания", proxy: "Настройки прокси", proxy_desc: "Использовать прокси-сервер", done: "Готово", create_story: "Создать историю", story_text: "Текст истории:", story_photo: "Фотография (необязательно):", choose_photo: "📷 Выбрать фото", remove_photo: "✕ Убрать фото", publish: "Опубликовать", recording: "ЗАПИСЬ", connecting: "Соединение..."},
       uk: {title: "⚖️ Live Messenger", user: "Користувач", online: "В мережі", away: "Немає на місці", busy: "Зайнятий", my_profile: "👤 Мій профіль", edit: "✏️ Змінити", name: "Ім'я:", phone: "Телефон:", status: "Статус:", bio: "Про себе:", welcome: "Ласкаво просимо до месенджера!", change_photo: "📷 Змінити фото", save: "💾 Зберегти", add_contact: "➕ Контакт", add_group: "➕ Група", search: "Глобальний пошук (ім'я, номер)...", select_chat: "Виберіть співрозмовника...", select_chat_desc: "Виберіть контакт або створіть новий...", profile: "ℹ️ Профіль", my_story: "Моя історія", role: "Роль:", members: "Учасники:", type_message: "Повідомлення", add_contact_title: "Додати новий контакт", add_group_title: "Створити груповий чат", group_name: "Назва групи:", select_members: "Виберіть учасників:", cancel: "Скасувати", create: "Створити", settings: "⚙️ Налаштування", general: "Загальні", account: "Акаунт", privacy: "Приватність", notifications: "Сповіщення", chat_settings: "Налаштування чату", devices: "Пристрої", advanced: "Розширені", language: "Мова", language_desc: "Виберіть мову інтерфейсу", theme: "Тема оформлення", theme_desc: "Світла, темна або XP (для слабких ПК)", theme_light: "Світла", theme_dark: "Темна", theme_xp: "Windows XP (для слабких ПК)", sounds: "Звуки", sounds_desc: "Звуки сповіщень та кліків", edit_profile_desc: "Змінити ім'я, фото та опис", username: "Ім'я користувача", phone_visibility: "Хто бачить номер", avatar_visibility: "Хто бачить фото", everyone: "Всі", contacts: "Контакти", nobody: "Ніхто", messages: "Повідомлення", messages_desc: "Хто може писати першим", desktop_notif: "Сповіщення на робочому столі", message_preview: "Показувати текст повідомлення", chat_wallpaper: "Фон чату", standard: "Стандартний", text_size: "Розмір тексту", active_sessions: "Активні сесії", data_usage: "Використання даних", data_usage_desc: "Налаштування автозавантаження", proxy: "Налаштування проксі", proxy_desc: "Використовувати проксі-сервер", done: "Готово", create_story: "Створити історію", story_text: "Текст історії:", story_photo: "Фотографія (необов'язково):", choose_photo: "📷 Вибрати фото", remove_photo: "✕ Прибрати фото", publish: "Опублікувати", recording: "ЗАПИС", connecting: "З'єднання..."},
@@ -4745,6 +4804,18 @@
       myProfile.loginKey = username;
       myProfile.username = account.username || username.toLowerCase().replace(/[^a-z0-9_-]/g, '') || 'user';
       myProfile.lastUsernameChange = account.lastUsernameChange || 0;
+      
+      // Сброс остатков предыдущего аккаунта
+      myProfile.avatar = defaultAvatarUrl;
+      myProfile.phone = '+7 (000) 000-00-00';
+      myProfile.role = 'User';
+      myProfile.bio = 'Welcome to the messenger!';
+      
+      // Если вход по телефону — подставляем номер
+      if (account.type === 'phone') {
+        myProfile.phone = username;
+      }
+      
       document.getElementById('view-phone').textContent = myProfile.phone;
       document.getElementById('view-username').textContent = '@' + myProfile.username;
 
@@ -4761,10 +4832,6 @@
       document.getElementById('display-my-name').textContent = myProfile.name;
       document.getElementById('view-name').textContent = myProfile.name;
       document.getElementById('display-my-mood').textContent = getStatusText(myProfile.status);
-
-      if (db[username] && db[username].type === 'phone') {
-        myProfile.phone = username;
-      }
 
       ensureBotExists();
       updateProfileDisplay(); renderStories(); renderContacts(); renderChat();
@@ -4951,6 +5018,21 @@
       mutedContacts.clear();
       blockedContacts.clear();
       pinnedMessages = {};
+      stories = [];
+      archivedContacts.clear();
+      
+      // Сброс myProfile
+      myProfile = {
+        name: 'User1',
+        phone: '+7 (000) 000-00-00',
+        username: 'user1',
+        loginKey: 'User1',
+        role: 'User',
+        bio: 'Welcome to the messenger!',
+        avatar: defaultAvatarUrl,
+        status: 'online',
+        lastUsernameChange: 0
+      };
     }
 
     function renderAvatar(avatarStr) {
@@ -4983,7 +5065,18 @@
     function playConnectSound() {if (!soundsEnabled) return; if (audioCtx.state === 'suspended') audioCtx.resume(); const t = audioCtx.currentTime;[523.25, 659.25, 783.99].forEach((fr, i) => {const o = audioCtx.createOscillator(), g = audioCtx.createGain(); o.type = 'sine'; o.frequency.setValueAtTime(fr, t + i * .1); g.gain.setValueAtTime(.001, t + i * .1); g.gain.exponentialRampToValueAtTime(.09, t + i * .1 + .02); g.gain.exponentialRampToValueAtTime(.001, t + i * .1 + .18); o.connect(g); g.connect(audioCtx.destination); o.start(t + i * .1); o.stop(t + i * .1 + .2);});}
     function playHangupSound() {if (!soundsEnabled) return; if (audioCtx.state === 'suspended') audioCtx.resume(); const t = audioCtx.currentTime, o = audioCtx.createOscillator(), g = audioCtx.createGain(); o.type = 'sine'; o.frequency.setValueAtTime(520, t); o.frequency.exponentialRampToValueAtTime(140, t + .35); g.gain.setValueAtTime(.12, t); g.gain.exponentialRampToValueAtTime(.001, t + .35); o.connect(g); g.connect(audioCtx.destination); o.start(t); o.stop(t + .35);}
     function playIncomingSound() {if (!soundsEnabled) return; if (audioCtx.state === 'suspended') audioCtx.resume(); const t = audioCtx.currentTime; const note = (freq, start, dur, vol) => {const o = audioCtx.createOscillator(); const g = audioCtx.createGain(); o.type = 'sine'; o.frequency.setValueAtTime(freq, t + start); g.gain.setValueAtTime(0.001, t + start); g.gain.exponentialRampToValueAtTime(vol, t + start + 0.02); g.gain.exponentialRampToValueAtTime(0.001, t + start + dur); o.connect(g); g.connect(audioCtx.destination); o.start(t + start); o.stop(t + start + dur + 0.05);}; note(880, 0, 0.15, 0.1); note(1046.50, 0.12, 0.3, 0.1);}
-
+    function playBeep() {
+      if (!soundsEnabled) return;
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const t = audioCtx.currentTime;
+      const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+      o.type = 'sine';
+      o.frequency.setValueAtTime(1000, t);
+      g.gain.setValueAtTime(0.1, t);
+      g.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
+      o.connect(g); g.connect(audioCtx.destination);
+      o.start(t); o.stop(t + 0.3);
+}
     function toggleStatusMenu(event) {
       event.stopPropagation(); playClick();
       const isActive = statusMenu.classList.toggle('active');
@@ -5266,8 +5359,8 @@
   });
 
     function sendMedia(type, dataUrl, filename) {
-      if (!activeId) {alert('Выберите контакт!'); return;}
-      if (blockedContacts.has(activeId)) {alert('Вы заблокировали пользователя!'); return;}
+      if (!activeId) { showToast('Сначала выберите контакт!', 'error'); return; }
+      if (blockedContacts.has(activeId)) { showToast('Вы заблокировали пользователя!', 'error'); return; }
       playClick(); if (!threads[activeId]) threads[activeId] = [];
       const msgObj = {who: 'me', text: '', time: getNowTime(), id: Date.now(), type: type, media: dataUrl, read: false};
       if (filename) msgObj.filename = filename;
@@ -5275,6 +5368,91 @@
       threads[activeId].push(msgObj); lastSentMsgId = msgObj.id; renderChat();
       if (activeId === botId) {triggerBotResponse();}
     }
+    function startVoiceRecording() {
+  if (!activeId) { showToast('Сначала выберите контакт!', 'error'); return; }
+  if (blockedContacts.has(activeId)) { showToast('Вы заблокировали пользователя!', 'error'); return; }
+  if (voiceRecorder && voiceRecorder.state === 'recording') return;
+
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    showToast('Микрофон не поддерживается', 'error');
+    return;
+  }
+
+  navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+    voiceChunks = [];
+    voiceSeconds = 0;
+    voiceRecorder = new MediaRecorder(stream);
+    voiceRecorder.ondataavailable = e => { if (e.data.size > 0) voiceChunks.push(e.data); };
+    voiceRecorder.onstop = () => { stream.getTracks().forEach(t => t.stop()); };
+    voiceRecorder.start();
+
+    document.getElementById('recordingBanner').classList.add('active');
+    document.getElementById('voiceBtn').classList.add('recording');
+    document.getElementById('recordingTimer').textContent = '00:00';
+
+    voiceTimerInterval = setInterval(() => {
+      voiceSeconds++;
+      const m = String(Math.floor(voiceSeconds / 60)).padStart(2, '0');
+      const s = String(voiceSeconds % 60).padStart(2, '0');
+      document.getElementById('recordingTimer').textContent = `${m}:${s}`;
+      if (voiceSeconds >= 120) stopAndSendVoice(); // максимум 2 минуты
+    }, 1000);
+
+    playClick();
+  }).catch(err => {
+    showToast('Ошибка доступа к микрофону: ' + err.message, 'error');
+  });
+}
+
+function cancelVoice() {
+  if (voiceRecorder && voiceRecorder.state === 'recording') {
+    try { voiceRecorder.stop(); } catch (e) {}
+  }
+  voiceRecorder = null;
+  voiceChunks = [];
+  clearInterval(voiceTimerInterval);
+  voiceTimerInterval = null;
+  voiceSeconds = 0;
+  document.getElementById('recordingBanner').classList.remove('active');
+  document.getElementById('voiceBtn').classList.remove('recording');
+  playClick();
+}
+
+function stopAndSendVoice() {
+  if (!voiceRecorder || voiceRecorder.state !== 'recording') return;
+
+  const stream = voiceRecorder.stream;
+  voiceRecorder.onstop = () => {
+    stream.getTracks().forEach(t => t.stop());
+
+    const blob = new Blob(voiceChunks, { type: 'audio/webm' });
+    const url = URL.createObjectURL(blob);
+
+    clearInterval(voiceTimerInterval);
+    voiceTimerInterval = null;
+    voiceSeconds = 0;
+    voiceChunks = [];
+    voiceRecorder = null;
+    document.getElementById('recordingBanner').classList.remove('active');
+    document.getElementById('voiceBtn').classList.remove('recording');
+
+    if (!activeId) return;
+    if (!threads[activeId]) threads[activeId] = [];
+
+    const msgObj = { who: 'me', text: '', time: getNowTime(), id: Date.now(), type: 'audio', media: url, read: false };
+    if (replyToMsg) {
+      msgObj.replyTo = { name: replyToMsg.author || contacts.find(x => x.id === activeId).name, text: replyToMsg.text || 'Голосовое' };
+      cancelReply();
+    }
+    threads[activeId].push(msgObj);
+    lastSentMsgId = msgObj.id;
+    renderChat();
+    if (activeId === botId) triggerBotResponse();
+    playClick();
+  };
+
+  voiceRecorder.stop();
+}
 
     function shareLocation() {
       closeAttachmentMenu();
@@ -5324,10 +5502,14 @@
       container.appendChild(row); row.querySelector('input').focus();
     }
     function createPoll() {
-      const question = document.getElementById('poll-question').value.trim(); if (!question) {alert('Введите вопрос!'); return;}
+      const options = [];
+      const inputs = document.querySelectorAll('#poll-options-container .poll-option-input');
       const isAnon = document.getElementById('poll-anonymous').checked;
-      const inputs = document.querySelectorAll('.poll-option-input'); const options = [];
-      
+      const question = document.getElementById('poll-question').value.trim(); 
+      if (!question) { showToast('Введите вопрос для опроса', 'error'); return; }
+      // ...
+      if (options.length < 2) { showToast('Нужно минимум 2 варианта ответа!', 'error'); return; }
+      if (!activeId) { showToast('Сначала выберите контакт', 'error'); return; }
       inputs.forEach(inp => {
         const val = inp.value.trim(); 
         if (val) options.push({text: val, votes: 0, voters: []});
@@ -5451,7 +5633,8 @@
           let text = msg.text || 'Медиафайл';
           if (msg.type === 'poll') text = 'Опрос';
           if (msg.type === 'location') text = 'Геолокация';
-          pinnedContent.innerHTML = `<b>${msg.author || contacts.find(x => x.id === activeId).name}:</b> ${text}`;
+          const authorName = msg.author || contacts.find(x => x.id === activeId).name;
+          pinnedContent.innerHTML = `<b>${escapeHtml(authorName)}:</b> ${escapeHtml(text)}`;
           pinnedContent.onclick = () => scrollToMessage(msg.id);
           pinnedContent.style.cursor = 'pointer';
           pinnedBanner.classList.add('active');
@@ -5509,7 +5692,7 @@
       const list = document.getElementById('forward-contact-list'); list.innerHTML = '';
       contacts.forEach(c => {
         const div = document.createElement('div'); div.style.cssText = 'padding:10px;cursor:pointer;border-bottom:1px solid var(--border-dark);display:flex;align-items:center;gap:10px;transition:background .15s;';
-        div.innerHTML = `<div class="contact-avatar-container">${renderAvatar(c.avatar)}</div><div style="font-weight:bold;">${c.name}</div>`;
+        div.innerHTML = `<div class="contact-avatar-container">${renderAvatar(c.avatar)}</div><div style="font-weight:bold;">${escapeHtml(c.name)}</div>`;
         div.onmouseover = () => div.style.background = 'var(--tg-hover)';
         div.onmouseout = () => div.style.background = '';
         div.onclick = () => forwardTo(c.id); list.appendChild(div);
@@ -5544,7 +5727,7 @@
       const list = document.getElementById('forward-contact-list'); list.innerHTML = '';
       contacts.forEach(c => {
         const div = document.createElement('div'); div.style.cssText = 'padding:10px;cursor:pointer;border-bottom:1px solid var(--border-dark);display:flex;align-items:center;gap:10px;';
-        div.innerHTML = `<div class="contact-avatar-container">${renderAvatar(c.avatar)}</div><div style="font-weight:bold;">${c.name}</div>`;
+        div.innerHTML = `<div class="contact-avatar-container">${renderAvatar(c.avatar)}</div><div style="font-weight:bold;">${escapeHtml(c.name)}div>`;
         div.onclick = () => {
           if (!threads[c.id]) threads[c.id] = [];
           selectedMsgs.forEach(id => {
@@ -5621,7 +5804,7 @@
 
         const subline = c.username ? `@${c.username} · ${pt}` : `📞 ${pt}`;
 
-        div.innerHTML = `<div class="contact-avatar-container" onclick="event.stopPropagation(); openDetailedProfile('${c.id}')">${ah}</div><div class="contact-info" onclick="event.stopPropagation(); selectContact('${c.id}')"><div class="contact-name">${c.name} ${badgeHtml}</div><div class="contact-phone">${subline}</div></div><div class="contact-status ${sc}"></div><div class="contact-actions"><div class="edit-contact-btn" title="Edit">✏️</div><div class="delete-btn" title="Delete">🗑️</div></div>`;
+        div.innerHTML = `<div class="contact-avatar-container" onclick="event.stopPropagation(); openDetailedProfile('${c.id}')">${ah}</div><div class="contact-info" onclick="event.stopPropagation(); selectContact('${c.id}')"><div class="contact-name">${subline} ${badgeHtml}</div><div class="contact-phone">${subline}</div></div><div class="contact-status ${sc}"></div><div class="contact-actions"><div class="edit-contact-btn" title="Edit">✏️</div><div class="delete-btn" title="Delete">🗑️</div></div>`;
 
         if (c.id !== botId) {
           div.querySelector('.edit-contact-btn').onclick = e => {e.stopPropagation(); editContactFromList(c.id);};
@@ -5644,7 +5827,7 @@
     function editContactFromList(id) {
       playClick(); activeId = id; unreadCounts[id] = 0; renderContacts(); renderChat();
       const c = contacts.find(x => x.id === id); if (!c) return;
-      document.getElementById('contact-popup-title').innerHTML = `👤 ${c.name} <button class="edit-btn" onclick="toggleEditProfile(event, 'contact')">${translations[currentLang].edit}</button>`;
+      document.getElementById('contact-popup-title').innerHTML = `👤 ${escapeHtml(c.name)} <button class="edit-btn" onclick="toggleEditProfile(event, 'contact')">${translations[currentLang].edit}</button>`;
       document.getElementById('contact-view-mode').style.display = 'none'; document.getElementById('contact-edit-mode').style.display = 'block';
       document.getElementById('edit-c-phone-container').style.display = 'none';
       document.getElementById('edit-c-role-container').style.display = 'none';
@@ -5734,7 +5917,7 @@
       let st = c.isGroup ? 'Group' : (c.status === 'court' ? 'In Court' : translations[currentLang].online);
       let ah = renderAvatar(c.avatar); if (privacySettings.avatar === 'nobody') ah = `<div style="font-size:16px;color:#ccc;">👤</div>`;
 
-      chatTitleEl.innerHTML = `<div class="contact-avatar-container" style="width:28px;height:28px;font-size:16px;cursor:pointer;" onclick="event.stopPropagation(); openDetailedProfile('${c.id}')" title="Открыть профиль">${ah}</div><span style="cursor:pointer;" onclick="toggleContactProfile(event)">${c.name}</span> <span>[${st}]</span>`;
+      chatTitleEl.innerHTML = `<div class="contact-avatar-container" style="width:28px;height:28px;font-size:16px;cursor:pointer;" onclick="event.stopPropagation(); openDetailedProfile('${c.id}')" title="Открыть профиль">${ah}</div><span style="cursor:pointer;" onclick="toggleContactProfile(event)">${escapeHtml(c.name)}</span> <span>[${st}]</span>`;
 
       viewContactProfileBtn.style.display = 'flex';
       if (callBtn) callBtn.style.display = 'flex';
@@ -5766,13 +5949,13 @@
         if (isSelectMode && selectedMsgs.has(m.id)) div.classList.add('selected');
         const an = m.who === 'me' ? myProfile.name : (m.author || c.name);
         let bubbleContent = '';
-        if (m.forwardedFrom) bubbleContent += `<div style="font-size:10px; color:#888; margin-bottom:4px;">Переслано от ${m.forwardedFrom}</div>`;
-        if (m.replyTo) bubbleContent += `<div class="reply-quote"><b>${m.replyTo.name}</b>${m.replyTo.text}</div>`;
+        if (m.forwardedFrom) bubbleContent += `<div style="font-size:10px; color:#888; margin-bottom:4px;">Переслано от ${escapeHtml(m.forwardedFrom)}</div>`;
+        if (m.replyTo) bubbleContent += `<div class="reply-quote"><b>${escapeHtml(m.replyTo.name)}</b>${escapeHtml(m.replyTo.text)}</div>`;
 
         if (m.type === 'image') bubbleContent += `<img src="${m.media}" alt="image" onclick="openImageViewer(this.src)">`;
         else if (m.type === 'video') bubbleContent += `<video src="${m.media}" controls></video>`;
         else if (m.type === 'audio') bubbleContent += `<audio src="${m.media}" controls></audio>`;
-        else if (m.type === 'file') bubbleContent += `<a href="${m.media}" download="${m.filename || 'file'}" class="file-attachment">📄 ${m.filename || 'Файл'}</a>`;
+        else if (m.type === 'file') bubbleContent += `<a href="${m.media}" download="${escapeHtml(m.filename || 'file')}" class="file-attachment">📄 ${escapeHtml(m.filename || 'Файл')}</a>`;
         else if (m.type === 'location') {
           bubbleContent += `
           <a href="${m.locationData.link}" target="_blank" class="location-attachment">
@@ -5786,8 +5969,8 @@
           let optionsHtml = m.options.map((opt, idx) => {
             const totalVotes = m.options.reduce((a, b) => a + b.votes, 0);
             const percent = totalVotes === 0 ? 0 : Math.round((opt.votes / totalVotes) * 100);
-            if (m.voted) return `<div class="poll-option-result ${m.myVote === idx ? 'voted' : ''}" data-index="${idx}" onclick="votePoll(${m.id}, ${idx})"><div class="poll-option-bar" style="width: ${percent}%"></div><div class="poll-option-text">${opt.text}</div><div class="poll-option-percent">${percent}%</div></div>`;
-            return `<div class="poll-option-btn" data-index="${idx}" onclick="votePoll(${m.id}, ${idx})">${opt.text}</div>`;
+            if (m.voted) return `<div class="poll-option-result ${m.myVote === idx ? 'voted' : ''}" data-index="${idx}" onclick="votePoll(${m.id}, ${idx})"><div class="poll-option-bar" style="width: ${percent}%"></div><div class="poll-option-text">${escapeHtml(opt.text)}</div><div class="poll-option-percent">${percent}%</div></div>`;
+            return `<div class="poll-option-btn" data-index="${idx}" onclick="votePoll(${m.id}, ${idx})">${escapeHtml(opt.text)}</div>`;
           }).join('');
 
           let votersHtml = '';
@@ -5808,9 +5991,9 @@
             }
           }
 
-          bubbleContent += `<div class="poll-container"><div class="poll-question">${m.question}</div><div class="poll-options">${optionsHtml}</div>${votersHtml}<div class="poll-footer">${m.voted ? 'Нажмите, чтобы изменить голос' : 'Нажмите, чтобы проголосовать'}${m.isAnonymous ? ' • Анонимный' : ''}</div></div>`;
+          bubbleContent += `<div class="poll-container"><div class="poll-question">${escapeHtml(m.question)}</div><div class="poll-options">${optionsHtml}</div>${votersHtml}<div class="poll-footer">${m.voted ? 'Нажмите, чтобы изменить голос' : 'Нажмите, чтобы проголосовать'}${m.isAnonymous ? ' • Анонимный' : ''}</div></div>`;
         }
-        else bubbleContent += m.text;
+        else bubbleContent += escapeHtml(m.text);
 
         // NEW: Read status for my messages
         let readIcon = '';
@@ -5818,7 +6001,7 @@
           readIcon = m.read ? '<span class="read-status read">✓✓</span>' : '<span class="read-status unread">✓</span>';
         }
 
-        div.innerHTML = `<div class="msg-checkbox"></div><div class="msg-meta">${an} • ${m.time} ${readIcon}</div><div class="msg-bubble">${bubbleContent}</div>`;
+        div.innerHTML = `<div class="msg-checkbox"></div><div class="msg-meta">${escapeHtml(an)} • ${m.time} ${readIcon}</div><div class="msg-bubble">${bubbleContent}</div>`;
 
         if (m.reactions && Object.keys(m.reactions).length > 0) {
           const reactionsDiv = document.createElement('div');
@@ -6037,7 +6220,7 @@
         div.className = 'contact';
         div.style.margin = '0';
         div.style.padding = '6px 10px';
-        div.innerHTML = `<div class="contact-avatar-container" style="width:28px;height:28px;">${renderAvatar(c.avatar)}</div><div class="contact-info"><div class="contact-name" style="font-size:12px;">${c.name}</div></div>`;
+        div.innerHTML = `<div class="contact-avatar-container" style="width:28px;height:28px;">${renderAvatar(c.avatar)}</div><div class="contact-info"><div class="contact-name" style="font-size:12px;">${escapeHtml(c.name)}</div></div>`;
         div.onclick = () => {
           toggleArchive();
           selectContact(c.id);
@@ -6161,7 +6344,7 @@
       if (event && event.stopPropagation) event.stopPropagation(); playClick();
       if (contactProfilePopup.classList.contains('active')) {contactProfilePopup.classList.remove('active'); return;}
       const c = contacts.find(x => x.id === activeId); if (!c) return;
-      document.getElementById('contact-popup-title').innerHTML = `👤 ${c.name} <button class="edit-btn" onclick="toggleEditProfile(event, 'contact')">${translations[currentLang].edit}</button>`;
+      document.getElementById('contact-popup-title').innerHTML = `👤 ${escapeHtml(c.name)} <button class="edit-btn" onclick="toggleEditProfile(event, 'contact')">${translations[currentLang].edit}</button>`;
       document.getElementById('contact-view-mode').style.display = 'block';
       document.getElementById('contact-edit-mode').style.display = 'none';
       if (c.isGroup) {
@@ -6197,12 +6380,30 @@
           if (memberName !== c.owner && memberName !== myProfile.name) {
             if (amIOwner) {
               // Владелец может назначать/снимать админов и кикать
+              let actionsHtml = '';
+const safeMemberName = String(memberName).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+
+if (memberName !== c.owner && memberName !== myProfile.name) {
+  if (amIOwner) {
+    if (isThisMemberAdmin) {
+      actionsHtml += `<button onclick="demoteMember('${c.id}', '${safeMemberName}')" title="Снять админа">⬇️</button>`;
+    } else {
+      actionsHtml += `<button onclick="promoteMember('${c.id}', '${safeMemberName}')" title="Сделать админом">⬆️</button>`;
+    }
+    actionsHtml += `<button onclick="kickMember('${c.id}', '${safeMemberName}')" style="color:red;" title="Исключить">✕</button>`;
+  } else if (amIAdmin) {
+    if (!isThisMemberAdmin) {
+      actionsHtml += `<button onclick="kickMember('${c.id}', '${safeMemberName}')" style="color:red;" title="Исключить">✕</button>`;
+    }
+  }
+}
               if (isThisMemberAdmin) {
-                actionsHtml += `<button onclick="demoteMember('${c.id}', '${memberName}')" title="Снять админа">⬇️</button>`;
+                const safeMemberName = String(memberName).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+                actionsHtml += `<button onclick="demoteMember('${c.id}', '${safeMemberName}')" title="Снять админа">⬇️</button>`;
               } else {
-                actionsHtml += `<button onclick="promoteMember('${c.id}', '${memberName}')" title="Сделать админом">⬆️</button>`;
+                actionsHtml += `<button onclick="promoteMember('${c.id}', '${safeMemberName}')" title="Сделать админом">⬆️</button>`;
               }
-              actionsHtml += `<button onclick="kickMember('${c.id}', '${memberName}')" style="color:red;" title="Исключить">✕</button>`;
+              actionsHtml += `<button onclick="kickMember('${c.id}', '${safeMemberName}')" style="color:red;" title="Исключить">✕</button>`;
             } else if (amIAdmin) {
               // Админ может кикать только обычных участников
               if (!isThisMemberAdmin) {
@@ -6212,7 +6413,7 @@
           }
 
           const row = document.createElement('div'); row.className = 'member-row';
-          row.innerHTML = `<span>${memberName}${roleBadge}</span> <div class="actions">${actionsHtml}</div>`;
+          row.innerHTML = `<span>${escapeHtml(memberName)}${roleBadge}</span> <div class="actions">${actionsHtml}</div>`;
           listEl.appendChild(row);
         });
       } else {
@@ -6266,19 +6467,21 @@
     function renderGroupCheckboxes() {
       const container = document.getElementById('group-members-list'); container.innerHTML = '';
       contacts.filter(c => !c.isGroup && c.id !== botId).forEach(c => {
-        const label = document.createElement('label'); label.innerHTML = `<input type="checkbox" value="${c.name}"> ${c.name}`; container.appendChild(label);
+        const label = document.createElement('label'); label.innerHTML = `<input type="checkbox" value="${escapeHtml(c.name)}"> ${escapeHtml(c.name)}`;
       });
     }
     function createGroup() {
-      const name = document.getElementById('new-group-name').value.trim(); if (!name) {alert('Enter group name!'); return;}
+      const nid = 'group_' + Date.now();
+      const name = document.getElementById('new-group-name').value.trim(); 
+      if (!name) { showToast('Введите название группы', 'error'); return; }
       const cbs = document.querySelectorAll('#group-members-list input[type="checkbox"]:checked');
-      const members = Array.from(cbs).map(cb => cb.value); if (members.length === 0) {alert('Select at least one member!'); return;}
-      const nid = 'group_' + Date.now(); members.push(myProfile.name);
+      const members = Array.from(cbs).map(cb => cb.value); 
+      if (members.length === 0) { showToast('Выберите хотя бы одного участника', 'error'); return; }
       contacts.push({
         id: nid, name, avatar: defaultGroupAvatar, isGroup: true, 
-        members: members, 
-        owner: myProfile.name, 
-        admins: [], 
+        members: [myProfile.name, ...members],
+        owner: myProfile.name,
+        admins: [],
         status: 'online', phone: 'Group Chat'
       });
       threads[nid] = [{who: 'them', text: `Группа "${name}" создана.`, time: getNowTime(), author: 'System'}];
@@ -6312,5 +6515,6 @@
     })();
   </script>
 </body>
+    <div id="toast-container" class="toast-container"></div>
 
 </html>
