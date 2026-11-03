@@ -5559,7 +5559,8 @@
     }
     function actionDelete() {
       if (!contextTargetMsg) return; playClick();
-      const c = contacts.find(x => x.id === activeId); const isAdmin = c.isGroup && c.admin === myProfile.name;
+      const c = contacts.find(x => x.id === activeId); 
+      const isAdmin = c.isGroup && (c.owner === myProfile.name || (c.admins && c.admins.includes(myProfile.name)));
       if (contextTargetMsg.who !== 'me' && !isAdmin) {alert('Вы можете удалять только свои сообщения!'); contextMenu.classList.remove('active'); return;}
       if (!confirm('Удалить это сообщение?')) return; playTrashSound();
       threads[activeId] = threads[activeId].filter(m => m.id !== contextTargetMsg.id); renderChat(); contextMenu.classList.remove('active');
@@ -5567,12 +5568,29 @@
 
     function promoteMember(groupId, memberName) {
       playClick(); const g = contacts.find(x => x.id === groupId); if (!g) return;
-      g.admin = memberName; alert(`${memberName} теперь администратор группы.`); toggleContactProfile({stopPropagation: () => { }});
+      if (!g.admins) g.admins = [];
+      if (!g.admins.includes(memberName)) {
+        g.admins.push(memberName);
+        alert(`👑 ${memberName} теперь администратор группы.`);
+      }
+      toggleContactProfile({stopPropagation: () => { }});
     }
+
+    function demoteMember(groupId, memberName) {
+      playClick(); const g = contacts.find(x => x.id === groupId); if (!g) return;
+      if (g.admins) {
+        g.admins = g.admins.filter(name => name !== memberName);
+        alert(`⬇️ ${memberName} больше не администратор.`);
+      }
+      toggleContactProfile({stopPropagation: () => { }});
+    }
+
     function kickMember(groupId, memberName) {
       if (!confirm(`Исключить ${memberName} из группы?`)) return; playTrashSound();
       const g = contacts.find(x => x.id === groupId); if (!g) return;
-      g.members = g.members.filter(name => name !== memberName); renderChat(); toggleContactProfile({stopPropagation: () => { }});
+      g.members = g.members.filter(name => name !== memberName);
+      if (g.admins) g.admins = g.admins.filter(name => name !== memberName);
+      renderChat(); toggleContactProfile({stopPropagation: () => { }});
     }
 
     inputEl.addEventListener('keydown', e => {if (e.key.length === 1 && !e.ctrlKey && !e.altKey && !e.metaKey) playTypeSound();});
@@ -6147,21 +6165,54 @@
       document.getElementById('contact-view-mode').style.display = 'block';
       document.getElementById('contact-edit-mode').style.display = 'none';
       if (c.isGroup) {
+        // Совместимость со старыми группами (если группа была создана до обновления)
+        if (!c.owner && c.admin) { c.owner = c.admin; c.admins = [c.admin]; delete c.admin; }
+        if (!c.admins) c.admins = [];
+
         document.getElementById('cp-phone').parentElement.style.display = 'none';
         document.getElementById('cp-role').textContent = 'Group Chat';
         document.getElementById('cp-status').parentElement.style.display = 'none';
         document.getElementById('cp-bio-container').style.display = 'none';
         document.getElementById('cp-members-container').style.display = 'block';
+        
         const listEl = document.getElementById('cp-members-list'); listEl.innerHTML = '';
+        
         c.members.forEach(memberName => {
           if (!memberName) return;
-          const isAdmin = c.admin === memberName; const amIAdmin = c.admin === myProfile.name;
+          
+          const isThisMemberOwner = (c.owner === memberName);
+          const isThisMemberAdmin = c.admins.includes(memberName);
+          
+          const amIOwner = (c.owner === myProfile.name);
+          const amIAdmin = c.admins.includes(myProfile.name);
+
+          let roleBadge = '';
+          if (isThisMemberOwner) roleBadge = ' <span style="color:#e53935; font-size:10px;">👑 Владелец</span>';
+          else if (isThisMemberAdmin) roleBadge = ' <span style="color:#4a90e2; font-size:10px;">🛡️ Админ</span>';
+          else roleBadge = ' <span style="color:#888; font-size:10px;">Участник</span>';
+
           let actionsHtml = '';
-          if (amIAdmin && !isAdmin && memberName !== myProfile.name) {
-            actionsHtml = `<button onclick="promoteMember('${c.id}', '${memberName}')">👑</button><button onclick="kickMember('${c.id}', '${memberName}')" style="color:red;">✕</button>`;
+          
+          // Действия не применяются к Владельцу и к самому себе
+          if (memberName !== c.owner && memberName !== myProfile.name) {
+            if (amIOwner) {
+              // Владелец может назначать/снимать админов и кикать
+              if (isThisMemberAdmin) {
+                actionsHtml += `<button onclick="demoteMember('${c.id}', '${memberName}')" title="Снять админа">⬇️</button>`;
+              } else {
+                actionsHtml += `<button onclick="promoteMember('${c.id}', '${memberName}')" title="Сделать админом">⬆️</button>`;
+              }
+              actionsHtml += `<button onclick="kickMember('${c.id}', '${memberName}')" style="color:red;" title="Исключить">✕</button>`;
+            } else if (amIAdmin) {
+              // Админ может кикать только обычных участников
+              if (!isThisMemberAdmin) {
+                actionsHtml += `<button onclick="kickMember('${c.id}', '${memberName}')" style="color:red;" title="Исключить">✕</button>`;
+              }
+            }
           }
+
           const row = document.createElement('div'); row.className = 'member-row';
-          row.innerHTML = `<span>${memberName} ${isAdmin ? '👑' : ''}</span> <div class="actions">${actionsHtml}</div>`;
+          row.innerHTML = `<span>${memberName}${roleBadge}</span> <div class="actions">${actionsHtml}</div>`;
           listEl.appendChild(row);
         });
       } else {
@@ -6223,12 +6274,17 @@
       const cbs = document.querySelectorAll('#group-members-list input[type="checkbox"]:checked');
       const members = Array.from(cbs).map(cb => cb.value); if (members.length === 0) {alert('Select at least one member!'); return;}
       const nid = 'group_' + Date.now(); members.push(myProfile.name);
-      contacts.push({id: nid, name, avatar: defaultGroupAvatar, isGroup: true, members: members, admin: myProfile.name, status: 'online', phone: 'Group Chat'});
+      contacts.push({
+        id: nid, name, avatar: defaultGroupAvatar, isGroup: true, 
+        members: members, 
+        owner: myProfile.name, 
+        admins: [], 
+        status: 'online', phone: 'Group Chat'
+      });
       threads[nid] = [{who: 'them', text: `Группа "${name}" создана.`, time: getNowTime(), author: 'System'}];
       playClick(); closeModal('modal-add-group'); activeId = nid; renderContacts(); renderChat();
       document.getElementById('new-group-name').value = '';
     }
-
     function minimizeWindow() {playClick(); document.getElementById('main-window').classList.toggle('minimized');}
     function maximizeWindow() {playClick(); document.getElementById('main-window').classList.toggle('maximized');}
     function closeWindow() {playClick(); document.getElementById('main-window').classList.add('hidden');}
